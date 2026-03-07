@@ -307,6 +307,301 @@
     font-size:10px; color:var(--gold); font-family:'DM Mono',monospace;
   }
 
+
+  /* ══ eBOOK PREVIEW SECTION ══ */
+  .preview-section {
+    margin-bottom: 28px;
+    animation: fadeUp .5s .48s ease both;
+  }
+
+  .preview-header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .preview-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .preview-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .preview-title em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--rust) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .preview-sub {
+    font-size: 11px; color: var(--ink-lt); letter-spacing: .4px;
+  }
+
+  /* spotlight */
+  .spotlight {
+    background: linear-gradient(135deg, #0c1830 0%, #1a2e50 100%);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(90,140,220,0.18);
+    box-shadow: 0 8px 32px rgba(10,20,50,0.18);
+  }
+  .spotlight::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(26,122,110,0.22), transparent 68%);
+    pointer-events: none;
+  }
+  .spotlight::after {
+    content: ''; position: absolute;
+    bottom: -60px; left: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(168,120,42,0.15), transparent 68%);
+    pointer-events: none;
+  }
+  .spotlight-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: #5be0d8; border: 1px solid rgba(91,224,216,0.35);
+    padding: 4px 12px; border-radius: 20px; display: inline-block;
+    margin-bottom: 18px; position: relative; z-index: 2;
+  }
+  .spotlight-inner {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 28px; align-items: flex-start;
+    position: relative; z-index: 2;
+  }
+
+  /* Book cover */
+  .book-cover-wrap {
+    position: relative;
+    perspective: 800px;
+  }
+  .book-cover {
+    width: 148px;
+    border-radius: 4px 8px 8px 4px;
+    transform: rotateY(-14deg) rotateX(3deg);
+    transform-style: preserve-3d;
+    box-shadow:
+      6px 10px 30px rgba(0,0,0,0.5),
+      -2px 0 8px rgba(0,0,0,0.3);
+    position: relative;
+    transition: transform .3s ease;
+  }
+  .book-cover-wrap:hover .book-cover {
+    transform: rotateY(-6deg) rotateX(1deg) scale(1.03);
+  }
+  .bc-spine {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 12px;
+    background: linear-gradient(180deg, #0a3060, #1a4a8a, #0a3060);
+    border-radius: 4px 0 0 4px;
+    transform: translateZ(-2px) translateX(-10px) rotateY(-90deg);
+    transform-origin: right center;
+  }
+  .bc-front {
+    background: linear-gradient(158deg, #060b16 0%, #0c1830 50%, #080f1e 100%);
+    border-radius: 4px 8px 8px 4px;
+    padding: 16px 12px 14px;
+    min-height: 210px;
+    display: flex; flex-direction: column;
+    border: 1px solid rgba(91,224,216,0.15);
+    overflow: hidden;
+    position: relative;
+  }
+  .bc-front::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #1a7a6e, #5be0d8, #1a7a6e);
+  }
+  .bc-logo-text {
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px;
+    color: white;
+  }
+  .bc-logo-text span { color: #5be0d8; }
+  .bc-logo-sub { font-size: 7px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+  .bc-badge-area {
+    font-family: 'DM Mono', monospace; font-size: 6.5px;
+    letter-spacing: 1.5px; color: rgba(255,255,255,0.35);
+    text-transform: uppercase; margin: 10px 0 8px;
+  }
+  .bc-main-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700;
+    font-size: 22px; color: white; line-height: 1.1; margin-bottom: 4px;
+    flex: 1;
+  }
+  .bc-sub-title {
+    font-size: 9px; color: #5be0d8; margin-bottom: 8px;
+  }
+  .bc-topics {
+    font-size: 6.5px; color: rgba(255,255,255,0.35);
+    line-height: 1.6; margin-bottom: 8px;
+  }
+  .bc-edition {
+    background: rgba(168,120,42,0.85); color: #fff;
+    font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 8px; font-family: 'DM Mono', monospace;
+    display: inline-block; border-radius: 2px; margin-bottom: 8px;
+    align-self: flex-start;
+  }
+  .bc-cr { font-size: 6.5px; color: rgba(255,255,255,0.2); }
+  .book-shadow {
+    position: absolute; bottom: -18px; left: 10px; right: -10px;
+    height: 20px; background: radial-gradient(ellipse, rgba(0,0,0,0.35), transparent 70%);
+    filter: blur(6px);
+  }
+
+  /* Page preview cards */
+  .pp-title {
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45);
+    margin-bottom: 12px;
+  }
+  .pp-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .pp-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 10px 11px;
+    display: flex; gap: 8px;
+    transition: background .2s, border-color .2s;
+  }
+  .pp-card:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(91,224,216,0.3);
+  }
+  .pp-card-num {
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    color: white; background: rgba(26,74,138,0.8);
+    width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pp-card-num.teal   { background: rgba(26,122,110,0.8); }
+  .pp-card-num.gold   { background: rgba(168,120,42,0.8); }
+  .pp-card-num.rust   { background: rgba(176,56,32,0.8); }
+  .pp-card-num.violet { background: rgba(92,58,138,0.8); }
+  .pp-card-head {
+    font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.9);
+    margin-bottom: 4px;
+  }
+  .pp-card-desc {
+    font-size: 9.5px; color: rgba(255,255,255,0.45); line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .pp-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .pp-tag {
+    font-family: 'DM Mono', monospace; font-size: 7px;
+    color: white; background: rgba(26,74,138,0.7);
+    padding: 2px 6px; border-radius: 3px;
+  }
+  .pp-tag.teal   { background: rgba(26,122,110,0.7); }
+  .pp-tag.gold   { background: rgba(168,120,42,0.7); }
+  .pp-tag.rust   { background: rgba(176,56,32,0.7); }
+  .pp-tag.violet { background: rgba(92,58,138,0.7); }
+
+  .pp-stat-card {
+    flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(26,122,110,0.2), rgba(26,74,138,0.2));
+    border-color: rgba(91,224,216,0.2);
+  }
+  .pp-stats { display: flex; gap: 14px; margin-bottom: 8px; }
+  .pp-stat { text-align: center; }
+  .pp-stat-val {
+    font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700;
+    color: #5be0d8; line-height: 1;
+  }
+  .pp-stat-label {
+    font-size: 8px; color: rgba(255,255,255,0.4);
+    font-family: 'DM Mono', monospace; letter-spacing: .5px; margin-top: 2px;
+  }
+  .pp-cta-note {
+    font-size: 9px; color: rgba(255,255,255,0.35); text-align: center;
+    font-family: 'DM Mono', monospace; line-height: 1.4;
+  }
+
+  /* Series strip */
+  .series-strip-title {
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 12px; text-align: center;
+  }
+  .series-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-bottom: 18px;
+  }
+  .series-card {
+    border-radius: 10px; padding: 13px 13px 11px;
+    border: 1px solid transparent;
+    transition: transform .2s, box-shadow .2s;
+    cursor: default;
+  }
+  .series-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+  }
+  .sc-blue   { background: linear-gradient(135deg,#e8f0fb,#f0f5ff); border-color: rgba(26,74,138,0.2); }
+  .sc-teal   { background: linear-gradient(135deg,#e4f3f0,#edfaf7); border-color: rgba(26,122,110,0.2); }
+  .sc-gold   { background: linear-gradient(135deg,#faf0da,#fff8ec); border-color: rgba(168,120,42,0.2); }
+  .sc-slate  { background: linear-gradient(135deg,#e8ecf4,#f0f3fa); border-color: rgba(46,58,78,0.18); }
+  .sc-violet { background: linear-gradient(135deg,#f0eaf8,#f8f4ff); border-color: rgba(92,58,138,0.2); }
+  .sc-rust   { background: linear-gradient(135deg,#faeae4,#fff2ee); border-color: rgba(176,56,32,0.2); }
+  .sc-green  { background: linear-gradient(135deg,#e4f5ec,#edfaf3); border-color: rgba(26,107,58,0.2); }
+  .sc-orange { background: linear-gradient(135deg,#faedde,#fff6ec); border-color: rgba(176,72,8,0.2); }
+
+  .sc-module {
+    font-family: 'DM Mono', monospace; font-size: 7px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-lt); margin-bottom: 4px;
+  }
+  .sc-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700;
+    font-size: 13.5px; color: var(--ink); line-height: 1.2; margin-bottom: 5px;
+  }
+  .sc-desc {
+    font-size: 10px; color: var(--ink-lt); line-height: 1.55; margin-bottom: 7px;
+  }
+  .sc-meta {
+    font-family: 'DM Mono', monospace; font-size: 8px;
+    color: var(--ink-lt); margin-bottom: 7px; letter-spacing: .3px;
+  }
+  .sc-price {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700;
+    font-size: 14px; color: var(--rust);
+  }
+  .sc-price span { font-size: 10px; font-weight: 400; color: var(--ink-lt); }
+
+  /* Value bar */
+  .preview-value-bar {
+    background: var(--gold-pale); border: 1px solid rgba(168,120,42,0.25);
+    border-radius: 10px; padding: 14px 20px;
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 0;
+  }
+  .pvb-item {
+    display: flex; align-items: center; gap: 8px; flex: 1;
+    font-size: 11.5px; color: var(--ink-mid);
+  }
+  .pvb-icon {
+    font-size: 14px; color: var(--green); font-weight: 700;
+  }
+  .pvb-div {
+    width: 1px; height: 32px; background: rgba(168,120,42,0.25); margin: 0 16px;
+  }
+
+  @media(max-width:600px) {
+    .spotlight-inner { grid-template-columns: 1fr; }
+    .book-cover-wrap { display: none; }
+    .pp-grid { grid-template-columns: 1fr 1fr; }
+    .series-strip { grid-template-columns: 1fr 1fr; }
+    .preview-value-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .pvb-div { display: none; }
+  }
+  /* ══ END eBOOK PREVIEW CSS ══ */
   @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
   @media(max-width:600px){
@@ -357,6 +652,201 @@
       </tbody>
     </table>
 
+
+    <!-- ══ eBOOK PREVIEW SECTION ══ -->
+    <div class="preview-section">
+
+      <div class="preview-header">
+        <div class="preview-eyebrow">What's Inside</div>
+        <div class="preview-title">Premium <em>eBook</em> Series</div>
+        <div class="preview-sub">A glimpse into the depth and quality of FullonBaan training materials</div>
+      </div>
+
+      <!-- Architecture eBook spotlight -->
+      <div class="spotlight">
+        <div class="spotlight-badge">Featured Module</div>
+        <div class="spotlight-inner">
+
+          <!-- Left: mock book cover -->
+          <div class="book-cover-wrap">
+            <div class="book-cover">
+              <div class="bc-spine"></div>
+              <div class="bc-front">
+                <div class="bc-logo-area">
+                  <div class="bc-logo-text">Fullon<span>Baan</span></div>
+                  <div class="bc-logo-sub">One stop destination for IT solutions</div>
+                </div>
+                <div class="bc-badge-area">OFFICIAL TRAINING GUIDE</div>
+                <div class="bc-main-title">Architecture</div>
+                <div class="bc-sub-title">Infor ERPLN 6.1 Tools</div>
+                <div class="bc-topics">Architecture &nbsp;·&nbsp; Session Management &nbsp;·&nbsp; System Tiers &nbsp;·&nbsp; VRC Concepts</div>
+                <div class="bc-edition">PREMIUM EDITION</div>
+                <div class="bc-cr">© 2025 FullonBaan IT Solutions</div>
+              </div>
+            </div>
+            <div class="book-shadow"></div>
+          </div>
+
+          <!-- Right: page previews -->
+          <div class="page-previews">
+            <div class="pp-title">Inside this eBook — 5 comprehensive sections:</div>
+
+            <div class="pp-grid">
+
+              <div class="pp-card">
+                <div class="pp-card-num">01</div>
+                <div class="pp-card-body">
+                  <div class="pp-card-head">Software Architecture</div>
+                  <div class="pp-card-desc">The five session components: OBJ, FRM, TBL, RPT, CHT. How Software Architecture differs from System Architecture. Forms, Table Definitions, Overview vs Details sessions.</div>
+                  <div class="pp-tags"><span class="pp-tag">Sessions</span><span class="pp-tag">Forms</span><span class="pp-tag">Objects</span></div>
+                </div>
+              </div>
+
+              <div class="pp-card">
+                <div class="pp-card-num teal">02</div>
+                <div class="pp-card-body">
+                  <div class="pp-card-head">Session Startup Flow</div>
+                  <div class="pp-card-desc">The complete 12-step lifecycle: from querying runtime components to license check, loading forms, data definitions, user defaults — and finally handing control to the user.</div>
+                  <div class="pp-tags"><span class="pp-tag teal">Lifecycle</span><span class="pp-tag teal">bshell</span><span class="pp-tag teal">Runtime</span></div>
+                </div>
+              </div>
+
+              <div class="pp-card">
+                <div class="pp-card-num gold">03</div>
+                <div class="pp-card-body">
+                  <div class="pp-card-head">System Architecture &amp; Tiers</div>
+                  <div class="pp-card-desc">Three-tier design: Tier 1 Presentation (Worktop/Webtop), Tier 2 Business Logic (bshell VM), Tier 3 Data Management (DB driver). Three deployment configurations.</div>
+                  <div class="pp-tags"><span class="pp-tag gold">3-Tier</span><span class="pp-tag gold">Webtop</span><span class="pp-tag gold">Worktop</span></div>
+                </div>
+              </div>
+
+              <div class="pp-card">
+                <div class="pp-card-num rust">04</div>
+                <div class="pp-card-body">
+                  <div class="pp-card-head">Data Dictionary</div>
+                  <div class="pp-card-desc">Application DD (APDD) vs Runtime DD (RTDD). The Convert to Runtime process and the four key sessions: ttams2200m000, ttams2201m000, ttadv5215m000, ttadv5210m000.</div>
+                  <div class="pp-tags"><span class="pp-tag rust">APDD</span><span class="pp-tag rust">RTDD</span><span class="pp-tag rust">Convert</span></div>
+                </div>
+              </div>
+
+              <div class="pp-card">
+                <div class="pp-card-num violet">05</div>
+                <div class="pp-card-body">
+                  <div class="pp-card-head">Version Release Customization</div>
+                  <div class="pp-card-desc">VRC explained: Version (major), Release (minor), Customization (customer-specific). Package VRC derivation hierarchy, Package Combinations, and multi-user version control.</div>
+                  <div class="pp-tags"><span class="pp-tag violet">VRC</span><span class="pp-tag violet">Packages</span><span class="pp-tag violet">Lifecycle</span></div>
+                </div>
+              </div>
+
+              <div class="pp-card pp-stat-card">
+                <div class="pp-stats">
+                  <div class="pp-stat"><div class="pp-stat-val">22</div><div class="pp-stat-label">Pages</div></div>
+                  <div class="pp-stat"><div class="pp-stat-val">5</div><div class="pp-stat-label">Sections</div></div>
+                  <div class="pp-stat"><div class="pp-stat-val">6</div><div class="pp-stat-label">Learning<br>Objectives</div></div>
+                </div>
+                <div class="pp-cta-note">Part of the Infor LN Development eBook bundle</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Series strip -->
+      <div class="series-strip-title">The Complete FullonBaan Technical eBook Library</div>
+      <div class="series-strip">
+
+        <div class="series-card sc-blue">
+          <div class="sc-module">Development</div>
+          <div class="sc-title">Architecture &amp; VRC</div>
+          <div class="sc-desc">Session components, startup flow, 3-tier system, data dictionary, VRC concepts</div>
+          <div class="sc-meta">5 sections &nbsp;·&nbsp; 22 slides</div>
+          <div class="sc-price">&#x20B9;1,999 <span>/ eBook</span></div>
+        </div>
+
+        <div class="series-card sc-teal">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Domain &amp; Data Types</div>
+          <div class="sc-desc">11 data types, additional attributes, validations, legal/illegal chars, format masks</div>
+          <div class="sc-meta">4 deep topics &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-gold">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Tables in Baan/LN</div>
+          <div class="sc-desc">Table lifecycle, Convert to Runtime, Reference Mode, Referential Integrity, FK enforcement</div>
+          <div class="sc-meta">5 lifecycle steps &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-slate">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Dev Objects &amp; Migration</div>
+          <div class="sc-desc">10 dev object types, DEV-UAT-PROD pipeline, Patch vs PMC Solutions migration</div>
+          <div class="sc-meta">3-env pipeline &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-violet">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Functions vs Libraries</div>
+          <div class="sc-desc">DLL vs embedded functions, compilation, memory, performance, decision guide</div>
+          <div class="sc-meta">Performance deep-dive &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-rust">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Report Types &amp; Structure</div>
+          <div class="sc-desc">3 report types, 7-band structure, aggregate functions, Before/After field groups</div>
+          <div class="sc-meta">7-band architecture &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-green">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">3GL vs 4GL &amp; Script Architecture</div>
+          <div class="sc-desc">Declaration, Form, Group, Choice, Field, I/O sections — full 4GL program anatomy</div>
+          <div class="sc-meta">8 section types &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+        <div class="series-card sc-orange">
+          <div class="sc-module">Tools Series</div>
+          <div class="sc-title">Sequential Dump vs Exchange Scheme</div>
+          <div class="sc-desc">Data migration, server-to-server, export/import flows, AFS/DAL programs</div>
+          <div class="sc-meta">9 sections &nbsp;·&nbsp; Premium</div>
+          <div class="sc-price">Included <span>in bundle</span></div>
+        </div>
+
+      </div>
+
+      <div class="preview-value-bar">
+        <div class="pvb-item">
+          <div class="pvb-icon">&#x2714;</div>
+          <div class="pvb-text"><strong>8+ Premium eBooks</strong> in the Development bundle</div>
+        </div>
+        <div class="pvb-div"></div>
+        <div class="pvb-item">
+          <div class="pvb-icon">&#x2714;</div>
+          <div class="pvb-text"><strong>Real code examples</strong> — not just theory</div>
+        </div>
+        <div class="pvb-div"></div>
+        <div class="pvb-item">
+          <div class="pvb-icon">&#x2714;</div>
+          <div class="pvb-text"><strong>Practitioner-authored</strong> by certified LN consultants</div>
+        </div>
+        <div class="pvb-div"></div>
+        <div class="pvb-item">
+          <div class="pvb-icon">&#x2714;</div>
+          <div class="pvb-text"><strong>Instant delivery</strong> after payment</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ══ END eBOOK PREVIEW SECTION ══ -->
+
     <!-- Contact tiles -->
     <div class="contact-row">
       <a class="ci"
@@ -366,12 +856,10 @@
         <div class="ci-label">Call / WhatsApp</div>
         <div class="ci-val">+91 63605 93122</div>
       </a>
-      <a class="ci"
-         href="mailto:fullonbaan@gmail.com?subject=Infor%20LN%20Training%20Enquiry&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20am%20interested%20in%20your%20Infor%20LN%20Training%20Materials.%20Please%20share%20more%20details.%0A%0ARegards"
-         target="_blank" rel="noopener">
+      <a class="ci" href="/cdn-cgi/l/email-protection#6a0c1f06060504080b0b042a0d070b03064409050755191f08000f091e5723040c05184f585a26244f585a3e180b030403040d4f585a2f041b1f0318134c08050e135722034f585a2c1f06060504280b0b044f585a3e0f0b074f58294f5a2b4f5a2b234f585a0b074f585a03041e0f180f191e0f0e4f585a03044f585a13051f184f585a23040c05184f585a26244f585a3e180b030403040d4f585a270b1e0f18030b0619444f585a3a060f0b190f4f585a19020b180f4f585a0705180f4f585a0e0f1e0b030619444f5a2b4f5a2b380f0d0b180e19" target="_blank" rel="noopener">
         <span class="ci-icon">✉️</span>
         <div class="ci-label">Email</div>
-        <div class="ci-val">fullonbaan@gmail.com</div>
+        <div class="ci-val"><span class="__cf_email__" data-cfemail="5137243d3d3e3f3330303f11363c30383d7f323e3c">[email&#160;protected]</span></div>
       </a>
       <a class="ci" href="https://www.fullonbaan.com" target="_blank" rel="noopener">
         <span class="ci-icon">🌐</span>
@@ -448,73 +936,88 @@
   </div>
 </div>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
-  /* dust motes */
-  const dotsEl = document.getElementById('dots');
-  for (let i = 0; i < 35; i++) {
-    const d = document.createElement('div'); d.className = 'dot';
-    const s = Math.random() * 4 + 1.5;
-    d.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${5+Math.random()*7}s;--delay:${Math.random()*7}s;--op:${.06+Math.random()*.14};`;
-    dotsEl.appendChild(d);
-  }
+  /* ── Dust motes ── */
+  (function() {
+    var dotsEl = document.getElementById('dots');
+    if (!dotsEl) return;
+    for (var i = 0; i < 35; i++) {
+      var d = document.createElement('div'); d.className = 'dot';
+      var s = Math.random() * 4 + 1.5;
+      d.style.cssText = 'width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--dur:'+(5+Math.random()*7)+'s;--delay:'+(Math.random()*7)+'s;--op:'+(0.06+Math.random()*0.14)+';';
+      dotsEl.appendChild(d);
+    }
+  })();
 
-  const MODULES = {
+  /* ── Module data ── */
+  var MODULES = {
     development:    { name:'Infor LN Development',    ebook:1999, video:3999, combo:4999 },
     administration: { name:'Infor LN Administration', ebook:1999, video:3999, combo:4999 },
-    finance:        { name:'Infor LN Finance',         ebook:1999, video:4999, combo:5999 },
+    finance:        { name:'Infor LN Finance',        ebook:1999, video:4999, combo:5999 },
     manufacturing:  { name:'Infor LN Manufacturing',  ebook:null, video:4999, combo:null },
     logistics:      { name:'Infor LN Logistics',      ebook:null, video:4999, combo:null },
-    planning:       { name:'Infor LN Planning',        ebook:null, video:4999, combo:null },
+    planning:       { name:'Infor LN Planning',       ebook:null, video:4999, combo:null },
     extensibility:  { name:'Infor Extensibility',     ebook:null, video:3999, combo:null },
   };
 
-  const UPI_ID   = 'nikivernekar@okicici';
-  const UPI_NAME = 'FullonBaan';
+  var UPI_ID   = 'nikivernekar@okicici';
+  var UPI_NAME = 'FullonBaan';
+  var selAmount = 0, selDesc = '';
 
-  let selAmount = 0, selDesc = '';
-
-  function togglePay() {
+  /* ── Explicitly on window so inline onclick always finds them ── */
+  window.togglePay = function() {
     document.getElementById('payBtn').classList.toggle('open');
     document.getElementById('payPanel').classList.toggle('open');
-  }
+  };
 
-  function onModuleChange() {
-    const mod = MODULES[document.getElementById('modSelect').value];
-    const tSel = document.getElementById('typeSelect');
+  window.onModuleChange = function() {
+    var modKey = document.getElementById('modSelect').value;
+    var mod = MODULES[modKey];
+    var tSel = document.getElementById('typeSelect');
     tSel.innerHTML = '<option value="">— Choose type —</option>';
-    hideAmount();
+    window.hideAmount();
     if (!mod) { tSel.disabled = true; return; }
-    const fmt = n => n.toLocaleString('en-IN');
-    if (mod.ebook) tSel.insertAdjacentHTML('beforeend', `<option value="ebook">📘 eBook — ₹${fmt(mod.ebook)}</option>`);
-    tSel.insertAdjacentHTML('beforeend', `<option value="video">🎬 Video Course — ₹${fmt(mod.video)}</option>`);
-    if (mod.combo) tSel.insertAdjacentHTML('beforeend', `<option value="combo">🎁 Combo (eBook + Videos) — ₹${fmt(mod.combo)}</option>`);
+    var fmt = function(n) { return n.toLocaleString('en-IN'); };
+    if (mod.ebook) tSel.insertAdjacentHTML('beforeend', '<option value="ebook">eBook \u2014 \u20B9' + fmt(mod.ebook) + '</option>');
+    tSel.insertAdjacentHTML('beforeend', '<option value="video">Video Course \u2014 \u20B9' + fmt(mod.video) + '</option>');
+    if (mod.combo) tSel.insertAdjacentHTML('beforeend', '<option value="combo">Combo (eBook + Videos) \u2014 \u20B9' + fmt(mod.combo) + '</option>');
     tSel.disabled = false;
-  }
+  };
 
-  function onTypeChange() {
-    const modKey = document.getElementById('modSelect').value;
-    const typeKey = document.getElementById('typeSelect').value;
-    if (!modKey || !typeKey) { hideAmount(); return; }
-    const mod = MODULES[modKey];
-    const labels = { ebook:'eBook', video:'Video Course', combo:'Combo (eBook + Videos)' };
+  window.onTypeChange = function() {
+    var modKey  = document.getElementById('modSelect').value;
+    var typeKey = document.getElementById('typeSelect').value;
+    if (!modKey || !typeKey) { window.hideAmount(); return; }
+    var mod = MODULES[modKey];
+    var labels = { ebook:'eBook', video:'Video Course', combo:'Combo (eBook + Videos)' };
     selAmount = mod[typeKey];
-    selDesc = `${mod.name} — ${labels[typeKey]}`;
+    selDesc   = mod.name + ' \u2014 ' + labels[typeKey];
     document.getElementById('amountDesc').textContent = selDesc;
-    document.getElementById('amountVal').textContent  = `₹${selAmount.toLocaleString('en-IN')}`;
+    document.getElementById('amountVal').textContent  = '\u20B9' + selAmount.toLocaleString('en-IN');
     document.getElementById('amountRow').classList.add('visible');
     document.getElementById('proceedBtn').classList.add('visible');
     document.getElementById('upiNote').classList.add('visible');
-  }
+  };
 
-  function hideAmount() {
-    ['amountRow','proceedBtn','upiNote'].forEach(id => document.getElementById(id).classList.remove('visible'));
-    selAmount = 0; selDesc = '';
-  }
+  window.hideAmount = function() {
+    document.getElementById('amountRow').classList.remove('visible');
+    document.getElementById('proceedBtn').classList.remove('visible');
+    document.getElementById('upiNote').classList.remove('visible');
+  };
 
-  function openUPI() {
+  window.openUPI = function() {
     if (!selAmount) return;
-    window.location.href = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${selAmount}&cu=INR&tn=${encodeURIComponent(selDesc)}`;
-  }
+    var txnRef = 'FOB' + Date.now();
+    var upiUrl = 'upi://pay?pa=' + UPI_ID
+      + '&pn=' + encodeURIComponent(UPI_NAME)
+      + '&am=' + selAmount
+      + '&cu=INR'
+      + '&tn=' + encodeURIComponent(selDesc)
+      + '&tr=' + txnRef;
+    window.location.href = upiUrl;
+  };
+
 </script>
 </body>
 </html>
