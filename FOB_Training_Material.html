@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FullonBaan — Infor LN Training Materials</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C; --gold-l: #E8C97A; --gold-p: #F5E6BB;
+    --rust: #7B1A08; --rust2: #5C1205; --green: #6fbf73;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#0a0a0a; display:flex; align-items:center; justify-content:center;
+    min-height:100vh; font-family:'DM Sans',sans-serif; padding:32px 16px;
+  }
+
+  /* Card */
+  .card-wrap {
+    position:relative; width:100%; max-width:780px;
+    background:#111; border-radius:20px;
+    border:1px solid #2a2a2a;
+    box-shadow:0 60px 120px rgba(0,0,0,0.7),0 0 0 1px rgba(201,168,76,0.10),inset 0 1px 0 rgba(255,255,255,0.04);
+    animation:rise .7s cubic-bezier(0.22,1,0.36,1) both;
+    overflow:hidden;
+  }
+  @keyframes rise { from{opacity:0;transform:translateY(28px) scale(0.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+  .card-bg {
+    position:absolute; inset:0; z-index:0;
+    background:
+      radial-gradient(ellipse 55% 45% at 8% 8%,rgba(201,168,76,0.12) 0%,transparent 60%),
+      radial-gradient(ellipse 50% 40% at 92% 88%,rgba(139,42,15,0.22) 0%,transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 50%,rgba(20,12,0,0.80) 0%,transparent 100%);
+  }
+  .dots { position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none; }
+  .dot { position:absolute; border-radius:50%; background:var(--gold); opacity:0; animation:twinkle var(--dur) var(--delay) ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{opacity:0;transform:scale(.4)} 50%{opacity:var(--op);transform:scale(1)} }
+
+  .card-wrap::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold-p) 50%,var(--gold) 70%,transparent 100%);
+    z-index:10; animation:shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer { 0%,100%{opacity:.7} 50%{opacity:1} }
+
+  .card-inner { position:relative; z-index:2; padding:44px 52px 40px; }
+
+  /* Header */
+  .card-header { text-align:center; margin-bottom:32px; }
+  .eyebrow {
+    display:inline-flex; align-items:center; gap:9px;
+    background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.22);
+    border-radius:40px; padding:5px 18px;
+    font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:3px;
+    color:var(--gold-l); text-transform:uppercase; margin-bottom:18px;
+    animation:fadeIn .5s .2s ease both;
+  }
+  .eyebrow span { font-size:7px; color:var(--gold); }
+  .main-title {
+    font-family:'Playfair Display',serif; font-size:46px; font-weight:900; line-height:1.1;
+    background:linear-gradient(140deg,var(--gold-p) 0%,var(--gold) 40%,var(--gold-l) 75%,var(--gold-p) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:8px; animation:fadeIn .5s .3s ease both;
+  }
+  .sub-title { font-size:13px; color:rgba(255,255,255,0.45); letter-spacing:.5px; font-weight:300; animation:fadeIn .5s .4s ease both; }
+  .gold-rule { width:70px; height:2px; margin:18px auto; background:linear-gradient(90deg,transparent,var(--gold),transparent); animation:fadeIn .5s .45s ease both; }
+
+  /* Table */
+  .price-table { width:100%; border-collapse:collapse; margin-bottom:26px; animation:fadeIn .5s .5s ease both; }
+  .price-table thead tr { background:linear-gradient(90deg,var(--rust) 0%,var(--rust2) 100%); }
+  .price-table thead th { padding:13px 14px; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-p); font-weight:600; text-align:center; font-family:'DM Mono',monospace; }
+  .price-table thead th:nth-child(2) { text-align:left; }
+  .price-table thead th:first-child  { border-radius:8px 0 0 0; width:48px; }
+  .price-table thead th:last-child   { border-radius:0 8px 0 0; }
+  .price-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.045); transition:background .2s; }
+  .price-table tbody tr:hover { background:rgba(201,168,76,0.05); }
+  .price-table tbody tr:last-child { border-bottom:none; }
+  .price-table tbody td { padding:14px 14px; text-align:center; color:rgba(255,255,255,0.82); font-size:13px; }
+  .price-table tbody td:nth-child(2) { text-align:left; }
+  .highlight-row { background:rgba(201,168,76,0.045); }
+  .num  { font-family:'DM Mono',monospace; font-size:12px; color:var(--gold); font-weight:500; }
+  .mod  { font-weight:500; color:#fff; font-size:13px; }
+  .pval { font-family:'Playfair Display',serif; font-weight:700; font-size:16px; color:var(--gold-l); }
+  .pfree { font-size:11px; color:var(--green); background:rgba(111,191,115,0.1); border:1px solid rgba(111,191,115,0.22); border-radius:20px; padding:3px 11px; display:inline-block; font-weight:500; }
+  .pna  { color:#3a3a3a; font-family:'DM Mono',monospace; font-size:13px; }
+  .cval { font-family:'Playfair Display',serif; font-weight:700; font-size:15px; background:linear-gradient(135deg,var(--gold) 0%,var(--gold-p) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+  /* Contact */
+  .contact-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:22px; animation:fadeIn .5s .6s ease both; }
+  .ci {
+    background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px; padding:14px 10px; text-align:center;
+    text-decoration:none; display:block;
+    transition:border-color .2s,background .2s,transform .15s; cursor:pointer;
+  }
+  .ci:hover { border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.07); transform:translateY(-2px); }
+  .ci:active { transform:translateY(0); }
+  .ci-icon  { font-size:20px; display:block; margin-bottom:6px; }
+  .ci-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+  .ci-val   { font-size:11.5px; color:rgba(255,255,255,0.72); }
+
+  /* ── Pay Now ── */
+  .pay-section { margin-bottom:26px; animation:fadeIn .5s .65s ease both; }
+  .pay-btn {
+    width:100%; padding:15px 24px;
+    background:linear-gradient(135deg,var(--rust) 0%,#9B2A10 50%,var(--rust) 100%);
+    background-size:200% 100%;
+    border:1px solid rgba(201,168,76,0.35); border-radius:12px;
+    color:var(--gold-p); font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+    letter-spacing:.5px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition:all .25s; position:relative; overflow:hidden;
+  }
+  .pay-btn::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(90deg,transparent,rgba(201,168,76,0.12),transparent);
+    transform:translateX(-100%); transition:transform .5s;
+  }
+  .pay-btn:hover { border-color:var(--gold); box-shadow:0 4px 20px rgba(201,168,76,0.2); }
+  .pay-btn:hover::after { transform:translateX(100%); }
+  .pay-btn .arrow { transition:transform .25s; display:inline-block; }
+  .pay-btn.open .arrow { transform:rotate(180deg); }
+
+  .pay-panel { max-height:0; overflow:hidden; transition:max-height .45s cubic-bezier(0.22,1,0.36,1),opacity .3s ease; opacity:0; }
+  .pay-panel.open { max-height:560px; opacity:1; }
+
+  .pay-inner {
+    background:rgba(0,0,0,0.55); border:1px solid rgba(201,168,76,0.18);
+    border-top:none; border-radius:0 0 12px 12px; padding:22px 22px 20px;
+  }
+
+  .pay-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+  .pay-label { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:7px; display:block; }
+  .pay-select {
+    width:100%; padding:11px 36px 11px 14px;
+    background:#1a1a1a; border:1px solid #333; border-radius:8px;
+    color:#fff; font-family:'DM Sans',sans-serif; font-size:12.5px; cursor:pointer; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C9A84C' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center; transition:border-color .2s;
+  }
+  .pay-select:focus { outline:none; border-color:var(--gold); }
+  .pay-select option { background:#1a1a1a; }
+  .pay-select:disabled { opacity:.35; cursor:not-allowed; }
+
+  .pay-amount-row {
+    display:none; align-items:center; justify-content:space-between;
+    background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.2);
+    border-radius:10px; padding:14px 18px; margin-bottom:14px;
+  }
+  .pay-amount-row.visible { display:flex; }
+  .pa-left .pa-desc { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:3px; }
+  .pa-left .pa-name { font-size:13.5px; font-weight:600; color:#fff; }
+  .pa-right .pa-curr { font-size:10px; color:var(--gold); font-family:'DM Mono',monospace; letter-spacing:1px; text-align:right; }
+  .pa-right .pa-amt { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; background:linear-gradient(135deg,var(--gold),var(--gold-p)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+  .pay-proceed {
+    width:100%; padding:13px; background:linear-gradient(135deg,var(--gold) 0%,#a07828 100%);
+    border:none; border-radius:10px;
+    color:#1a0f00; font-family:'DM Sans',sans-serif; font-weight:700; font-size:14px;
+    letter-spacing:.5px; cursor:pointer; display:none; align-items:center; justify-content:center; gap:8px;
+    transition:opacity .2s,transform .15s;
+  }
+  .pay-proceed.visible { display:flex; }
+  .pay-proceed:hover { opacity:.9; transform:translateY(-1px); }
+  .pay-proceed:active { transform:translateY(0); }
+
+  .upi-note { text-align:center; font-size:10px; color:rgba(255,255,255,0.25); font-family:'DM Mono',monospace; margin-top:10px; letter-spacing:.5px; display:none; }
+  .upi-note.visible { display:block; }
+
+  /* Footer */
+  .card-footer { display:flex; align-items:center; justify-content:space-between; padding-top:20px; border-top:1px solid rgba(255,255,255,0.07); animation:fadeIn .5s .7s ease both; }
+  .brand-block .name { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--gold); }
+  .brand-block .tagline { font-size:9.5px; color:rgba(255,255,255,0.35); letter-spacing:1.5px; text-transform:uppercase; font-family:'DM Mono',monospace; margin-top:2px; }
+  .tags { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .tag { background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.18); border-radius:20px; padding:3px 10px; font-size:10px; color:var(--gold-l); font-family:'DM Mono',monospace; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  @media(max-width:600px){
+    .card-inner{padding:28px 20px 28px;}
+    .main-title{font-size:32px;}
+    .contact-row{grid-template-columns:1fr; gap:8px;}
+    .pay-row{grid-template-columns:1fr; gap:10px;}
+    .card-footer{flex-direction:column; gap:14px; align-items:flex-start;}
+    .price-table thead th,.price-table tbody td{padding:10px 8px; font-size:11px;}
+    .pval{font-size:14px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="card-wrap">
+  <div class="card-bg"></div>
+  <div class="dots" id="dots"></div>
+
+  <div class="card-inner">
+
+    <!-- Header -->
+    <div class="card-header">
+      <div class="eyebrow"><span>◆</span>Fullonbaan Education<span>◆</span></div>
+      <div class="main-title">Infor LN Training<br>Materials</div>
+      <div class="sub-title">Professional ERP Certification Programs &nbsp;·&nbsp; India's Most Comprehensive LN Library</div>
+      <div class="gold-rule"></div>
+    </div>
+
+    <!-- Pricing Table -->
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Module</th><th>📘 eBook (INR)</th><th>🎬 Videos (INR)</th><th>🎁 Combo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row"><td class="num">01</td><td class="mod">Infor LN Development</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span></td></tr>
+        <tr class="highlight-row"><td class="num">02</td><td class="mod">Infor LN Administration</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span></td></tr>
+        <tr class="highlight-row"><td class="num">03</td><td class="mod">Infor LN Finance</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹5,999</span></td></tr>
+        <tr><td class="num">04</td><td class="mod">Infor LN Manufacturing</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
+        <tr><td class="num">05</td><td class="mod">Infor LN Logistics</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
+        <tr><td class="num">06</td><td class="mod">Infor LN Planning</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
+        <tr><td class="num">07</td><td class="mod">Infor Extensibility</td><td><span class="pfree">Free</span></td><td><span class="pval">₹3,999</span></td><td><span class="pna">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- Contact Tiles (all clickable) -->
+    <div class="contact-row">
+      <a class="ci"
+         href="https://wa.me/916360593122?text=Hi%20FullonBaan%2C%20I%20am%20interested%20in%20Infor%20LN%20Training%20Materials.%20Please%20share%20more%20details."
+         target="_blank" rel="noopener">
+        <span class="ci-icon">📱</span>
+        <div class="ci-label">Call / WhatsApp</div>
+        <div class="ci-val">+91 63605 93122</div>
+      </a>
+      <a class="ci"
+         href="mailto:fullonbaan@gmail.com?subject=Infor%20LN%20Training%20Enquiry&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20am%20interested%20in%20your%20Infor%20LN%20Training%20Materials.%20Please%20share%20more%20details.%0A%0ARegards"
+         target="_blank" rel="noopener">
+        <span class="ci-icon">✉️</span>
+        <div class="ci-label">Email</div>
+        <div class="ci-val">fullonbaan@gmail.com</div>
+      </a>
+      <a class="ci" href="https://www.fullonbaan.com" target="_blank" rel="noopener">
+        <span class="ci-icon">🌐</span>
+        <div class="ci-label">Website</div>
+        <div class="ci-val">www.fullonbaan.com</div>
+      </a>
+    </div>
+
+    <!-- Pay Now -->
+    <div class="pay-section">
+      <button class="pay-btn" id="payBtn" onclick="togglePay()">
+        <span>💳</span>&nbsp; Pay Now — Select Your Module &nbsp;<span class="arrow">▼</span>
+      </button>
+
+      <div class="pay-panel" id="payPanel">
+        <div class="pay-inner">
+
+          <div class="pay-row">
+            <div>
+              <span class="pay-label">Select Module</span>
+              <select class="pay-select" id="modSelect" onchange="onModuleChange()">
+                <option value="">— Choose a module —</option>
+                <option value="development">Infor LN Development</option>
+                <option value="administration">Infor LN Administration</option>
+                <option value="finance">Infor LN Finance</option>
+                <option value="manufacturing">Infor LN Manufacturing</option>
+                <option value="logistics">Infor LN Logistics</option>
+                <option value="planning">Infor LN Planning</option>
+                <option value="extensibility">Infor Extensibility</option>
+              </select>
+            </div>
+            <div>
+              <span class="pay-label">Select Type</span>
+              <select class="pay-select" id="typeSelect" onchange="onTypeChange()" disabled>
+                <option value="">— Choose type —</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pay-amount-row" id="amountRow">
+            <div class="pa-left">
+              <div class="pa-desc">You are paying for</div>
+              <div class="pa-name" id="amountDesc">—</div>
+            </div>
+            <div class="pa-right">
+              <div class="pa-curr">INR</div>
+              <div class="pa-amt" id="amountVal">—</div>
+            </div>
+          </div>
+
+          <button class="pay-proceed" id="proceedBtn" onclick="openUPI()">
+            🔐 &nbsp;Proceed to Pay via UPI
+          </button>
+
+          <div class="upi-note" id="upiNote">
+            Opens your default UPI app (GPay · PhonePe · Paytm · BHIM)
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <div class="brand-block">
+        <div class="name">FullonBaan</div>
+        <div class="tagline">One Stop Destination for IT Solutions</div>
+      </div>
+      <div class="tags">
+        <span class="tag">#InforLN</span>
+        <span class="tag">#BaanERP</span>
+        <span class="tag">#ERPTraining</span>
+        <span class="tag">#FullonBaan</span>
+      </div>
+    </div>
+
+  </div><!-- /card-inner -->
+</div><!-- /card-wrap -->
+
+<script>
+  /* ── Sparkle dots ──────────────────────────────────── */
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < 50; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    const s = Math.random() * 3 + 1;
+    d.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${3+Math.random()*6}s;--delay:${Math.random()*6}s;--op:${(.12+Math.random()*.30)};`;
+    dotsEl.appendChild(d);
+  }
+
+  /* ── Pricing data ──────────────────────────────────── */
+  const MODULES = {
+    development:    { name:'Infor LN Development',    ebook:1999, video:3999, combo:4999 },
+    administration: { name:'Infor LN Administration', ebook:1999, video:3999, combo:4999 },
+    finance:        { name:'Infor LN Finance',         ebook:1999, video:4999, combo:5999 },
+    manufacturing:  { name:'Infor LN Manufacturing',  ebook:null, video:4999, combo:null },
+    logistics:      { name:'Infor LN Logistics',      ebook:null, video:4999, combo:null },
+    planning:       { name:'Infor LN Planning',        ebook:null, video:4999, combo:null },
+    extensibility:  { name:'Infor Extensibility',     ebook:null, video:3999, combo:null },
+  };
+
+  /* ⚠️  Replace this with FullonBaan's actual UPI VPA */
+  const UPI_ID   = 'fullonbaan@okaxis';
+  const UPI_NAME = 'FullonBaan';
+
+  let selAmount = 0, selDesc = '';
+
+  /* ── Toggle panel ──────────────────────────────────── */
+  function togglePay() {
+    document.getElementById('payBtn').classList.toggle('open');
+    document.getElementById('payPanel').classList.toggle('open');
+  }
+
+  /* ── Module changed ────────────────────────────────── */
+  function onModuleChange() {
+    const mod  = MODULES[document.getElementById('modSelect').value];
+    const tSel = document.getElementById('typeSelect');
+    tSel.innerHTML = '<option value="">— Choose type —</option>';
+    hideAmount();
+
+    if (!mod) { tSel.disabled = true; return; }
+
+    const fmt = n => n.toLocaleString('en-IN');
+    if (mod.ebook) tSel.insertAdjacentHTML('beforeend',`<option value="ebook">📘 eBook — ₹${fmt(mod.ebook)}</option>`);
+                   tSel.insertAdjacentHTML('beforeend',`<option value="video">🎬 Video Course — ₹${fmt(mod.video)}</option>`);
+    if (mod.combo) tSel.insertAdjacentHTML('beforeend',`<option value="combo">🎁 Combo (eBook + Videos) — ₹${fmt(mod.combo)}</option>`);
+
+    tSel.disabled = false;
+  }
+
+  /* ── Type changed ──────────────────────────────────── */
+  function onTypeChange() {
+    const modKey  = document.getElementById('modSelect').value;
+    const typeKey = document.getElementById('typeSelect').value;
+    if (!modKey || !typeKey) { hideAmount(); return; }
+
+    const mod    = MODULES[modKey];
+    const amount = mod[typeKey];
+    const labels = { ebook:'eBook', video:'Video Course', combo:'Combo (eBook + Videos)' };
+
+    selAmount = amount;
+    selDesc   = `${mod.name} — ${labels[typeKey]}`;
+
+    document.getElementById('amountDesc').textContent = selDesc;
+    document.getElementById('amountVal').textContent  = `₹${amount.toLocaleString('en-IN')}`;
+    document.getElementById('amountRow').classList.add('visible');
+    document.getElementById('proceedBtn').classList.add('visible');
+    document.getElementById('upiNote').classList.add('visible');
+  }
+
+  function hideAmount() {
+    ['amountRow','proceedBtn','upiNote'].forEach(id => document.getElementById(id).classList.remove('visible'));
+    selAmount = 0; selDesc = '';
+  }
+
+  /* ── Open UPI deep-link ────────────────────────────── */
+  function openUPI() {
+    if (!selAmount) return;
+    const url = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${selAmount}&cu=INR&tn=${encodeURIComponent(selDesc)}`;
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>
