@@ -1022,6 +1022,15 @@
                + '&cu=INR'
                + '&tn=' + encodeURIComponent(selDesc)
                + '&tr=' + txnRef;
+
+    // Google Ads — Purchase conversion event
+    gtag('event', 'conversion', {
+      'send_to': 'AW-18000254476/GinaCJyVroQcEIysmIdD',
+      'value': selAmount,
+      'currency': 'INR',
+      'transaction_id': txnRef
+    });
+
     window.location.href = upiUrl;
   };
 
