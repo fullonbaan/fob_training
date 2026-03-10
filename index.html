@@ -62,7 +62,7 @@
       0 32px 64px rgba(60,40,10,0.10),
       inset 0 1px 0 rgba(255,255,255,0.9);
     animation: rise .8s cubic-bezier(0.22,1,0.36,1) both;
-    overflow: hidden;
+    overflow: visible;
   }
 
   @keyframes rise {
@@ -204,6 +204,7 @@
   .ci-val { font-size:11.5px; color:var(--ink-mid); font-weight:500; }
 
   /* ── Pay Now ── */
+  /* ── Pay Now ── */
   .pay-section { margin-bottom:28px; animation:fadeUp .5s .62s ease both; }
 
   .pay-btn {
@@ -232,13 +233,12 @@
     transition:max-height .45s cubic-bezier(0.22,1,0.36,1), opacity .3s ease;
     opacity:0;
   }
-  .pay-panel.open { max-height:560px; opacity:1; }
+  .pay-panel.open { max-height:1000px; opacity:1; }
 
   .pay-inner {
     background:var(--smoke); border:1px solid var(--border);
     border-top:none; border-radius:0 0 12px 12px; padding:24px 22px 20px;
   }
-
   .pay-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
   .pay-label {
     font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px;
@@ -273,7 +273,6 @@
     font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:700;
     color:var(--rust);
   }
-
   .pay-proceed {
     width:100%; padding:14px;
     background:linear-gradient(135deg, var(--gold) 0%, var(--gold-mid) 100%);
@@ -287,12 +286,187 @@
   .pay-proceed.visible { display:flex; }
   .pay-proceed:hover { opacity:.92; transform:translateY(-1px); box-shadow:0 6px 20px rgba(168,120,42,0.38); }
   .pay-proceed:active { transform:translateY(0); }
-
   .upi-note {
     text-align:center; font-size:10px; color:var(--ink-lt);
     font-family:'DM Mono',monospace; margin-top:10px; letter-spacing:.5px; display:none;
   }
   .upi-note.visible { display:block; }
+
+  /* ── Footer ── */
+  .card-footer {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:22px; border-top:1px solid var(--border-lt);
+    animation:fadeUp .5s .7s ease both;
+  }
+  .brand-block .name {
+    font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700;
+    color:var(--ink); letter-spacing:.3px;
+  }
+  .brand-block .tagline {
+    font-size:9px; color:var(--ink-lt); letter-spacing:2px;
+    text-transform:uppercase; font-family:'DM Mono',monospace; margin-top:3px;
+  }
+  .tags { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .tag {
+    background:var(--gold-pale); border:1px solid rgba(168,120,42,0.25);
+    border-radius:20px; padding:3px 11px;
+    font-size:10px; color:var(--gold); font-family:'DM Mono',monospace;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── Step flow styles ── */
+  .step-header {
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .back-btn {
+    background:none; border:1px solid var(--border); border-radius:8px;
+    padding:6px 14px; font-size:12px; color:var(--gold); cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:background .2s;
+  }
+  .back-btn:hover { background:var(--gold-pale); }
+  .step-title {
+    font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700;
+    color:var(--ink);
+  }
+  .step-summary {
+    background:var(--gold-pale); border:1px solid rgba(168,120,42,0.2);
+    border-radius:8px; padding:10px 14px; font-size:12px;
+    color:var(--ink-mid); margin-bottom:14px; font-weight:500;
+  }
+  .user-fields { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+  .field-group { display:flex; flex-direction:column; gap:5px; }
+  .pay-input {
+    width:100%; padding:11px 14px;
+    background:var(--cream); border:1px solid var(--border); border-radius:8px;
+    color:var(--ink); font-family:'DM Sans',sans-serif; font-size:13px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .pay-input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(168,120,42,0.10); }
+  .field-error {
+    font-size:11.5px; color:var(--rust); font-family:'DM Mono',monospace;
+    min-height:16px; margin-bottom:6px;
+  }
+
+  /* UPI App Grid */
+  .upi-apps-grid {
+    display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
+    margin:12px 0 16px;
+  }
+  .upi-app-btn {
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    background:var(--cream); border:2px solid var(--border); border-radius:12px;
+    padding:14px 8px; cursor:pointer;
+    transition:border-color .2s, background .2s, transform .15s, box-shadow .2s;
+    font-family:'DM Sans',sans-serif;
+  }
+  .upi-app-btn:hover {
+    border-color:var(--gold-mid); background:var(--gold-pale);
+    transform:translateY(-3px); box-shadow:0 6px 18px rgba(168,120,42,0.14);
+  }
+  .upi-app-icon { width:40px; height:40px; display:flex; align-items:center; justify-content:center; line-height:1; }
+  .upi-app-name { font-size:10px; font-weight:600; color:var(--ink-mid); text-align:center; }
+
+  .upi-manual-note {
+    text-align:center; font-size:11px; color:var(--ink-lt);
+    font-family:'DM Mono',monospace; letter-spacing:.3px;
+    margin-bottom:12px;
+  }
+  .pay-confirm-btns {
+    display:flex; gap:10px;
+  }
+  .btn-success, .btn-failure {
+    flex:1; padding:13px; border:none; border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+    cursor:pointer; transition:opacity .2s, transform .15s;
+  }
+  .btn-success { background:linear-gradient(135deg,#2E7D4F,#50c880); color:#fff; }
+  .btn-failure { background:linear-gradient(135deg,var(--rust),#e07050); color:#fff; }
+  .btn-success:hover, .btn-failure:hover { opacity:.9; transform:translateY(-1px); }
+
+  /* Thank You / Failure */
+  .thankyou-wrap { text-align:center; padding:10px 0 4px; }
+  .ty-icon { font-size:52px; margin-bottom:10px; }
+  .ty-title {
+    font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:700;
+    color:var(--ink); margin-bottom:8px;
+  }
+  .ty-msg { font-size:13px; color:var(--ink-lt); margin-bottom:14px; }
+  .ty-order-box {
+    background:var(--gold-pale); border:1px solid rgba(168,120,42,0.25);
+    border-radius:10px; padding:14px 18px; margin-bottom:14px;
+    text-align:left; font-size:13px; color:var(--ink-mid); line-height:1.8;
+  }
+  .ty-order-box strong { color:var(--ink); }
+  .ty-delivery {
+    font-size:13px; color:var(--ink-mid); margin-bottom:10px; line-height:1.6;
+  }
+  .ty-contact {
+    font-size:12px; color:var(--ink-lt); font-family:'DM Mono',monospace;
+  }
+
+  @media(max-width:620px){
+    .upi-apps-grid { grid-template-columns:repeat(3,1fr); }
+    .pay-confirm-btns { flex-direction:column; }
+  }
+
+
+
+  /* ── Ecosystem Nav Bar ── */
+  .eco-nav {
+    position:relative; z-index:10;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 28px;
+    background:linear-gradient(90deg,var(--ink) 0%,var(--ink-mid) 100%);
+    border-bottom:1px solid rgba(201,148,62,0.22);
+    border-radius:24px 24px 0 0;
+  }
+  .eco-nav-label {
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px;
+    text-transform:uppercase; color:rgba(201,148,62,0.5); white-space:nowrap;
+  }
+  .eco-nav-links { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .eco-link {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 13px; border:1px solid rgba(201,148,62,0.28); border-radius:20px;
+    background:rgba(201,148,62,0.07); color:var(--gold-lt);
+    font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500;
+    text-decoration:none; transition:background .18s,border-color .18s,color .18s;
+    white-space:nowrap;
+  }
+  .eco-link:hover { background:rgba(201,148,62,0.2); border-color:var(--gold-mid); color:#fff; }
+  .eco-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .eco-link-repo  .eco-dot { background:#5B8DEF; }
+  .eco-link-train .eco-dot { background:#4CAF82; }
+  .eco-link-jobs  .eco-dot { background:#E2914A; }
+  /* ── Ecosystem Footer ── */
+  .eco-footer {
+    margin-top:28px; padding:20px 0 2px;
+    border-top:1px solid var(--border-lt); text-align:center;
+  }
+  .eco-footer-label {
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px;
+    text-transform:uppercase; color:var(--ink-lt); margin-bottom:14px;
+  }
+  .eco-footer-links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .eco-footer-link {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 18px; border:1px solid var(--border); border-radius:22px;
+    background:var(--smoke); color:var(--ink-mid); font-size:12px; font-weight:500;
+    text-decoration:none; transition:background .18s,border-color .18s,box-shadow .18s;
+  }
+  .eco-footer-link:hover {
+    background:var(--gold-pale); border-color:var(--gold-mid);
+    box-shadow:0 2px 10px rgba(168,120,42,0.12); color:var(--ink);
+  }
+  .eco-footer-link .efl-icon { font-size:14px; }
+  .eco-footer-link .efl-name { font-weight:600; color:var(--gold); }
+  .eco-footer-link .efl-desc { color:var(--ink-lt); font-size:11px; }
+  @media(max-width:600px){
+    .eco-nav { flex-direction:column; gap:8px; align-items:flex-start; padding:10px 16px; }
+    .eco-nav-links { justify-content:flex-start; }
+    .eco-footer-links { flex-direction:column; align-items:center; }
+  }
 
   /* ── Footer ── */
   .card-footer {
@@ -628,6 +802,16 @@
   <div class="card-bg"></div>
   <div class="dots" id="dots"></div>
 
+  <!-- ── FOB Ecosystem Nav ── -->
+  <nav class="eco-nav">
+    <span class="eco-nav-label">◆ FOB Ecosystem</span>
+    <div class="eco-nav-links">
+      <a class="eco-link eco-link-repo"  href="https://fobrepo.vercel.app/"     target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Repo</a>
+      <a class="eco-link eco-link-train" href="https://fobinterview.vercel.app/" target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Interview</a>
+      <a class="eco-link eco-link-jobs"  href="https://fobjobs.vercel.app/"     target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Jobs</a>
+    </div>
+  </nav>
+
   <div class="card-inner">
 
     <!-- Header -->
@@ -864,7 +1048,7 @@
         <div class="ci-label">Call / WhatsApp</div>
         <div class="ci-val">+91 63605 93122</div>
       </a>
-      <a class="ci" href="mailto:fullonbaan@gmail.com" rel="noopener">
+      <a class="ci" href="mailto:fullonbaan@gmail.com">
         <span class="ci-icon">✉️</span>
         <div class="ci-label">Email</div>
         <div class="ci-val">fullonbaan@gmail.com</div>
@@ -876,7 +1060,7 @@
       </a>
     </div>
 
-    <!-- Pay Now -->
+    <!-- ── Pay Now ── -->
     <div class="pay-section">
       <button class="pay-btn" id="payBtn" onclick="togglePay()">
         <span>💳</span>&nbsp; Pay Now — Select Your Module &nbsp;<span class="arrow">▼</span>
@@ -884,46 +1068,206 @@
 
       <div class="pay-panel" id="payPanel">
         <div class="pay-inner">
-          <div class="pay-row">
-            <div>
-              <span class="pay-label">Select Module</span>
-              <select class="pay-select" id="modSelect" onchange="onModuleChange()">
-                <option value="">— Choose a module —</option>
-                <option value="development">Infor LN Development</option>
-                <option value="administration">Infor LN Administration</option>
-                <option value="finance">Infor LN Finance</option>
-                <option value="manufacturing">Infor LN Manufacturing</option>
-                <option value="logistics">Infor LN Logistics</option>
-                <option value="planning">Infor LN Planning</option>
-                <option value="extensibility">Infor Extensibility</option>
-              </select>
+
+          <!-- STEP 1: Select Module -->
+          <div id="step1">
+            <div class="pay-row">
+              <div>
+                <span class="pay-label">Select Module</span>
+                <select class="pay-select" id="modSelect" onchange="onModuleChange()">
+                  <option value="">— Choose a module —</option>
+                  <optgroup label="📘 eBooks">
+                    <option value="dev_ebook">Infor LN Development — eBook — ₹1,999</option>
+                    <option value="adm_ebook">Infor LN Administration — eBook — ₹1,999</option>
+                    <option value="fin_ebook">Infor LN Finance — eBook — ₹1,999</option>
+                  </optgroup>
+                  <optgroup label="🎬 Video Courses">
+                    <option value="dev_video">Infor LN Development — Video Course — ₹3,999</option>
+                    <option value="adm_video">Infor LN Administration — Video Course — ₹3,999</option>
+                    <option value="fin_video">Infor LN Finance — Video Course — ₹4,999</option>
+                    <option value="mfg_video">Infor LN Manufacturing — Video Course — ₹4,999</option>
+                    <option value="log_video">Infor LN Logistics — Video Course — ₹4,999</option>
+                    <option value="pln_video">Infor LN Planning — Video Course — ₹4,999</option>
+                    <option value="ext_video">Infor Extensibility — Video Course — ₹3,999</option>
+                  </optgroup>
+                  <optgroup label="🎁 Combo Bundles (eBook + Videos)">
+                    <option value="dev_combo">Infor LN Development — Combo — ₹4,999</option>
+                    <option value="adm_combo">Infor LN Administration — Combo — ₹4,999</option>
+                    <option value="fin_combo">Infor LN Finance — Combo — ₹5,999</option>
+                  </optgroup>
+                </select>
+              </div>
+
             </div>
-            <div>
-              <span class="pay-label">Select Type</span>
-              <select class="pay-select" id="typeSelect" onchange="onTypeChange()" disabled>
-                <option value="">— Choose type —</option>
-              </select>
+
+            <div class="pay-amount-row" id="amountRow">
+              <div class="pa-left">
+                <div class="pa-desc">You are paying for</div>
+                <div class="pa-name" id="amountDesc">—</div>
+              </div>
+              <div class="pa-right">
+                <div class="pa-curr">INR</div>
+                <div class="pa-amt" id="amountVal">—</div>
+              </div>
+            </div>
+
+            <button class="pay-proceed" id="proceedBtn" onclick="goToStep2()">
+              👤&nbsp; Continue — Enter Your Details
+            </button>
+            <div class="upi-note" id="upiNote">Next: Enter your name, email &amp; mobile to proceed</div>
+          </div>
+
+          <!-- STEP 2: User Details -->
+          <div id="step2" style="display:none;">
+            <div class="step-header">
+              <button class="back-btn" onclick="goToStep1()">← Back</button>
+              <div class="step-title">Your Details</div>
+            </div>
+            <div class="step-summary" id="step2Summary"></div>
+            <div class="user-fields">
+              <div class="field-group">
+                <label class="pay-label">Full Name *</label>
+                <input type="text" class="pay-input" id="userName" placeholder="Enter your full name" />
+              </div>
+              <div class="field-group">
+                <label class="pay-label">Email ID *</label>
+                <input type="email" class="pay-input" id="userEmail" placeholder="Enter your email address" />
+              </div>
+              <div class="field-group">
+                <label class="pay-label">Mobile No *</label>
+                <input type="tel" class="pay-input" id="userMobile" placeholder="Enter your 10-digit mobile number" maxlength="10" />
+              </div>
+            </div>
+            <div class="field-error" id="fieldError"></div>
+            <button class="pay-proceed" style="display:flex;margin-top:6px;" onclick="goToStep3()">
+              💳&nbsp; Proceed to Payment
+            </button>
+          </div>
+
+          <!-- STEP 3: UPI App Selection -->
+          <div id="step3" style="display:none;">
+            <div class="step-header">
+              <button class="back-btn" onclick="goBackToStep2()">← Back</button>
+              <div class="step-title">Choose UPI App</div>
+            </div>
+            <div class="step-summary" id="step3Summary"></div>
+            <div class="upi-apps-grid">
+              <button class="upi-app-btn" onclick="launchUPI('paytm')">
+                <span class="upi-app-icon">
+                  <svg viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="10" fill="#002970"/>
+                    <rect x="6" y="6" width="36" height="36" rx="7" fill="#00BAF2"/>
+                    <text x="24" y="20" text-anchor="middle" font-size="7.5" font-weight="900" fill="#002970" font-family="Arial,sans-serif">Pay</text>
+                    <text x="24" y="30" text-anchor="middle" font-size="7.5" font-weight="900" fill="#ffffff" font-family="Arial,sans-serif">tm</text>
+                    <rect x="10" y="32" width="28" height="2.5" rx="1.2" fill="#002970"/>
+                  </svg>
+                </span>
+                <span class="upi-app-name">Paytm</span>
+              </button>
+              <button class="upi-app-btn" onclick="launchUPI('gpay')">
+                <span class="upi-app-icon">
+                  <svg viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="10" fill="#fff" stroke="#e0e0e0" stroke-width="1"/>
+                    <text x="24" y="19" text-anchor="middle" font-size="8" font-weight="700" fill="#4285F4" font-family="Arial,sans-serif">G</text>
+                    <text x="15" y="30" text-anchor="middle" font-size="6" font-weight="700" fill="#EA4335" font-family="Arial,sans-serif">o</text>
+                    <text x="21" y="30" text-anchor="middle" font-size="6" font-weight="700" fill="#FBBC05" font-family="Arial,sans-serif">o</text>
+                    <text x="27" y="30" text-anchor="middle" font-size="6" font-weight="700" fill="#34A853" font-family="Arial,sans-serif">g</text>
+                    <text x="33" y="30" text-anchor="middle" font-size="6" font-weight="700" fill="#4285F4" font-family="Arial,sans-serif">le</text>
+                    <text x="24" y="40" text-anchor="middle" font-size="6" font-weight="700" fill="#5F6368" font-family="Arial,sans-serif">Pay</text>
+                  </svg>
+                </span>
+                <span class="upi-app-name">Google Pay</span>
+              </button>
+              <button class="upi-app-btn" onclick="launchUPI('bhim')">
+                <span class="upi-app-icon">
+                  <svg viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="10" fill="#1A237E"/>
+                    <rect x="0" y="0" width="48" height="16" rx="0" fill="#FF9933"/>
+                    <rect x="0" y="0" width="48" height="16" rx="10" fill="#FF9933"/>
+                    <rect x="0" y="16" width="48" height="16" fill="#fff"/>
+                    <rect x="0" y="32" width="48" height="16" fill="#138808"/>
+                    <rect x="0" y="32" width="48" height="16" rx="0" fill="#138808"/>
+                    <rect x="0" y="38" width="48" height="10" rx="10" fill="#138808"/>
+                    <circle cx="24" cy="24" r="6" fill="none" stroke="#000080" stroke-width="1.5"/>
+                    <text x="24" y="24.5" text-anchor="middle" dominant-baseline="middle" font-size="5" font-weight="900" fill="#000080" font-family="Arial,sans-serif">BHIM</text>
+                  </svg>
+                </span>
+                <span class="upi-app-name">BHIM</span>
+              </button>
+              <button class="upi-app-btn" onclick="launchUPI('phonepe')">
+                <span class="upi-app-icon">
+                  <svg viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="10" fill="#5F259F"/>
+                    <circle cx="24" cy="20" r="10" fill="#fff" opacity="0.15"/>
+                    <text x="24" y="18" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="Arial,sans-serif">Pe</text>
+                    <text x="24" y="34" text-anchor="middle" font-size="7" font-weight="700" fill="#fff" font-family="Arial,sans-serif" opacity="0.85">PhonePe</text>
+                  </svg>
+                </span>
+                <span class="upi-app-name">PhonePe</span>
+              </button>
+              <button class="upi-app-btn" onclick="launchUPI('whatsapp')">
+                <span class="upi-app-icon">
+                  <svg viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="10" fill="#25D366"/>
+                    <circle cx="24" cy="22" r="11" fill="#fff"/>
+                    <path d="M24 13c-4.97 0-9 4.03-9 9 0 1.59.42 3.08 1.14 4.38L15 31l4.74-1.24A8.96 8.96 0 0024 31c4.97 0 9-4.03 9-9s-4.03-9-9-9zm4.4 12.61c-.19.53-1.1.98-1.52 1.04-.39.05-.88.07-1.42-.09-.33-.1-.75-.23-1.29-.46-2.27-.98-3.75-3.27-3.87-3.42-.12-.15-.97-1.29-.97-2.46 0-1.17.61-1.75.83-1.99.22-.24.48-.3.64-.3l.46.01c.15.01.35-.06.54.41.2.49.69 1.68.75 1.8.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.25-.1.49.14.24.61 1.01 1.31 1.63.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.14-.16.59-.69.75-.93.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.56-.13 1.1z" fill="#25D366"/>
+                    <text x="24" y="41" text-anchor="middle" font-size="5.5" font-weight="700" fill="#fff" font-family="Arial,sans-serif">WhatsApp Pay</text>
+                  </svg>
+                </span>
+                <span class="upi-app-name">WhatsApp Pay</span>
+              </button>
+            </div>
+            <div class="upi-manual-note">
+              After completing payment in your UPI app, come back and confirm below:
+            </div>
+            <div class="pay-confirm-btns" id="confirmBtns" style="display:none;">
+              <button class="btn-success" onclick="onPaymentSuccess()">✅ Payment Successful</button>
+              <button class="btn-failure" onclick="onPaymentFailure()">❌ Payment Failed</button>
             </div>
           </div>
 
-          <div class="pay-amount-row" id="amountRow">
-            <div class="pa-left">
-              <div class="pa-desc">You are paying for</div>
-              <div class="pa-name" id="amountDesc">—</div>
-            </div>
-            <div class="pa-right">
-              <div class="pa-curr">INR</div>
-              <div class="pa-amt" id="amountVal">—</div>
+          <!-- STEP 4: Thank You -->
+          <div id="step4" style="display:none;">
+            <div class="thankyou-wrap">
+              <div class="ty-icon">🎉</div>
+              <div class="ty-title">Thank You!</div>
+              <div class="ty-msg">Your payment was received. Here's your order summary:</div>
+              <div class="ty-order-box" id="tyOrderBox"></div>
+              <div class="ty-delivery">
+                📧 Your training material will be sent shortly to <strong id="tyEmail"></strong>.<br>
+                Please check your inbox &amp; spam folder.
+              </div>
+              <div class="ty-contact">Questions? WhatsApp us at <strong>+91 63605 93122</strong></div>
             </div>
           </div>
 
-          <button class="pay-proceed" id="proceedBtn" onclick="openUPI()">
-            🔐&nbsp; Proceed to Pay via UPI
-          </button>
-          <div class="upi-note" id="upiNote">
-            Opens your default UPI app (GPay · PhonePe · Paytm · BHIM)
+          <!-- STEP 5: Payment Failed -->
+          <div id="step5" style="display:none;">
+            <div class="thankyou-wrap">
+              <div class="ty-icon">😔</div>
+              <div class="ty-title" style="color:var(--rust)">Payment Failed</div>
+              <div class="ty-msg">Don't worry — we've noted your interest and will reach out to you shortly.</div>
+              <div class="ty-order-box" id="failOrderBox"></div>
+              <div class="ty-delivery">
+                Our team will contact you at <strong id="failContact"></strong> to assist you.
+              </div>
+              <div class="ty-contact">Or reach us directly on WhatsApp: <strong>+91 63605 93122</strong></div>
+              <button class="pay-proceed" style="display:flex;margin-top:16px;" onclick="retryPayment()">🔄 Retry Payment</button>
+            </div>
           </div>
+
         </div>
+      </div>
+    </div>
+
+
+    <!-- FOB Ecosystem Footer -->
+    <div class="eco-footer">
+      <div class="eco-footer-label">◆ Explore the FOB Ecosystem ◆</div>
+      <div class="eco-footer-links">
+        <a class="eco-footer-link" href="https://fobrepo.vercel.app/"     target="_blank" rel="noopener"><span class="efl-icon">📦</span><span class="efl-name">FOB Repo</span><span class="efl-desc">Resources &amp; Downloads</span></a>
+        <a class="eco-footer-link" href="https://fobinterview.vercel.app/" target="_blank" rel="noopener"><span class="efl-icon">🎓</span><span class="efl-name">FOB Interview</span><span class="efl-desc">Interview Prep</span></a>
+        <a class="eco-footer-link" href="https://fobjobs.vercel.app/"     target="_blank" rel="noopener"><span class="efl-icon">💼</span><span class="efl-name">FOB Jobs</span><span class="efl-desc">Infor LN Opportunities</span></a>
       </div>
     </div>
 
@@ -945,95 +1289,237 @@
 </div>
 
 <script>
+  // ═══════════════════════════════════════════════════════════════
+  //  EMAILJS CREDENTIALS (live & configured)
+  // ═══════════════════════════════════════════════════════════════
+  var EMAILJS_PUBLIC_KEY  = 'aDL0FEenlYJ8WaJne';
+  var EMAILJS_SERVICE_ID  = 'service_t9cqgtn';
+  var EMAILJS_TEMPLATE_ID = 'template_ezdle7f';
+
   /* ── Dust motes ── */
-  (function() {
-    var dotsEl = document.getElementById('dots');
-    if (!dotsEl) return;
-    for (var i = 0; i < 35; i++) {
-      var d = document.createElement('div'); d.className = 'dot';
-      var s = Math.random() * 4 + 1.5;
-      d.style.cssText = 'width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--dur:'+(5+Math.random()*7)+'s;--delay:'+(Math.random()*7)+'s;--op:'+(0.06+Math.random()*0.14)+';';
-      dotsEl.appendChild(d);
+  (function(){
+    var d=document.getElementById('dots'); if(!d) return;
+    for(var i=0;i<35;i++){
+      var e=document.createElement('div'); e.className='dot';
+      var s=Math.random()*4+1.5;
+      e.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--dur:'+(5+Math.random()*7)+'s;--delay:'+(Math.random()*7)+'s;--op:'+(0.06+Math.random()*0.14)+';';
+      d.appendChild(e);
     }
   })();
 
-  /* ── Module data ── */
-  var MODULES = {
-    development:    { name:'Infor LN Development',    ebook:1999, video:3999, combo:4999 },
-    administration: { name:'Infor LN Administration', ebook:1999, video:3999, combo:4999 },
-    finance:        { name:'Infor LN Finance',        ebook:1999, video:4999, combo:5999 },
-    manufacturing:  { name:'Infor LN Manufacturing',  ebook:null, video:4999, combo:null },
-    logistics:      { name:'Infor LN Logistics',      ebook:null, video:4999, combo:null },
-    planning:       { name:'Infor LN Planning',       ebook:null, video:4999, combo:null },
-    extensibility:  { name:'Infor Extensibility',     ebook:null, video:3999, combo:null },
+  /* ── Training module catalogue ── */
+  var GUIDES = {
+    dev_ebook: { name:'Infor LN Development — eBook',              price:1999 },
+    adm_ebook: { name:'Infor LN Administration — eBook',           price:1999 },
+    fin_ebook: { name:'Infor LN Finance — eBook',                  price:1999 },
+    dev_video: { name:'Infor LN Development — Video Course',       price:3999 },
+    adm_video: { name:'Infor LN Administration — Video Course',    price:3999 },
+    fin_video: { name:'Infor LN Finance — Video Course',           price:4999 },
+    mfg_video: { name:'Infor LN Manufacturing — Video Course',     price:4999 },
+    log_video: { name:'Infor LN Logistics — Video Course',         price:4999 },
+    pln_video: { name:'Infor LN Planning — Video Course',          price:4999 },
+    ext_video: { name:'Infor Extensibility — Video Course',        price:3999 },
+    dev_combo: { name:'Infor LN Development — Combo (eBook + Videos)',    price:4999 },
+    adm_combo: { name:'Infor LN Administration — Combo (eBook + Videos)', price:4999 },
+    fin_combo: { name:'Infor LN Finance — Combo (eBook + Videos)',        price:5999 },
   };
 
   var UPI_ID   = 'nikivernekar@okicici';
   var UPI_NAME = 'FullonBaan';
-  var selAmount = 0, selDesc = '';
 
-  /* ── Explicitly on window so inline onclick always finds them ── */
-  window.togglePay = function() {
+  var UPI_APPS = {
+    paytm:    { scheme:'paytmmp://upi/pay',  label:'Paytm' },
+    gpay:     { scheme:'tez://upi/pay',       label:'Google Pay' },
+    bhim:     { scheme:'bhim://upi/pay',      label:'BHIM' },
+    phonepe:  { scheme:'phonepe://upi/pay',   label:'PhonePe' },
+    whatsapp: { scheme:'whatsapp://upi/pay',  label:'WhatsApp Pay' },
+  };
+
+  var selAmount = 0, selDesc = '', selKey = '';
+  var userData  = { name:'', email:'', mobile:'' };
+  var txnRef    = '';
+
+  /* ── Show/hide steps ── */
+  function showStep(id){
+    ['step1','step2','step3','step4','step5'].forEach(function(s){
+      var el = document.getElementById(s);
+      if(el) el.style.display = (s===id) ? 'block' : 'none';
+    });
+  }
+
+  function hideAmount(){
+    document.getElementById('amountRow').classList.remove('visible');
+    document.getElementById('proceedBtn').classList.remove('visible');
+    document.getElementById('upiNote').classList.remove('visible');
+  }
+
+  /* ── Toggle panel ── */
+  window.togglePay = function(){
     document.getElementById('payBtn').classList.toggle('open');
     document.getElementById('payPanel').classList.toggle('open');
   };
 
-  window.onModuleChange = function() {
-    var modKey = document.getElementById('modSelect').value;
-    var mod = MODULES[modKey];
-    var tSel = document.getElementById('typeSelect');
-    tSel.innerHTML = '<option value="">— Choose type —</option>';
-    window.hideAmount();
-    if (!mod) { tSel.disabled = true; return; }
-    var fmt = function(n) { return n.toLocaleString('en-IN'); };
-    if (mod.ebook) tSel.insertAdjacentHTML('beforeend', '<option value="ebook">eBook \u2014 \u20B9' + fmt(mod.ebook) + '</option>');
-    tSel.insertAdjacentHTML('beforeend', '<option value="video">Video Course \u2014 \u20B9' + fmt(mod.video) + '</option>');
-    if (mod.combo) tSel.insertAdjacentHTML('beforeend', '<option value="combo">Combo (eBook + Videos) \u2014 \u20B9' + fmt(mod.combo) + '</option>');
-    tSel.disabled = false;
-  };
-
-  window.onTypeChange = function() {
-    var modKey  = document.getElementById('modSelect').value;
-    var typeKey = document.getElementById('typeSelect').value;
-    if (!modKey || !typeKey) { window.hideAmount(); return; }
-    var mod = MODULES[modKey];
-    var labels = { ebook:'eBook', video:'Video Course', combo:'Combo (eBook + Videos)' };
-    selAmount = mod[typeKey];
-    selDesc   = mod.name + ' \u2014 ' + labels[typeKey];
+  /* ── Step 1: Module selection ── */
+  window.onModuleChange = function(){
+    selKey = document.getElementById('modSelect').value;
+    hideAmount();
+    if(!selKey) return;
+    var g = GUIDES[selKey];
+    if(!g) return;
+    selAmount = g.price;
+    selDesc   = g.name;
     document.getElementById('amountDesc').textContent = selDesc;
-    document.getElementById('amountVal').textContent  = '\u20B9' + selAmount.toLocaleString('en-IN');
+    document.getElementById('amountVal').textContent  = '\u20b9' + selAmount.toLocaleString('en-IN');
     document.getElementById('amountRow').classList.add('visible');
     document.getElementById('proceedBtn').classList.add('visible');
     document.getElementById('upiNote').classList.add('visible');
   };
 
-  window.hideAmount = function() {
-    document.getElementById('amountRow').classList.remove('visible');
-    document.getElementById('proceedBtn').classList.remove('visible');
-    document.getElementById('upiNote').classList.remove('visible');
+  /* ── Step 1 → 2 ── */
+  window.goToStep2 = function(){
+    if(!selAmount){ alert('Please select a module first.'); return; }
+    document.getElementById('step2Summary').textContent = selDesc + '  \u00b7  \u20b9' + selAmount.toLocaleString('en-IN');
+    showStep('step2');
   };
 
-  window.openUPI = function() {
-    if (!selAmount) return;
-    var txnRef = 'FOB' + Date.now();
-    var upiUrl = 'upi://pay?pa=' + encodeURIComponent(UPI_ID)
+  /* ── Step 2 back ── */
+  window.goToStep1 = function(){ showStep('step1'); };
+
+  /* ── Step 2 → 3 with validation ── */
+  window.goToStep3 = function(){
+    var name   = document.getElementById('userName').value.trim();
+    var email  = document.getElementById('userEmail').value.trim();
+    var mobile = document.getElementById('userMobile').value.trim();
+    var err    = document.getElementById('fieldError');
+
+    if(!name)                          { err.textContent='Please enter your full name.'; return; }
+    if(!email || !email.includes('@')) { err.textContent='Please enter a valid email address.'; return; }
+    if(!mobile || mobile.length < 10)  { err.textContent='Please enter a valid 10-digit mobile number.'; return; }
+
+    err.textContent = '';
+    userData = { name:name, email:email, mobile:mobile };
+
+    document.getElementById('step3Summary').innerHTML =
+      '<strong>' + name + '</strong> &nbsp;\u00b7&nbsp; ' + email +
+      ' &nbsp;\u00b7&nbsp; +91 ' + mobile +
+      '<br><span style="color:var(--rust);font-weight:600;">' + selDesc + ' \u2014 \u20b9' + selAmount.toLocaleString('en-IN') + '</span>';
+
+    showStep('step3');
+  };
+
+  /* ── Step 3 back ── */
+  window.goBackToStep2 = function(){ showStep('step2'); };
+
+  /* ── Launch UPI app ── */
+  window.launchUPI = function(appKey){
+    txnRef = 'FOB' + Date.now();
+    var app    = UPI_APPS[appKey];
+    var params = '?pa=' + encodeURIComponent(UPI_ID)
                + '&pn=' + encodeURIComponent(UPI_NAME)
                + '&am=' + selAmount
                + '&cu=INR'
-               + '&tn=' + encodeURIComponent(selDesc)
+               + '&tn=' + encodeURIComponent(selDesc.substring(0,50))
                + '&tr=' + txnRef;
-
-    // Google Ads — Purchase conversion event
-    gtag('event', 'conversion', {
-      'send_to': 'AW-18000254476/GinaCJyVroQcEIysmIdD',
-      'value': selAmount,
-      'currency': 'INR',
-      'transaction_id': txnRef
-    });
-
-    window.location.href = upiUrl;
+    window.location.href = app.scheme + params;
+    // Show confirm buttons after delay
+    setTimeout(function(){
+      document.getElementById('confirmBtns').style.display = 'flex';
+    }, 2500);
+    // Google Ads conversion
+    if(typeof gtag !== 'undefined'){
+      gtag('event','conversion',{send_to:'AW-18000254476/purchase',value:selAmount,currency:'INR',transaction_id:txnRef});
+    }
   };
 
+  /* ── Payment Success ── */
+  window.onPaymentSuccess = function(){
+    document.getElementById('tyEmail').textContent = userData.email;
+    document.getElementById('tyOrderBox').innerHTML =
+      '<strong>Order Ref:</strong> ' + txnRef + '<br>' +
+      '<strong>Module:</strong> ' + selDesc + '<br>' +
+      '<strong>Amount Paid:</strong> \u20b9' + selAmount.toLocaleString('en-IN') + '<br>' +
+      '<strong>Name:</strong> ' + userData.name + '<br>' +
+      '<strong>Mobile:</strong> +91 ' + userData.mobile + '<br>' +
+      '<strong>Email:</strong> ' + userData.email;
+    showStep('step4');
+    // Notify FullonBaan
+    sendEmail({
+      to_email:    'fullonbaan@gmail.com',
+      subject:     'New Training Order — ' + selDesc,
+      status:      'PAYMENT SUCCESSFUL',
+      order_ref:   txnRef,
+      guide:       selDesc,
+      amount:      'Rs.' + selAmount.toLocaleString('en-IN'),
+      cust_name:   userData.name,
+      cust_email:  userData.email,
+      cust_mobile: '+91 ' + userData.mobile,
+      message:     'New training order received. Please deliver the training material to the customer at the earliest.',
+    });
+    // Confirm to customer
+    sendEmail({
+      to_email:    userData.email,
+      subject:     'Your FullonBaan Training Order is Confirmed — ' + selDesc,
+      status:      'ORDER CONFIRMED',
+      order_ref:   txnRef,
+      guide:       selDesc,
+      amount:      'Rs.' + selAmount.toLocaleString('en-IN'),
+      cust_name:   userData.name,
+      cust_email:  userData.email,
+      cust_mobile: '+91 ' + userData.mobile,
+      message:     'Thank you for your purchase! Your Infor LN training material will be emailed to you shortly. Please check your inbox and spam folder. For queries, WhatsApp us at +91 63605 93122.',
+    });
+  };
+
+  /* ── Payment Failure ── */
+  window.onPaymentFailure = function(){
+    document.getElementById('failContact').textContent =
+      userData.email + ' / +91 ' + userData.mobile;
+    document.getElementById('failOrderBox').innerHTML =
+      '<strong>Module:</strong> ' + selDesc + '<br>' +
+      '<strong>Amount:</strong> \u20b9' + selAmount.toLocaleString('en-IN') + '<br>' +
+      '<strong>Name:</strong> ' + userData.name + '<br>' +
+      '<strong>Mobile:</strong> +91 ' + userData.mobile + '<br>' +
+      '<strong>Email:</strong> ' + userData.email;
+    showStep('step5');
+    sendEmail({
+      to_email:    'fullonbaan@gmail.com',
+      subject:     'Payment Failed — ' + selDesc,
+      status:      'PAYMENT FAILED — Please follow up with customer',
+      order_ref:   txnRef || 'N/A',
+      guide:       selDesc,
+      amount:      'Rs.' + selAmount.toLocaleString('en-IN'),
+      cust_name:   userData.name,
+      cust_email:  userData.email,
+      cust_mobile: '+91 ' + userData.mobile,
+      message:     'Payment failed. Please reach out to the customer to assist them.',
+    });
+  };
+
+  window.retryPayment = function(){
+    document.getElementById('confirmBtns').style.display = 'none';
+    showStep('step3');
+  };
+
+  /* ── EmailJS REST API ── */
+  function sendEmail(params){
+    fetch('https://api.emailjs.com/api/v1.0/email/send',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        service_id:      EMAILJS_SERVICE_ID,
+        template_id:     EMAILJS_TEMPLATE_ID,
+        user_id:         EMAILJS_PUBLIC_KEY,
+        template_params: params
+      })
+    })
+    .then(function(res){
+      if(res.ok){ console.log('Email sent successfully'); }
+      else { console.error('Email send failed', res.status); }
+    })
+    .catch(function(err){
+      console.error('Email error:', err);
+    });
+  }
 </script>
 </body>
 </html>
