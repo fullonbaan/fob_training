@@ -1220,10 +1220,10 @@
         <div class="ci-label">Call / WhatsApp</div>
         <div class="ci-val">+91 63605 93122</div>
       </a>
-      <a class="ci" href="/cdn-cgi/l/email-protection#97f1e2fbfbf8f9f5f6f6f9d7f0faf6fefbb9f4f8fa">
+      <a class="ci" href="mailto:fullonbaan@gmail.com?subject=Enquiry%20%E2%80%94%20Infor%20LN%20Interview%20Guide&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20am%20interested%20in%20your%20Infor%20LN%20Interview%20Preparation%20Guides.%20Could%20you%20please%20share%20more%20details%3F%0A%0AThank%20you%21">
         <span class="ci-icon">✉️</span>
         <div class="ci-label">Email</div>
-        <div class="ci-val"><span class="__cf_email__" data-cfemail="65031009090a0b0704040b250208040c094b060a08">[email&#160;protected]</span></div>
+        <div class="ci-val">fullonbaan@gmail.com</div>
       </a>
       <a class="ci" href="https://www.fullonbaan.com" target="_blank" rel="noopener">
         <span class="ci-icon">🌐</span>
@@ -1745,11 +1745,6 @@
 
   };
 
-  window.retryPayment = function(){
-    document.getElementById('confirmBtns').style.display = 'none';
-    showStep('step3');
-  };
-
   // ── EmailJS REST API (no SDK needed) ─────────────────────────
   // HOW TO SET UP (5 minutes, free):
   // 1. Go to https://www.emailjs.com and create a free account
@@ -1803,3 +1798,17 @@
 
 
   // ── Show / hide steps ───────────────────────
+  function showStep(id) {
+    ['step1','step2','step3','step4','step5'].forEach(function(s){
+      var el = document.getElementById(s);
+      if(el) el.style.display = (s === id) ? '' : 'none';
+    });
+  }
+
+  window.retryPayment = function(){
+    showStep('step3');
+  };
+
+</script>
+</body>
+</html>
