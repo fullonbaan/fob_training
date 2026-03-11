@@ -172,6 +172,15 @@
     border:1px solid rgba(46,125,79,0.22); border-radius:20px;
     padding:3px 11px; display:inline-block; font-weight:500;
   }
+
+  .save-badge {
+    display: inline-block; margin-top: 5px;
+    font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 600;
+    color: var(--green); background: var(--green-bg);
+    border: 1px solid rgba(46,125,79,0.25); border-radius: 20px;
+    padding: 2px 8px; letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
   .pna  { color:var(--border); font-family:'DM Mono',monospace; font-size:14px; }
   .cval {
     font-family:'Cormorant Garamond',serif; font-weight:700; font-size:16px;
@@ -809,6 +818,7 @@
       <a class="eco-link eco-link-repo"  href="https://fobrepo.vercel.app/"     target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Repo</a>
       <a class="eco-link eco-link-train" href="https://fobinterview.vercel.app/" target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Interview</a>
       <a class="eco-link eco-link-jobs"  href="https://fobjobs.vercel.app/"     target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Jobs</a>
+      <a class="eco-link eco-link-train" href="https://fobexams.vercel.app/"    target="_blank" rel="noopener"><span class="eco-dot"></span>FOB Certification</a>
     </div>
   </nav>
 
@@ -834,13 +844,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="highlight-row"><td class="num">01</td><td class="mod">Infor LN Development</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span></td></tr>
-        <tr class="highlight-row"><td class="num">02</td><td class="mod">Infor LN Administration</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span></td></tr>
-        <tr class="highlight-row"><td class="num">03</td><td class="mod">Infor LN Finance</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹5,999</span></td></tr>
-        <tr><td class="num">04</td><td class="mod">Infor LN Manufacturing</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
-        <tr><td class="num">05</td><td class="mod">Infor LN Logistics</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
-        <tr><td class="num">06</td><td class="mod">Infor LN Planning</td><td><span class="pfree">Free</span></td><td><span class="pval">₹4,999</span></td><td><span class="pna">—</span></td></tr>
-        <tr><td class="num">07</td><td class="mod">Infor Extensibility</td><td><span class="pfree">Free</span></td><td><span class="pval">₹3,999</span></td><td><span class="pna">—</span></td></tr>
+        <tr class="highlight-row"><td class="num">01</td><td class="mod">Infor LN Development</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+        <tr class="highlight-row"><td class="num">02</td><td class="mod">Infor LN Administration</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+        <tr class="highlight-row"><td class="num">03</td><td class="mod">Infor LN Finance</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹5,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+        <tr><td class="num">04</td><td class="mod">Infor LN Manufacturing</td><td><span class="pval">₹499</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
+        <tr><td class="num">05</td><td class="mod">Infor LN Logistics</td><td><span class="pval">₹499</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
+        <tr><td class="num">06</td><td class="mod">Infor LN Planning</td><td><span class="pval">₹499</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
+        <tr><td class="num">07</td><td class="mod">Infor Extensibility</td><td><span class="pval">₹499</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹3,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
       </tbody>
     </table>
 
@@ -1048,7 +1058,7 @@
         <div class="ci-label">Call / WhatsApp</div>
         <div class="ci-val">+91 63605 93122</div>
       </a>
-      <a class="ci" href="mailto:fullonbaan@gmail.com">
+      <a class="ci" href="mailto:fullonbaan@gmail.com?subject=Training%20Enquiry%20—%20FullonBaan&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20am%20interested%20in%20your%20Infor%20LN%20training%20materials.%20Please%20share%20more%20details.%0A%0AName%3A%20%0AMobile%3A%20%0AModule%20of%20Interest%3A%20%0A%0ARegards">
         <span class="ci-icon">✉️</span>
         <div class="ci-label">Email</div>
         <div class="ci-val">fullonbaan@gmail.com</div>
@@ -1080,6 +1090,10 @@
                     <option value="dev_ebook">Infor LN Development — eBook — ₹1,999</option>
                     <option value="adm_ebook">Infor LN Administration — eBook — ₹1,999</option>
                     <option value="fin_ebook">Infor LN Finance — eBook — ₹1,999</option>
+                    <option value="mfg_ebook">Infor LN Manufacturing — eBook — ₹499</option>
+                    <option value="log_ebook">Infor LN Logistics — eBook — ₹499</option>
+                    <option value="pln_ebook">Infor LN Planning — eBook — ₹499</option>
+                    <option value="ext_ebook">Infor Extensibility — eBook — ₹499</option>
                   </optgroup>
                   <optgroup label="🎬 Video Courses">
                     <option value="dev_video">Infor LN Development — Video Course — ₹3,999</option>
@@ -1094,6 +1108,10 @@
                     <option value="dev_combo">Infor LN Development — Combo — ₹4,999</option>
                     <option value="adm_combo">Infor LN Administration — Combo — ₹4,999</option>
                     <option value="fin_combo">Infor LN Finance — Combo — ₹5,999</option>
+                    <option value="mfg_combo">Infor LN Manufacturing — Combo — ₹4,999</option>
+                    <option value="log_combo">Infor LN Logistics — Combo — ₹4,999</option>
+                    <option value="pln_combo">Infor LN Planning — Combo — ₹4,999</option>
+                    <option value="ext_combo">Infor Extensibility — Combo — ₹3,999</option>
                   </optgroup>
                 </select>
               </div>
@@ -1268,6 +1286,7 @@
         <a class="eco-footer-link" href="https://fobrepo.vercel.app/"     target="_blank" rel="noopener"><span class="efl-icon">📦</span><span class="efl-name">FOB Repo</span><span class="efl-desc">Resources &amp; Downloads</span></a>
         <a class="eco-footer-link" href="https://fobinterview.vercel.app/" target="_blank" rel="noopener"><span class="efl-icon">🎓</span><span class="efl-name">FOB Interview</span><span class="efl-desc">Interview Prep</span></a>
         <a class="eco-footer-link" href="https://fobjobs.vercel.app/"     target="_blank" rel="noopener"><span class="efl-icon">💼</span><span class="efl-name">FOB Jobs</span><span class="efl-desc">Infor LN Opportunities</span></a>
+        <a class="eco-footer-link" href="https://fobexams.vercel.app/"    target="_blank" rel="noopener"><span class="efl-icon">🎓</span><span class="efl-name">FOB Exams</span><span class="efl-desc">Certification Portal</span></a>
       </div>
     </div>
 
@@ -1288,7 +1307,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ═══════════════════════════════════════════════════════════════
   //  EMAILJS CREDENTIALS (live & configured)
   // ═══════════════════════════════════════════════════════════════
@@ -1312,6 +1331,10 @@
     dev_ebook: { name:'Infor LN Development — eBook',              price:1999 },
     adm_ebook: { name:'Infor LN Administration — eBook',           price:1999 },
     fin_ebook: { name:'Infor LN Finance — eBook',                  price:1999 },
+    mfg_ebook: { name:'Infor LN Manufacturing — eBook',            price:499  },
+    log_ebook: { name:'Infor LN Logistics — eBook',                price:499  },
+    pln_ebook: { name:'Infor LN Planning — eBook',                 price:499  },
+    ext_ebook: { name:'Infor Extensibility — eBook',               price:499  },
     dev_video: { name:'Infor LN Development — Video Course',       price:3999 },
     adm_video: { name:'Infor LN Administration — Video Course',    price:3999 },
     fin_video: { name:'Infor LN Finance — Video Course',           price:4999 },
@@ -1322,6 +1345,10 @@
     dev_combo: { name:'Infor LN Development — Combo (eBook + Videos)',    price:4999 },
     adm_combo: { name:'Infor LN Administration — Combo (eBook + Videos)', price:4999 },
     fin_combo: { name:'Infor LN Finance — Combo (eBook + Videos)',        price:5999 },
+    mfg_combo: { name:'Infor LN Manufacturing — Combo (eBook + Videos)',  price:4999 },
+    log_combo: { name:'Infor LN Logistics — Combo (eBook + Videos)',      price:4999 },
+    pln_combo: { name:'Infor LN Planning — Combo (eBook + Videos)',       price:4999 },
+    ext_combo: { name:'Infor Extensibility — Combo (eBook + Videos)',     price:3999 },
   };
 
   var UPI_ID   = 'nikivernekar@okicici';
@@ -1513,13 +1540,11 @@
       })
     })
     .then(function(res){
-      if(res.ok){ console.log('Email sent successfully'); }
-      else { console.error('Email send failed', res.status); }
+      if(!res.ok) console.warn('EmailJS error', res.status);
     })
-    .catch(function(err){
-      console.error('Email error:', err);
-    });
+    .catch(function(err){ console.warn('EmailJS fetch error', err); });
   }
+
 </script>
 </body>
 </html>
