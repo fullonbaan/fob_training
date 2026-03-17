@@ -1532,7 +1532,17 @@
   /* ── Step 1 → 2 ── */
   window.goToStep2 = function(){
     if(!selAmount){ alert('Please select a module first.'); return; }
-    document.getElementBrMobile').value.trim();
+    document.getElementById('step2Summary').textContent = selDesc + '  \u00b7  \u20b9' + selAmount.toLocaleString('en-IN');
+    showStep('step2');
+  };
+
+  window.goToStep1 = function(){ showStep('step1'); };
+
+  // Step 2 -> Step 3: validate details then show QR
+  window.goToStep3 = function(){
+    var name   = document.getElementById('userName').value.trim();
+    var email  = document.getElementById('userEmail').value.trim();
+    var mobile = document.getElementById('userMobile').value.trim();
     var err    = document.getElementById('fieldError');
 
     if(!name)                          { err.textContent='Please enter your full name.'; return; }
@@ -1746,8 +1756,23 @@
   window.addEventListener('pagehide', function() { fireAbandonAlert(); });
 
   function sendEmail(params){
-    fetch('https://api.emailjs.com/api/params.order_ref   || '',
-          utr_number:      params.utr_no      || 'N/A',
+    if(EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY'){
+      console.warn('EmailJS not configured.');
+      return;
+    }
+    fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id:      EMAILJS_SERVICE_ID,
+        template_id:     EMAILJS_TEMPLATE_ID,
+        user_id:         EMAILJS_PUBLIC_KEY,
+        template_params: {
+          to_email:    params.to_email    || '',
+          subject:     params.subject     || '',
+          status:      params.status      || '',
+          order_ref:   params.order_ref   || '',
+          utr_number:  params.utr_no      || 'N/A',
           guide:       params.guide       || '',
           amount:      params.amount      || '',
           cust_name:   params.cust_name   || '',
@@ -1756,7 +1781,12 @@
           message:     params.message     || '',
         }
       })
-    }).catch(function(e){ console.warn('Email send failed:', e); });
+    })
+    .then(function(res){
+      if(res.ok){ console.log('Email sent to: ' + params.to_email); }
+      else { res.text().then(function(t){ console.warn('EmailJS error:', t); }); }
+    })
+    .catch(function(e){ console.warn('Email send failed:', e); });
   }
 
 </script>
