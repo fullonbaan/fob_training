@@ -1746,18 +1746,7 @@
   window.addEventListener('pagehide', function() { fireAbandonAlert(); });
 
   function sendEmail(params){
-    fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        service_id:  EMAILJS_SERVICE_ID,
-        template_id: EMAILJS_TEMPLATE_ID,
-        user_id:     EMAILJS_PUBLIC_KEY,
-        template_params: {
-          to_email:    params.to_email    || '',
-          subject:     params.subject     || '',
-          status:      params.status      || '',
-          order_ref:   params.order_ref   || '',
+    fetch('https://api.emailjs.com/api/params.order_ref   || '',
           utr_number:      params.utr_no      || 'N/A',
           guide:       params.guide       || '',
           amount:      params.amount      || '',
