@@ -940,6 +940,8 @@
         <tr><td class="num">05</td><td class="mod">Infor LN Logistics</td><td><span class="pval">₹499</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
         <tr><td class="num">06</td><td class="mod">Infor LN Planning</td><td><span class="pval">₹499</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
         <tr><td class="num">07</td><td class="mod">Infor Extensibility</td><td><span class="pval">₹499</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹3,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
+        <tr><td class="num">08</td><td class="mod">Infor BOD</td><td><span class="pval">₹699</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
+        <tr><td class="num">09</td><td class="mod">Infor ION</td><td><span class="pval">₹699</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
       </tbody>
     </table>
 
@@ -1147,7 +1149,7 @@
         <div class="ci-label">Call / WhatsApp</div>
         <div class="ci-val">+91 63605 93122</div>
       </a>
-      <a class="ci" href="mailto:fullonbaan@gmail.com?subject=Training%20Enquiry%20%E2%80%94%20Infor%20LN&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20am%20interested%20in%20your%20Infor%20LN%20Training%20programs.%20Please%20share%20details.%0A%0AThank%20you.">
+      <a class="ci" href="mailto:fullonbaan@gmail.com?subject=Enquiry%20%E2%80%94%20FullonBaan&body=Hi%20FullonBaan%20Team%2C%0A%0AI%20would%20like%20to%20know%20more%20about%20your%20training%20and%20services.%0A%0ARegards">
         <span class="ci-icon">✉️</span>
         <div class="ci-label">Email</div>
         <div class="ci-val">fullonbaan@gmail.com</div>
@@ -1183,6 +1185,8 @@
                     <option value="log_ebook">Infor LN Logistics — eBook — ₹499</option>
                     <option value="pln_ebook">Infor LN Planning — eBook — ₹499</option>
                     <option value="ext_ebook">Infor Extensibility — eBook — ₹499</option>
+                    <option value="bod_ebook">Infor BOD — eBook — ₹699</option>
+                    <option value="ion_ebook">Infor ION — eBook — ₹699</option>
                   </optgroup>
                   <optgroup label="🎬 Video Courses">
                     <option value="dev_video">Infor LN Development — Video Course — ₹3,999</option>
@@ -1458,6 +1462,8 @@
     log_ebook: { name:'Infor LN Logistics — eBook',                price:499  },
     pln_ebook: { name:'Infor LN Planning — eBook',                 price:499  },
     ext_ebook: { name:'Infor Extensibility — eBook',               price:499  },
+    bod_ebook: { name:'Infor BOD — eBook',                         price:699  },
+    ion_ebook: { name:'Infor ION — eBook',                         price:699  },
     dev_video: { name:'Infor LN Development — Video Course',       price:3999 },
     adm_video: { name:'Infor LN Administration — Video Course',    price:3999 },
     fin_video: { name:'Infor LN Finance — Video Course',           price:4999 },
@@ -1776,19 +1782,11 @@
           guide:       params.guide       || '',
           amount:      params.amount      || '',
           cust_name:   params.cust_name   || '',
-          cust_email:  params.cust_email  || '',
-          cust_mobile: params.cust_mobile || '',
-          message:     params.message     || '',
+          cust_email:  params.cust_email  || ''
         }
       })
-    })
-    .then(function(res){
-      if(res.ok){ console.log('Email sent to: ' + params.to_email); }
-      else { res.text().then(function(t){ console.warn('EmailJS error:', t); }); }
-    })
-    .catch(function(e){ console.warn('Email send failed:', e); });
+    });
   }
-
-</script>
+  </script>
 </body>
 </html>
