@@ -486,6 +486,21 @@
   .tag-ebook-only { display:inline-block; margin-top:4px; font-size:9px; font-weight:600; color:var(--gold); background:rgba(168,120,42,0.12); border:1px solid rgba(168,120,42,0.30); border-radius:20px; padding:2px 8px; white-space:nowrap; }
   .pna { color:var(--border); font-family:'DM Mono',monospace; font-size:14px; }
   .cval { font-family:'Noto Serif',serif; font-weight:700; font-size:15px; background:linear-gradient(135deg,var(--gold) 0%,var(--rust) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+  /* Mega-bundle row */
+  .mega-bundle-row { background:linear-gradient(90deg, rgba(168,120,42,0.12), rgba(123,50,16,0.08)) !important; border-top:2px solid var(--gold) !important; }
+  .mega-bundle-row td { padding:18px 14px !important; }
+  .mega-bundle-label { font-family:'Noto Serif',serif; font-weight:700; font-size:15px; color:var(--rust); }
+  .mega-bundle-label small { display:block; font-family:'Work Sans',sans-serif; font-size:11px; font-weight:400; color:var(--ink-mid); margin-top:2px; }
+  .mega-bundle-price { font-family:'Noto Serif',serif; font-weight:700; font-size:20px; color:var(--rust); }
+  .mega-bundle-orig { font-family:'Work Sans',sans-serif; font-size:12px; color:var(--ink-lt); text-decoration:line-through; margin-right:6px; }
+
+  /* Best Value badge */
+  .tag-best-value { display:inline-block; margin-left:8px; vertical-align:middle; font-size:9px; font-weight:700; color:#fff; background:var(--green); border-radius:20px; padding:3px 10px; letter-spacing:.4px; text-transform:uppercase; white-space:nowrap; }
+
+  /* Strikethrough anchor pricing */
+  .price-orig { display:block; font-family:'Work Sans',sans-serif; font-size:11px; color:var(--ink-lt); text-decoration:line-through; margin-bottom:2px; }
+
   @media(max-width:860px){
     .pricing-layout { grid-template-columns: 1fr; }
     .price-table thead th, .price-table tbody td { padding:10px 8px; font-size:11px; }
@@ -904,9 +919,9 @@
     <div class="hero-card">
       <div class="hc-label">Training Modules &amp; Pricing</div>
       <div class="hc-rows">
-        <div class="hc-row"><span class="hc-mod">Infor LN Development</span><div class="hc-prices"><span class="hc-ebook">₹1,999</span><span class="hc-combo">Combo ₹4,999</span></div></div>
+        <div class="hc-row"><span class="hc-mod">Infor LN Development <span class="tag-best-value" style="font-size:7px;padding:2px 6px;">Best Value</span></span><div class="hc-prices"><span class="hc-ebook">₹1,999</span><span class="hc-combo">Combo ₹4,999</span></div></div>
         <div class="hc-row"><span class="hc-mod">Infor LN Administration</span><div class="hc-prices"><span class="hc-ebook">₹1,999</span><span class="hc-combo">Combo ₹4,999</span></div></div>
-        <div class="hc-row"><span class="hc-mod">Infor LN Finance</span><div class="hc-prices"><span class="hc-ebook">₹1,999</span><span class="hc-combo">Combo ₹5,999</span></div></div>
+        <div class="hc-row"><span class="hc-mod">Infor LN Finance</span><div class="hc-prices"><span class="hc-ebook">₹1,999</span><span class="hc-combo">Combo ₹4,999</span></div></div>
         <div class="hc-row"><span class="hc-mod">Infor LN Manufacturing</span><div class="hc-prices"><span class="hc-free">FREE eBook</span><span class="hc-combo">Combo ₹4,999</span></div></div>
         <div class="hc-row"><span class="hc-mod">Infor LN Logistics</span><div class="hc-prices"><span class="hc-free">FREE eBook</span><span class="hc-combo">Combo ₹4,999</span></div></div>
         <div class="hc-row"><span class="hc-mod">Infor BOD <span class="hc-new">New</span></span><div class="hc-prices"><span class="hc-ebook">₹699</span></div></div>
@@ -1031,11 +1046,11 @@
     <div class="series-strip-title">◆ The Complete FullonBaan Technical eBook Library ◆</div>
     <div class="series-strip">
       <div class="series-card sc-blue">
-        <div class="sc-module">Development</div>
+        <div class="sc-module">Development <span class="tag-best-value">Best Value</span></div>
         <div class="sc-title">Architecture &amp; VRC</div>
         <div class="sc-desc">Session components, startup flow, 3-tier system, data dictionary, VRC concepts</div>
         <div class="sc-meta">5 sections · 22 slides</div>
-        <div class="sc-price">&#x20B9;1,999 <span>/ eBook</span></div>
+        <div class="sc-price"><span class="price-orig">&#x20B9;2,999</span>&#x20B9;1,999 <span>/ eBook</span></div>
       </div>
       <div class="series-card sc-teal">
         <div class="sc-module">Tools Series</div>
@@ -1128,15 +1143,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="highlight-row"><td class="num">01</td><td class="mod">Infor LN Development</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
-            <tr class="highlight-row"><td class="num">02</td><td class="mod">Infor LN Administration</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
-            <tr class="highlight-row"><td class="num">03</td><td class="mod">Infor LN Finance</td><td><span class="pval">₹1,999</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹5,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+            <tr class="highlight-row"><td class="num">01</td><td class="mod">Infor LN Development<span class="tag-best-value">Best Value</span></td><td><span class="price-orig">₹2,999</span><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+            <tr class="highlight-row"><td class="num">02</td><td class="mod">Infor LN Administration</td><td><span class="price-orig">₹2,999</span><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
+            <tr class="highlight-row"><td class="num">03</td><td class="mod">Infor LN Finance</td><td><span class="price-orig">₹2,999</span><span class="pval">₹1,999</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹999</span></td></tr>
             <tr><td class="num">04</td><td class="mod">Infor LN Manufacturing</td><td><span class="pfree">FREE</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
             <tr><td class="num">05</td><td class="mod">Infor LN Logistics</td><td><span class="pfree">FREE</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
             <tr><td class="num">06</td><td class="mod">Infor LN Planning</td><td><span class="pfree">FREE</span></td><td><span class="pval">₹4,999</span></td><td><span class="cval">₹4,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
             <tr><td class="num">07</td><td class="mod">Infor Extensibility</td><td><span class="pfree">FREE</span></td><td><span class="pval">₹3,999</span></td><td><span class="cval">₹3,999</span><br><span class="save-badge">Save ₹499</span></td></tr>
-            <tr><td class="num">08</td><td class="mod">Infor BOD<span class="tag-new">New</span></td><td><span class="pval">₹699</span><br><span class="tag-ebook-only">eBook Only</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
-            <tr><td class="num">09</td><td class="mod">Infor ION<span class="tag-new">New</span></td><td><span class="pval">₹699</span><br><span class="tag-ebook-only">eBook Only</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
+            <tr><td class="num">08</td><td class="mod">Infor BOD<span class="tag-new">New</span></td><td><span class="price-orig">₹999</span><span class="pval">₹699</span><br><span class="tag-ebook-only">eBook Only</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
+            <tr><td class="num">09</td><td class="mod">Infor ION<span class="tag-new">New</span></td><td><span class="price-orig">₹999</span><span class="pval">₹699</span><br><span class="tag-ebook-only">eBook Only</span></td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td><td style="color:var(--ink-lt);font-size:12px;text-align:center;">—</td></tr>
+            <tr class="mega-bundle-row"><td class="num" style="font-size:16px;">🏆</td><td colspan="2"><span class="mega-bundle-label">Full eBook Library<small>All 9 modules — Development, Admin, Finance, Manufacturing, Logistics, Planning, Extensibility, BOD &amp; ION</small></span></td><td style="text-align:center;"><span class="mega-bundle-orig">₹7,395</span></td><td style="text-align:center;"><span class="mega-bundle-price">₹4,999</span><br><span class="save-badge">Save ₹2,396</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -1248,7 +1264,7 @@
                     <optgroup label="🎬 Video Courses">
                       <option value="dev_video">Infor LN Development — Video Course — ₹3,999</option>
                       <option value="adm_video">Infor LN Administration — Video Course — ₹3,999</option>
-                      <option value="fin_video">Infor LN Finance — Video Course — ₹4,999</option>
+                      <option value="fin_video">Infor LN Finance — Video Course — ₹3,999</option>
                       <option value="mfg_video">Infor LN Manufacturing — Video Course — ₹4,999</option>
                       <option value="log_video">Infor LN Logistics — Video Course — ₹4,999</option>
                       <option value="pln_video">Infor LN Planning — Video Course — ₹4,999</option>
@@ -1257,11 +1273,14 @@
                     <optgroup label="🎁 Combo Bundles (eBook + Videos)">
                       <option value="dev_combo">Infor LN Development — Combo — ₹4,999</option>
                       <option value="adm_combo">Infor LN Administration — Combo — ₹4,999</option>
-                      <option value="fin_combo">Infor LN Finance — Combo — ₹5,999</option>
+                      <option value="fin_combo">Infor LN Finance — Combo — ₹4,999</option>
                       <option value="mfg_combo">Infor LN Manufacturing — Combo — ₹4,999</option>
                       <option value="log_combo">Infor LN Logistics — Combo — ₹4,999</option>
                       <option value="pln_combo">Infor LN Planning — Combo — ₹4,999</option>
                       <option value="ext_combo">Infor Extensibility — Combo — ₹3,999</option>
+                    </optgroup>
+                    <optgroup label="🏆 Mega Bundle">
+                      <option value="full_ebook_library">🏆 Full eBook Library — All 9 Modules — ₹4,999</option>
                     </optgroup>
                   </select>
                 </div>
@@ -1543,18 +1562,19 @@
     ion_ebook: { name:'Infor ION — eBook',                         price:699  },
     dev_video: { name:'Infor LN Development — Video Course',       price:3999 },
     adm_video: { name:'Infor LN Administration — Video Course',    price:3999 },
-    fin_video: { name:'Infor LN Finance — Video Course',           price:4999 },
+    fin_video: { name:'Infor LN Finance — Video Course',           price:3999 },
     mfg_video: { name:'Infor LN Manufacturing — Video Course',     price:4999 },
     log_video: { name:'Infor LN Logistics — Video Course',         price:4999 },
     pln_video: { name:'Infor LN Planning — Video Course',          price:4999 },
     ext_video: { name:'Infor Extensibility — Video Course',        price:3999 },
     dev_combo: { name:'Infor LN Development — Combo (eBook + Videos)',    price:4999 },
     adm_combo: { name:'Infor LN Administration — Combo (eBook + Videos)', price:4999 },
-    fin_combo: { name:'Infor LN Finance — Combo (eBook + Videos)',        price:5999 },
+    fin_combo: { name:'Infor LN Finance — Combo (eBook + Videos)',        price:4999 },
     mfg_combo: { name:'Infor LN Manufacturing — Combo (eBook + Videos)',  price:4999 },
     log_combo: { name:'Infor LN Logistics — Combo (eBook + Videos)',      price:4999 },
     pln_combo: { name:'Infor LN Planning — Combo (eBook + Videos)',       price:4999 },
     ext_combo: { name:'Infor Extensibility — Combo (eBook + Videos)',     price:3999 },
+    full_ebook_library: { name:'Full eBook Library — All 9 Modules',     price:4999 },
   };
 
   var UPI_ID   = 'nikivernekar@okicici';
