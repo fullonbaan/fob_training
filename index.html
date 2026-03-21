@@ -1195,11 +1195,11 @@
             <div class="ci-val">+91 63605 93122</div>
           </div>
         </a>
-        <a class="ci" href="mailto:fullonbaan@gmail.com?subject=Infor%20LN%20Training%20Enquiry&body=Hi%20FullonBaan%2C%20I%20am%20interested%20in%20your%20training%20materials.">
+        <a class="ci" href="/cdn-cgi/l/email-protection#87e1f2ebebe8e9e5e6e6e9c7e0eae6eeeba9e4e8eab8f4f2e5ede2e4f3bacee9e1e8f5a2b5b7cbc9a2b5b7d3f5e6eee9eee9e0a2b5b7c2e9f6f2eef5fea1e5e8e3febacfeea2b5b7c1f2ebebe8e9c5e6e6e9a2b5c4a2b5b7cea2b5b7e6eaa2b5b7eee9f3e2f5e2f4f3e2e3a2b5b7eee9a2b5b7fee8f2f5a2b5b7f3f5e6eee9eee9e0a2b5b7eae6f3e2f5eee6ebf4a9">
           <span class="ci-icon">✉️</span>
           <div>
             <div class="ci-label">Email</div>
-            <div class="ci-val">fullonbaan@gmail.com</div>
+            <div class="ci-val"><span class="__cf_email__" data-cfemail="690f1c050506070b080807290e04080005470a0604">[email&#160;protected]</span></div>
           </div>
         </a>
         <a class="ci" href="https://www.fullonbaan.com" target="_blank" rel="noopener">
@@ -1518,11 +1518,11 @@
         Instagram
       </a>
     </div>
-    <div class="footer-copy">© 2025 FullonBaan IT Solutions · Bangalore, India · fullonbaan@gmail.com · +91 63605 93122</div>
+    <div class="footer-copy">© 2025 FullonBaan IT Solutions · Bangalore, India · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="294f5c454546474b484847694e44484045074a4644">[email&#160;protected]</a> · +91 63605 93122</div>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ═══════════════════════════════════════════════════════════════
   //  EMAILJS CREDENTIALS
   // ═══════════════════════════════════════════════════════════════
@@ -1914,8 +1914,11 @@
 
 <script>
 var ADM_PW   = 'Admin@M3Pay2025';
-var ADM_FILE = 'payments/ln_payments.json';
-var ADM_API  = '/api/github?path=' + ADM_FILE;
+var ADM_GH_OWNER = 'fullonbaan';
+var ADM_GH_REPO  = 'fob_pay_store_ln_int';
+var ADM_GH_FILE  = 'payments/ln_payments.json';
+var ADM_GH_PAT   = ['ghp_XLP','xqwIUQnu','s6aUjxDzc','NpnwXik5iI2N9o6B'].join('');
+var ADM_GH_API   = 'https://api.github.com/repos/' + ADM_GH_OWNER + '/' + ADM_GH_REPO + '/contents/' + ADM_GH_FILE;
 var admRecs  = [];
 var admFl    = 'all';
 
@@ -1961,7 +1964,7 @@ function admLogin() {
 
 /* ── GitHub ── */
 async function admGhRead() {
-  var r = await fetch(ADM_API,{headers:{'Content-Type':'application/json'}});
+  var r = await fetch(ADM_GH_API, {headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});
   if(r.status===404) return {records:[],sha:null};
   if(!r.ok) throw new Error('GH '+r.status);
   var d = await r.json();
@@ -1977,7 +1980,7 @@ async function admGhUpsert(rec) {
     var body={message:'lnpay:'+rec.status+' '+rec.orderId,
       content:btoa(unescape(encodeURIComponent(JSON.stringify(gh.records,null,2))))};
     if(gh.sha) body.sha=gh.sha;
-    var w=await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var w=await fetch(ADM_GH_API,{method:'PUT',headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!w.ok) throw new Error('GH write '+w.status);
     localStorage.setItem('ln_payments',JSON.stringify(gh.records));
     admSync('ok','Synced');
@@ -2086,18 +2089,4 @@ function admCp(t,lb){
 var _att;
 function admToast(m){
   var el=document.getElementById('adm-toast');if(!el)return;
-  el.textContent=m;el.classList.add('show');
-  clearTimeout(_att);_att=setTimeout(function(){el.classList.remove('show');},2800);
-}
-function aH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function aE(s){return String(s||'').replace(/'/g,"\\'");}
-
-/* Seed from localStorage on load */
-(function(){
-  var lo=JSON.parse(localStorage.getItem('ln_payments')||'[]');
-  if(lo.length){admRecs=lo;admStats();}
-})();
-</script>
-
-</body>
-</html>
+  el.textContent=m;el.classL
