@@ -2037,6 +2037,8 @@ function admFilt(f,btn) {
   btn.classList.add('on');
   admRender();
 }
+function aH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function aE(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 function admRender() {
   var q=(document.getElementById('asrch').value||'').toLowerCase();
   var r=admFl==='all'?admRecs:admRecs.filter(function(x){return x.status===admFl;});
