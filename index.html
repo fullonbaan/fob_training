@@ -4,6 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FullOnBaan — Infor LN Training Materials</title>
+  <meta name="description" content="India's most comprehensive Infor LN training library. Industry-certified eBooks and video courses covering Development, Administration, Finance, Manufacturing, Logistics, and more. 10+ years of ERP expertise.">
+  <meta name="keywords" content="Infor LN, ERP training, Infor LN Development, Infor LN Finance, Infor LN Administration, FullOnBaan, enterprise software training, Infor LN eBooks">
+  <meta name="author" content="FullOnBaan Education">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FullOnBaan — Infor LN Training Materials">
+  <meta property="og:description" content="High-performance training for the modern ERP specialist. Curated eBooks and video courses on Infor LN Architecture, Finance, Manufacturing, and Enterprise Tools.">
+  <meta property="og:url" content="https://fobtraining.vercel.app/">
+  <meta property="og:site_name" content="FullOnBaan Education">
+  <meta property="og:image" content="https://fobtraining.vercel.app/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FullOnBaan — Infor LN Training Materials">
+  <meta name="twitter:description" content="India's most comprehensive Infor LN training library. eBooks and video courses by seasoned ERP professionals.">
+  <meta name="twitter:image" content="https://fobtraining.vercel.app/og-image.png">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2306132a'/><text x='50' y='68' font-family='serif' font-size='55' font-weight='bold' fill='%23f6bc68' text-anchor='middle'>F</text></svg>">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
   <!-- Tailwind CSS with plugins -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -237,20 +257,63 @@
       background: #0f1b33;
     }
 
-    .testimonial-card {
-      background: #131f37;
-      border-left: 4px solid #f6bc68;
-      padding: 2rem;
-      border-radius: 0.5rem;
+    /* Marquee testimonials */
+    .marquee-wrapper {
+      overflow: hidden;
       position: relative;
+      width: 100%;
     }
-    .quote-icon {
+    .marquee-wrapper::before,
+    .marquee-wrapper::after {
+      content: '';
       position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-size: 3rem;
-      opacity: 0.1;
-      color: #f6bc68;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, #06132a, transparent);
+    }
+    .marquee-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, #06132a, transparent);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+    }
+    .marquee-left {
+      animation: marqueeLeft 60s linear infinite;
+    }
+    .marquee-right {
+      animation: marqueeRight 60s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes marqueeLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes marqueeRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+    .marquee-item {
+      flex-shrink: 0;
+      width: 340px;
+      background: #131f37;
+      border: 1px solid #29344e;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      transition: border-color 0.3s;
+    }
+    .marquee-item:hover {
+      border-color: #0A66C2;
     }
 
     .contact-card {
@@ -288,7 +351,6 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-8">
           <a href="#home" class="nav-link text-on-surface hover:text-primary">Home</a>
-          <a href="#ebooks" class="nav-link text-on-surface hover:text-primary">E-Books</a>
           <a href="#catalog" class="nav-link text-on-surface hover:text-primary">Catalog</a>
           <a href="#pricing" class="nav-link text-on-surface hover:text-primary">Pricing</a>
           <a href="#contact" class="nav-link text-on-surface hover:text-primary">Contact</a>
@@ -311,7 +373,6 @@
       <div class="mobile-menu md:hidden" id="mobileMenu">
         <div class="px-4 py-4 border-t border-surface-container-high flex flex-col gap-4">
           <a href="#home" class="text-on-surface hover:text-primary">Home</a>
-          <a href="#ebooks" class="text-on-surface hover:text-primary">E-Books</a>
           <a href="#catalog" class="text-on-surface hover:text-primary">Catalog</a>
           <a href="#pricing" class="text-on-surface hover:text-primary">Pricing</a>
           <a href="#contact" class="text-on-surface hover:text-primary">Contact</a>
@@ -332,47 +393,32 @@
         ARCHITECTING <span class="text-gradient">PRECISION.</span>
       </h1>
       <p class="text-on-surface-variant text-xl mb-10 max-w-2xl mx-auto">Master enterprise software architecture with FullOnBaan's comprehensive Infor LN training materials designed for industry professionals.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
         <a href="#catalog" class="editorial-gradient text-on-primary px-8 py-3 rounded-lg font-label font-600 hover:shadow-lg transition">Explore Catalog</a>
         <a href="#pricing" class="border border-primary text-primary px-8 py-3 rounded-lg font-label font-600 hover:bg-primary hover:text-on-primary transition">View Pricing</a>
+      </div>
+      <div class="flex justify-center gap-12 md:gap-16">
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-headline font-bold text-primary">10+</div>
+          <div class="text-[10px] md:text-xs text-on-surface-variant font-label uppercase tracking-widest mt-1">Years Experience</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-headline font-bold text-primary">1000+</div>
+          <div class="text-[10px] md:text-xs text-on-surface-variant font-label uppercase tracking-widest mt-1">Professionals Trained</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-headline font-bold text-primary">9</div>
+          <div class="text-[10px] md:text-xs text-on-surface-variant font-label uppercase tracking-widest mt-1">LN Modules</div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- COURSE CATALOG -->
   <section id="catalog" class="py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-lowest">
-    <div class="max-w-[1600px] mx-auto">
-      <div class="flex flex-col md:flex-row gap-12">
-        <!-- Sidebar Filter -->
-        <aside class="w-full md:w-72 flex-shrink-0">
-          <div class="sticky top-24 space-y-10">
-            <div>
-              <h3 class="font-headline text-lg font-bold text-primary mb-6 tracking-tight">Categories</h3>
-              <ul class="space-y-4">
-                <li><button class="flex items-center justify-between w-full group text-left"><span class="text-on-surface font-medium group-hover:text-primary transition-colors">All Courses</span><span class="text-xs font-label bg-surface-container-highest px-2 py-0.5 rounded-full text-secondary">9</span></button></li>
-                <li><button class="flex items-center justify-between w-full group text-left"><span class="text-on-surface-variant group-hover:text-primary transition-colors">Administration &amp; Finance</span><span class="text-xs font-label bg-surface-container-highest px-2 py-0.5 rounded-full text-secondary">3</span></button></li>
-                <li><button class="flex items-center justify-between w-full group text-left"><span class="text-on-surface-variant group-hover:text-primary transition-colors">Manufacturing &amp; Logistics</span><span class="text-xs font-label bg-surface-container-highest px-2 py-0.5 rounded-full text-secondary">3</span></button></li>
-                <li><button class="flex items-center justify-between w-full group text-left"><span class="text-on-surface-variant group-hover:text-primary transition-colors">Integration &amp; ION</span><span class="text-xs font-label bg-surface-container-highest px-2 py-0.5 rounded-full text-secondary">3</span></button></li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-headline text-lg font-bold text-primary mb-6 tracking-tight">Format</h3>
-              <div class="space-y-3">
-                <label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="rounded-sm bg-surface-container-highest border-none text-primary focus:ring-primary/20"><span class="text-on-surface-variant text-sm group-hover:text-on-surface">eBook</span></label>
-                <label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="rounded-sm bg-surface-container-highest border-none text-primary focus:ring-primary/20"><span class="text-on-surface-variant text-sm group-hover:text-on-surface">Video Course</span></label>
-                <label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="rounded-sm bg-surface-container-highest border-none text-primary focus:ring-primary/20"><span class="text-on-surface-variant text-sm group-hover:text-on-surface">Combo (eBook + Video)</span></label>
-              </div>
-            </div>
-            <div class="p-6 rounded-xl bg-surface-container-low border-b-2 border-primary/20">
-              <h4 class="font-headline text-sm font-bold text-primary mb-2">Need Training?</h4>
-              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed">Connect with us for comprehensive Infor LN training.</p>
-              <a href="https://fob-ln-training.vercel.app/" target="_blank" class="text-xs font-bold text-primary underline underline-offset-4 hover:text-primary-fixed transition-colors">Visit Training Portal →</a>
-            </div>
-          </div>
-        </aside>
-
-        <!-- Course Grid -->
-        <div class="flex-1">
+    <div class="max-w-6xl mx-auto">
+      <!-- Course Grid -->
+      <div>
           <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-2">Knowledge <span class="text-primary italic">Catalog</span></h1>
@@ -396,6 +442,7 @@
                       <span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Development</span>
                     </div>
                     <h2 class="font-headline text-2xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor LN Development</h2>
+                    <p class="text-xs text-secondary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>73 eBooks included</p>
                     <ul class="space-y-3 mb-8">
                       <li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-xs text-primary">circle</span>Session Management &amp; System Tiers</li>
                       <li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-xs text-primary">circle</span>Data Dictionary &amp; VRC Concepts</li>
@@ -403,8 +450,11 @@
                     </ul>
                   </div>
                   <div class="flex items-center justify-between mt-auto pt-6 border-t border-outline-variant/20">
-                    <div class="flex flex-col"><span class="text-[10px] uppercase font-bold text-secondary opacity-60">From</span><span class="text-xl font-headline font-bold text-on-surface">₹1,999</span></div>
-                    <a href="#pricing" class="bg-primary-container hover:shadow-lg hover:shadow-primary/20 text-on-primary-container px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-all">Enroll Now <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                    <span class="text-xl font-headline font-bold text-on-surface">₹1,999</span>
+                    <div class="flex items-center gap-4">
+                      <a href="preview_Development.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a>
+                      <a href="javascript:void(0)" onclick="openPurchase('dev_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -419,8 +469,9 @@
               <div class="p-8 flex flex-col flex-1">
                 <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">precision_manufacturing</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Manufacturing</span></div>
                 <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor LN Manufacturing</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>10 eBooks included</p>
                 <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Production order management, routing, work centers, and standard costing &amp; WIP concepts.</p>
-                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹499</span><a href="#pricing" class="text-primary font-bold text-sm uppercase tracking-widest hover:underline underline-offset-8">Explore</a></div>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹499</span><div class="flex items-center gap-4"><a href="preview_Manufacturing.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('mfg_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
               </div>
             </div>
 
@@ -433,8 +484,9 @@
               <div class="p-8 flex flex-col flex-1">
                 <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">account_balance</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Finance</span></div>
                 <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor LN Finance Overview</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>41 eBooks included</p>
                 <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Master enterprise-level financial reporting and asset management within the Infor LN ecosystem.</p>
-                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹1,999</span><a href="#pricing" class="text-primary font-bold text-sm uppercase tracking-widest hover:underline underline-offset-8">Explore</a></div>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹1,999</span><div class="flex items-center gap-4"><a href="preview_Finance.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('fin_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
               </div>
             </div>
 
@@ -447,8 +499,9 @@
               <div class="p-8 flex flex-col flex-1">
                 <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">admin_panel_settings</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Administration</span></div>
                 <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor LN Administration</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>37 eBooks included</p>
                 <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">System administration, user management, and configuration mastery for Infor LN environments.</p>
-                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹1,999</span><a href="#pricing" class="text-primary font-bold text-sm uppercase tracking-widest hover:underline underline-offset-8">Explore</a></div>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹1,999</span><div class="flex items-center gap-4"><a href="preview_Admin.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('adm_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
               </div>
             </div>
 
@@ -461,34 +514,51 @@
               <div class="p-8 flex flex-col flex-1">
                 <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">local_shipping</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Logistics</span></div>
                 <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Warehouse &amp; Logistics Mastery</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>10 eBooks included</p>
                 <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Warehousing, freight management, and procurement logic within the Infor LN framework.</p>
-                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹499</span><a href="#pricing" class="text-primary font-bold text-sm uppercase tracking-widest hover:underline underline-offset-8">Explore</a></div>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹499</span><div class="flex items-center gap-4"><a href="preview_Logistics.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('log_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
               </div>
             </div>
 
-            <!-- Card: BOD & ION -->
+            <!-- Card: BOD -->
             <div class="group flex flex-col rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors duration-500 overflow-hidden">
               <div class="h-48 relative overflow-hidden">
-                <img class="w-full h-full object-cover grayscale opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwIWzo5-bML5I962D6Dr20hm8nQ5Kwjq-hoBs5VWPTJOEJPI92Pvnd5q6xrMdrdP6857HFd2eAOQi5puRIET_u86fFvu5lPxGIraqHUBhs1pZgMyIDHljd1lz4fmq61ORLpQuigZ-zFXkM2-M4yPWsRPZ7ZPRFcaoETuefGGuCszBiKd6uUxSGRRYYuwDEdJc54IybdRZuBz2SBMiuCN4eNmqoL6a8PVpKe0NDMbhOsufFqNLgIcHaS2y6SjC-T3s48f4aQndyhc" alt="Integration">
+                <img class="w-full h-full object-cover grayscale opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwIWzo5-bML5I962D6Dr20hm8nQ5Kwjq-hoBs5VWPTJOEJPI92Pvnd5q6xrMdrdP6857HFd2eAOQi5puRIET_u86fFvu5lPxGIraqHUBhs1pZgMyIDHljd1lz4fmq61ORLpQuigZ-zFXkM2-M4yPWsRPZ7ZPRFcaoETuefGGuCszBiKd6uUxSGRRYYuwDEdJc54IybdRZuBz2SBMiuCN4eNmqoL6a8PVpKe0NDMbhOsufFqNLgIcHaS2y6SjC-T3s48f4aQndyhc" alt="BOD">
                 <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
               </div>
               <div class="p-8 flex flex-col flex-1">
-                <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">settings_suggest</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Integration</span></div>
-                <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor BOD &amp; ION Integration</h2>
-                <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Seamlessly connecting your ERP ecosystem with BODs and ION middleware.</p>
-                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹699</span><a href="#pricing" class="text-primary font-bold text-sm uppercase tracking-widest hover:underline underline-offset-8">Explore</a></div>
+                <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">description</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Integration</span></div>
+                <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor BOD</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>11 eBooks included</p>
+                <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Business Object Documents — the backbone of Infor data exchange and enterprise integration.</p>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹699</span><div class="flex items-center gap-4"><a href="preview_BOD.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('bod_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
+              </div>
+            </div>
+
+            <!-- Card: ION -->
+            <div class="group flex flex-col rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors duration-500 overflow-hidden">
+              <div class="h-48 relative overflow-hidden">
+                <img class="w-full h-full object-cover grayscale opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwIWzo5-bML5I962D6Dr20hm8nQ5Kwjq-hoBs5VWPTJOEJPI92Pvnd5q6xrMdrdP6857HFd2eAOQi5puRIET_u86fFvu5lPxGIraqHUBhs1pZgMyIDHljd1lz4fmq61ORLpQuigZ-zFXkM2-M4yPWsRPZ7ZPRFcaoETuefGGuCszBiKd6uUxSGRRYYuwDEdJc54IybdRZuBz2SBMiuCN4eNmqoL6a8PVpKe0NDMbhOsufFqNLgIcHaS2y6SjC-T3s48f4aQndyhc" alt="ION">
+                <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+              </div>
+              <div class="p-8 flex flex-col flex-1">
+                <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary text-lg">settings_suggest</span><span class="text-xs font-label uppercase tracking-widest text-secondary font-semibold">Middleware</span></div>
+                <h2 class="font-headline text-xl font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">Infor ION</h2>
+                <p class="text-xs text-secondary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">menu_book</span>15 eBooks included</p>
+                <p class="text-sm text-on-surface-variant line-clamp-2 mb-6">Intelligent Open Network — middleware for workflows, API orchestration, and real-time event processing.</p>
+                <div class="mt-auto flex items-center justify-between"><span class="text-lg font-headline font-bold text-on-surface">₹699</span><div class="flex items-center gap-4"><a href="preview_ION.pdf" target="_blank" class="text-on-surface-variant hover:text-primary font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span>Preview</a><a href="javascript:void(0)" onclick="openPurchase('ion_ebook')" class="bg-primary text-on-primary text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all">Buy Now</a></div></div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
 
   <!-- PRICING & PAYMENT -->
   <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-low">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-16">
+        <span class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold font-label uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 animate-pulse"><span class="w-2 h-2 bg-green-400 rounded-full"></span>Special Launch Price</span>
         <h2 class="text-4xl font-headline font-bold text-on-surface mb-4">Investment in Excellence</h2>
         <p class="text-on-surface-variant max-w-xl mx-auto">Transparent pricing for independent consultants and enterprise teams. All prices in INR (₹).</p>
       </div>
@@ -726,27 +796,200 @@
   </section>
 
   <!-- TESTIMONIALS -->
-  <section id="testimonials" class="py-20 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="font-headline font-bold text-4xl text-center mb-12 text-on-surface">What Our Learners Say</h2>
+  <section id="testimonials" class="py-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div class="text-center">
+        <span class="text-xs font-label uppercase tracking-widest text-primary font-semibold">Real LinkedIn Recommendations</span>
+        <h2 class="font-headline font-bold text-3xl md:text-4xl text-on-surface mt-3">Trusted by <span class="text-primary italic">Professionals</span></h2>
+      </div>
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="testimonial-card">
-          <div class="quote-icon">❝</div>
-          <p class="text-on-surface-variant italic mb-6">"The FullOnBaan training materials transformed my understanding of Infor LN. The structured approach and real-world examples made complex concepts accessible. Highly recommended for anyone serious about enterprise software."</p>
-          <div>
-            <h4 class="font-headline font-bold text-on-surface">Rajesh Kumar</h4>
-            <p class="text-on-surface-variant text-sm">Solutions Architect, Tata Consultancy Services</p>
+    <!-- Marquee Row 1 — scrolls left -->
+    <div class="marquee-wrapper mb-6">
+      <div class="marquee-track marquee-left">
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Shivani Mohanty</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Development · Feb 2026</p>
+            </div>
           </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Excellent LN Development training. The hands-on approach and real-world scenarios made complex concepts easy to grasp."</p>
         </div>
-
-        <div class="testimonial-card">
-          <div class="quote-icon">❝</div>
-          <p class="text-on-surface-variant italic mb-6">"I've taken many enterprise software courses, but this one stands out. The curriculum is comprehensive, the instructors are knowledgeable, and the support team is incredibly responsive. Worth every rupee."</p>
-          <div>
-            <h4 class="font-headline font-bold text-on-surface">Priya Sharma</h4>
-            <p class="text-on-surface-variant text-sm">Sr. Software Engg, Infosys</p>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Hitesh Chotrani</h4>
+              <p class="text-[10px] text-on-surface-variant">BOD Development · Jan 2026</p>
+            </div>
           </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"BOD Development training was outstanding. The instructor's depth of knowledge in Infor integration is remarkable."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Amit Powar</h4>
+              <p class="text-[10px] text-on-surface-variant">BOD Development · Jan 2026</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Great BOD Development training session. Clear explanations and practical exercises helped me build confidence quickly."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Rishikesh Ravi</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Development · Nov 2025</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"The LN Development course was exactly what I needed. Practical, thorough, and expertly delivered."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Prashanth Myadagoni</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Development · Nov 2025</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Highly recommend this LN Development training. The sessions were well-structured and the trainer was very patient."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Sumit Raghav</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Development · Oct 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Amazing LN Development training experience. The real-time examples and problem-solving approach was very effective."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Syed Abid Ali</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Manufacturing · Oct 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"The Manufacturing module training gave our team deep expertise in shop floor control and production planning."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Hugo Pimenta</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Planning · Oct 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"LN Planning training was top-notch. The instructor has deep expertise in MRP, MPS, and capacity planning."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marquee Row 2 — scrolls right -->
+    <div class="marquee-wrapper">
+      <div class="marquee-track marquee-right">
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Swarnalatha Alagan</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Manufacturing · Sep 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Manufacturing training was thorough and expertly delivered. Gained deep understanding of BOM and routing."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Hugo Pimenta</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Manufacturing · Aug 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Second training with FullOnBaan and consistently excellent. Manufacturing module covered every aspect we needed."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Mohamed Sayed Osman</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Manufacturing · Aug 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Outstanding Manufacturing training. The practical sessions on production orders and project costing were invaluable."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Bala Subramanian</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Warehousing · Jul 2024</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Warehousing training was comprehensive. Covered inventory control, lot tracking, and warehouse layouts in detail."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Manish Sharma</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Administration · Sep 2023</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"LN Administration training was exactly what our IT team needed. Security setup and DMT migration were covered brilliantly."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Amol Gopale</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Logistics · Jun 2023</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"The Logistics training covered sales, purchasing, and warehousing end-to-end. Truly world-class instruction."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Sucheta Rai</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Logistics (USA) · May 2023</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"Completed LN Logistics training from the USA. The remote sessions were just as effective as in-person."</p>
+        </div>
+        <div class="marquee-item">
+          <div class="flex items-start gap-3 mb-3">
+            <svg class="w-5 h-5 text-[#0A66C2] flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <div>
+              <h4 class="font-bold text-sm text-on-surface leading-tight">Scott Selmon</h4>
+              <p class="text-[10px] text-on-surface-variant">LN Finance · President, Climco Coils · Dec 2021</p>
+            </div>
+          </div>
+          <p class="text-sm text-on-surface-variant italic leading-relaxed">"As President of Climco Coils, the Finance training transformed how our team handles LN financial operations."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO SHOWCASE -->
+  <section id="videos" class="py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-lowest">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-xs font-label uppercase tracking-widest text-primary font-semibold">See It in Action</span>
+        <h2 class="font-headline text-3xl md:text-4xl font-extrabold tracking-tight text-on-surface mt-3">Watch &amp; <span class="text-primary italic">Learn</span></h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="rounded-xl overflow-hidden border border-outline-variant/20 aspect-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/JZ6KZfeWVIo" title="FullOnBaan Training Video 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-outline-variant/20 aspect-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/od32eYkB8As" title="FullOnBaan Training Video 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
         </div>
       </div>
     </div>
@@ -772,7 +1015,7 @@
         </a>
 
         <a href="mailto:fullonbaan@gmail.com" class="contact-card">
-          <div class="text-3xl mb-4">📧</div>
+          <div class="flex justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
           <h3 class="font-headline font-bold text-on-surface mb-2">Email</h3>
           <p class="text-on-surface-variant text-sm">fullonbaan@gmail.com</p>
         </a>
@@ -788,8 +1031,10 @@
       <div class="max-w-2xl mx-auto bg-surface-container rounded-xl border border-surface-container-high p-8 mb-16">
         <h3 class="font-headline font-bold text-2xl text-on-surface mb-6">Training Inquiry</h3>
         <div class="space-y-4">
-          <input type="text" placeholder="Full Name" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
-          <select class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg">
+          <input type="text" id="inqName" placeholder="Full Name" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+          <input type="email" id="inqEmail" placeholder="Email Address" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+          <input type="tel" id="inqPhone" placeholder="Phone / WhatsApp Number" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+          <select id="inqModule" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg">
             <option disabled selected>Select a Training</option>
             <option>Infor LN Development</option>
             <option>Infor LN Administration</option>
@@ -801,8 +1046,10 @@
             <option>Infor BOD</option>
             <option>Infor ION</option>
           </select>
-          <textarea placeholder="Tell us about your interest..." rows="4" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant"></textarea>
-          <button class="editorial-gradient text-on-primary px-6 py-3 rounded-lg font-label font-600 w-full">Send Inquiry</button>
+          <textarea id="inqMessage" placeholder="Tell us about your interest..." rows="4" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant"></textarea>
+          <div id="inqError" class="text-sm text-error"></div>
+          <button onclick="sendInquiry()" class="editorial-gradient text-on-primary px-6 py-3 rounded-lg font-label font-600 w-full">Send Inquiry</button>
+          <div id="inqSuccess" class="text-sm text-green-400 text-center" style="display:none;">Inquiry sent! We'll get back to you shortly.</div>
         </div>
       </div>
 
@@ -837,12 +1084,12 @@
 
           <div class="accordion-item bg-surface-container rounded-lg border border-surface-container-high overflow-hidden">
             <button onclick="toggleAccordion(this)" class="w-full text-left p-6 flex justify-between items-center hover:bg-surface-container-high transition">
-              <span class="font-headline font-bold text-on-surface">What's the refund policy?</span>
+              <span class="font-headline font-bold text-on-surface">Are all sales final?</span>
               <span class="text-primary font-bold">+</span>
             </button>
             <div class="accordion-content bg-surface-container-high">
               <div class="px-6 pb-6 text-on-surface-variant">
-                <p>We offer a 7-day money-back guarantee if you're not satisfied with your purchase. No questions asked.</p>
+                <p>Yes, all purchases are final. We encourage you to download a free preview chapter for any module before buying, so you can evaluate the depth and quality of the material firsthand.</p>
               </div>
             </div>
           </div>
@@ -866,46 +1113,66 @@
   <!-- FOOTER -->
   <footer class="bg-surface-container-lowest border-t border-surface-container-high py-16 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <!-- Brand -->
         <div>
           <h3 class="font-headline font-bold text-xl text-primary mb-4">FullOnBaan Education</h3>
-          <p class="text-on-surface-variant text-sm">Enterprise software training for the modern world</p>
-        </div>
-
-        <div>
-          <h4 class="font-label font-600 text-on-surface mb-4">Company</h4>
-          <ul class="space-y-2 text-on-surface-variant text-sm">
-            <li><a href="#" class="hover:text-primary transition">About Us</a></li>
-            <li><a href="#" class="hover:text-primary transition">Contact</a></li>
-            <li><a href="#" class="hover:text-primary transition">Support</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-label font-600 text-on-surface mb-4">Legal</h4>
-          <ul class="space-y-2 text-on-surface-variant text-sm">
-            <li><a href="#" class="hover:text-primary transition">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-primary transition">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-primary transition">Enterprise Solutions</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-label font-600 text-on-surface mb-4">Follow Us</h4>
-          <div class="space-y-2 text-on-surface-variant text-sm">
-            <a href="https://linkedin.com/company/fullonbaan/" target="_blank" class="hover:text-primary transition block">LinkedIn</a>
-            <a href="https://www.facebook.com/p/FullonBaaN-100067220493183/" target="_blank" class="hover:text-primary transition block">Facebook</a>
-            <a href="https://www.instagram.com/fullonbaan/" target="_blank" class="hover:text-primary transition block">Instagram</a>
-            <a href="https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA" target="_blank" class="hover:text-primary transition block">YouTube</a>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Enterprise software training for the modern world. India's most comprehensive Infor LN training library.</p>
+          <div class="flex items-center gap-4">
+            <a href="https://linkedin.com/company/fullonbaan/" target="_blank" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#0A66C2] hover:bg-[#0A66C2]/10 transition-all" title="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/p/FullonBaaN-100067220493183/" target="_blank" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#1877F2] hover:bg-[#1877F2]/10 transition-all" title="Facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/fullonbaan/" target="_blank" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#E4405F] hover:bg-[#E4405F]/10 transition-all" title="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA" target="_blank" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#FF0000] hover:bg-[#FF0000]/10 transition-all" title="YouTube">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
           </div>
         </div>
 
+        <!-- Follow Us -->
         <div>
-          <h4 class="font-label font-600 text-on-surface mb-4">Contact</h4>
-          <div class="space-y-2 text-on-surface-variant text-sm">
-            <a href="tel:+916360593122" class="hover:text-primary transition block">+91 63605 93122</a>
-            <a href="mailto:fullonbaan@gmail.com" class="hover:text-primary transition block">fullonbaan@gmail.com</a>
-            <a href="https://wa.me/916360593122" target="_blank" class="hover:text-primary transition block">WhatsApp</a>
+          <h4 class="font-label font-semibold text-on-surface mb-4">Follow Us</h4>
+          <div class="space-y-3 text-on-surface-variant text-sm">
+            <a href="https://linkedin.com/company/fullonbaan/" target="_blank" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <a href="https://www.facebook.com/p/FullonBaaN-100067220493183/" target="_blank" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.instagram.com/fullonbaan/" target="_blank" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+            <a href="https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA" target="_blank" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              YouTube
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 class="font-label font-semibold text-on-surface mb-4">Contact</h4>
+          <div class="space-y-3 text-on-surface-variant text-sm">
+            <a href="tel:+916360593122" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              +91 63605 93122
+            </a>
+            <a href="mailto:fullonbaan@gmail.com" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              fullonbaan@gmail.com
+            </a>
+            <a href="https://wa.me/916360593122" target="_blank" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>
@@ -1043,6 +1310,14 @@
     document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
 
     // ======================
+    // MARQUEE DUPLICATION
+    // ======================
+    document.querySelectorAll('.marquee-track').forEach(function(track) {
+      var items = track.innerHTML;
+      track.innerHTML = items + items;
+    });
+
+    // ======================
     // ACCORDION FUNCTIONALITY
     // ======================
     function toggleAccordion(button) {
@@ -1067,6 +1342,7 @@
     function hideAmount(){document.getElementById('amountRow').classList.remove('visible');document.getElementById('proceedBtn').classList.remove('visible');}
 
     window.togglePay=function(){document.getElementById('payBtn').classList.toggle('open');document.getElementById('payPanel').classList.toggle('open');};
+    window.openPurchase=function(moduleKey){var btn=document.getElementById('payBtn'),panel=document.getElementById('payPanel');if(!panel.classList.contains('open')){btn.classList.add('open');panel.classList.add('open');}showStep('step1');document.getElementById('modSelect').value=moduleKey;onModuleChange();btn.scrollIntoView({behavior:'smooth',block:'center'});};
     window.onModuleChange=function(){selKey=document.getElementById('modSelect').value;hideAmount();if(!selKey)return;var g=GUIDES[selKey];if(!g)return;selAmount=g.price;selDesc=g.name;document.getElementById('amountDesc').textContent=selDesc;document.getElementById('amountVal').textContent='\u20b9'+selAmount.toLocaleString('en-IN');document.getElementById('amountRow').classList.add('visible');document.getElementById('proceedBtn').classList.add('visible');};
     window.goToStep2=function(){if(!selAmount){alert('Please select a module first.');return;}document.getElementById('step2Summary').textContent=selDesc+'  \u00b7  \u20b9'+selAmount.toLocaleString('en-IN');showStep('step2');};
     window.goToStep1=function(){showStep('step1');};
@@ -1078,6 +1354,8 @@
     window.onPaymentSuccess=function(){document.getElementById('tyEmail').textContent=userData.email;document.getElementById('tyOrderBox').innerHTML='<strong>Order Ref:</strong> '+txnRef+'<br><strong>UTR / Txn Ref:</strong> '+utrNumber+'<br><strong>Module:</strong> '+selDesc+'<br><strong>Amount:</strong> \u20b9'+selAmount.toLocaleString('en-IN')+'<br><strong>Name:</strong> '+userData.name+'<br><strong>Mobile:</strong> +91 '+userData.mobile+'<br><strong>Email:</strong> '+userData.email;showStep('step4');sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT SUBMITTED',order_ref:txnRef,utr_number:utrNumber,guide:selDesc,amount:'Rs.'+selAmount.toLocaleString('en-IN'),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'New training order received. UTR: '+utrNumber});sendEmail({to_email:userData.email,subject:'Your FullonBaan Training Order is Being Processed \u2014 '+selDesc,status:'PAYMENT SUBMITTED \u2014 UNDER VALIDATION',order_ref:txnRef,utr_number:utrNumber,guide:selDesc,amount:'Rs.'+selAmount.toLocaleString('en-IN'),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Thank you for your order! Your payment (UTR: '+utrNumber+') is being validated. For queries, WhatsApp us at +91 63605 93122.'});};
     window.onPaymentFailure=function(){document.getElementById('failContact').textContent=userData.email+' / +91 '+userData.mobile;document.getElementById('failOrderBox').innerHTML='<strong>Module:</strong> '+selDesc+'<br><strong>Amount:</strong> \u20b9'+selAmount.toLocaleString('en-IN')+'<br><strong>Name:</strong> '+userData.name+'<br><strong>Mobile:</strong> +91 '+userData.mobile+'<br><strong>Email:</strong> '+userData.email;showStep('step5');sendEmail({to_email:'fullonbaan@gmail.com',subject:'Payment Failed \u2014 '+selDesc,status:'PAYMENT FAILED',order_ref:txnRef||'N/A',guide:selDesc,amount:'Rs.'+selAmount.toLocaleString('en-IN'),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Payment failed. Please follow up with customer.'});};
     window.retryPayment=function(){showStep('step3');};
+
+    window.sendInquiry=function(){var name=document.getElementById('inqName').value.trim(),email=document.getElementById('inqEmail').value.trim(),phone=document.getElementById('inqPhone').value.trim(),mod=document.getElementById('inqModule').value,msg=document.getElementById('inqMessage').value.trim(),err=document.getElementById('inqError'),ok=document.getElementById('inqSuccess');err.textContent='';ok.style.display='none';if(!name){err.textContent='Please enter your name.';return;}if(!email||!email.includes('@')){err.textContent='Please enter a valid email address.';return;}if(!phone||phone.length<10){err.textContent='Please enter a valid phone number.';return;}if(!mod||mod==='Select a Training'){err.textContent='Please select a training module.';return;}sendEmail({to_email:'fullonbaan@gmail.com',subject:'Training Inquiry \u2014 '+mod,status:'NEW INQUIRY',order_ref:'INQ'+Date.now(),utr_number:'N/A',guide:mod,amount:'N/A',cust_name:name,cust_email:email,cust_mobile:phone,message:msg||'(no message)'});ok.style.display='block';document.getElementById('inqName').value='';document.getElementById('inqEmail').value='';document.getElementById('inqPhone').value='';document.getElementById('inqModule').selectedIndex=0;document.getElementById('inqMessage').value='';};
 
     function fireAbandonAlert(){if(!paymentIntentSent||utrSubmitted||abandonFired)return;abandonFired=true;sendEmail({to_email:'fullonbaan@gmail.com',subject:'\u26a0\ufe0f Possible Payment \u2014 No UTR Submitted \u2014 '+(userData?userData.name:'Unknown'),status:'PAYMENT LIKELY \u2014 UTR NOT SUBMITTED',order_ref:txnRef||'N/A',utr_number:'(customer did not submit UTR)',guide:selDesc||'N/A',amount:selAmount?'Rs.'+selAmount.toLocaleString('en-IN'):'N/A',cust_name:userData?userData.name:'N/A',cust_email:userData?userData.email:'N/A',cust_mobile:userData?'+91 '+userData.mobile:'N/A',message:'Customer switched away from payment screen. Check UPI app for incoming payment.'});}
     document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')fireAbandonAlert();});
