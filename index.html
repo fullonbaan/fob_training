@@ -314,111 +314,130 @@
   /* ── EBOOK SECTION ── */
   .ebook-section { background: var(--bg); }
 
-  /* Spotlight spotlight */
-  .spotlight {
+  /* Module Preview Grid */
+  .module-preview-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-bottom: 32px;
+  }
+  .mod-preview {
     background: linear-gradient(135deg, #0c1830 0%, #1a2e50 100%);
-    border-radius: 16px; padding: 28px 28px 24px;
-    margin-bottom: 36px;
-    position: relative; overflow: hidden;
-    border: 1px solid rgba(90,140,220,0.18);
-    box-shadow: 0 8px 32px rgba(10,20,50,0.18);
+    border-radius: 14px; padding: 0; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
-  .spotlight::before {
-    content:''; position:absolute; top:-80px; right:-80px;
-    width:280px; height:280px;
-    background:radial-gradient(circle,rgba(26,122,110,0.22),transparent 68%);
-    pointer-events:none;
+  .mod-preview:hover {
+    transform: translateY(-3px);
+    border-color: rgba(168,120,42,0.3);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.18);
   }
-  .spotlight::after {
-    content:''; position:absolute; bottom:-60px; left:-60px;
-    width:220px; height:220px;
-    background:radial-gradient(circle,rgba(168,120,42,0.15),transparent 68%);
-    pointer-events:none;
+  .mod-preview-header {
+    padding: 18px 20px 14px; position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
   }
-  .spotlight-badge {
-    font-family:'DM Mono',monospace; font-size:8px; letter-spacing:2.5px;
-    text-transform:uppercase; color:#5be0d8;
-    border:1px solid rgba(91,224,216,0.35); padding:4px 12px;
-    border-radius:20px; display:inline-block; margin-bottom:18px;
-    position:relative; z-index:2;
+  .mod-preview-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   }
-  .spotlight-inner {
-    display:grid; grid-template-columns:200px 1fr;
-    gap:28px; align-items:flex-start; position:relative; z-index:2;
+  .mod-preview.mp-blue .mod-preview-header::before   { background: linear-gradient(90deg,#1a4a8a,#5a8cdc,#1a4a8a); }
+  .mod-preview.mp-teal .mod-preview-header::before   { background: linear-gradient(90deg,#1a7a6e,#5be0d8,#1a7a6e); }
+  .mod-preview.mp-gold .mod-preview-header::before   { background: linear-gradient(90deg,#a87a2a,#d4a84a,#a87a2a); }
+  .mod-preview.mp-rust .mod-preview-header::before   { background: linear-gradient(90deg,#b03820,#e06848,#b03820); }
+  .mod-preview.mp-violet .mod-preview-header::before { background: linear-gradient(90deg,#5c3a8a,#9a70d0,#5c3a8a); }
+  .mod-preview.mp-green .mod-preview-header::before  { background: linear-gradient(90deg,#1a6b3a,#4ade80,#1a6b3a); }
+  .mod-preview-badge {
+    font-family:'DM Mono',monospace; font-size:7.5px; letter-spacing:2px;
+    text-transform:uppercase; padding:3px 10px;
+    border-radius:20px; display:inline-block; margin-bottom:10px;
   }
-  .book-cover-wrap { position:relative; perspective:800px; }
-  .book-cover {
-    width:148px; border-radius:4px 8px 8px 4px;
-    transform:rotateY(-14deg) rotateX(3deg);
-    transform-style:preserve-3d;
-    box-shadow:6px 10px 30px rgba(0,0,0,0.5),-2px 0 8px rgba(0,0,0,0.3);
-    transition:transform .3s ease;
+  .mp-blue .mod-preview-badge   { color:#5a8cdc; border:1px solid rgba(90,140,220,0.35); }
+  .mp-teal .mod-preview-badge   { color:#5be0d8; border:1px solid rgba(91,224,216,0.35); }
+  .mp-gold .mod-preview-badge   { color:#d4a84a; border:1px solid rgba(212,168,74,0.35); }
+  .mp-rust .mod-preview-badge   { color:#e06848; border:1px solid rgba(224,104,72,0.35); }
+  .mp-violet .mod-preview-badge { color:#9a70d0; border:1px solid rgba(154,112,208,0.35); }
+  .mp-green .mod-preview-badge  { color:#4ade80; border:1px solid rgba(74,222,128,0.35); }
+  .mod-preview-title {
+    font-family:'Noto Serif',serif; font-weight:700; font-size:15px;
+    color:#fff; line-height:1.2; margin-bottom:4px;
   }
-  .book-cover-wrap:hover .book-cover { transform:rotateY(-6deg) rotateX(1deg) scale(1.03); }
-  .bc-front {
-    background:linear-gradient(158deg,#060b16 0%,#0c1830 50%,#080f1e 100%);
-    border-radius:4px 8px 8px 4px; padding:16px 12px 14px;
-    min-height:210px; display:flex; flex-direction:column;
-    border:1px solid rgba(91,224,216,0.15); overflow:hidden; position:relative;
+  .mod-preview-sub {
+    font-size:10px; color:rgba(255,255,255,0.4); line-height:1.5;
   }
-  .bc-front::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:2px;
-    background:linear-gradient(90deg,#1a7a6e,#5be0d8,#1a7a6e);
+  .toc-label {
+    font-family:'DM Mono',monospace; font-size:8px; letter-spacing:2px;
+    text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:4px;
   }
-  .bc-logo-text { font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px; color:white; }
-  .bc-logo-text span { color:#5be0d8; }
-  .bc-logo-sub { font-size:7px; color:rgba(255,255,255,0.4); margin-top:1px; }
-  .bc-badge-area { font-family:'DM Mono',monospace; font-size:6.5px; letter-spacing:1.5px; color:rgba(255,255,255,0.35); text-transform:uppercase; margin:10px 0 8px; }
-  .bc-main-title { font-family:'Noto Serif',serif; font-weight:700; font-size:22px; color:white; line-height:1.1; margin-bottom:4px; flex:1; }
-  .bc-sub-title { font-size:9px; color:#5be0d8; margin-bottom:8px; }
-  .bc-topics { font-size:6.5px; color:rgba(255,255,255,0.35); line-height:1.6; margin-bottom:8px; }
-  .bc-edition { background:rgba(168,120,42,0.85); color:#fff; font-size:7px; letter-spacing:2px; text-transform:uppercase; padding:4px 8px; font-family:'DM Mono',monospace; display:inline-block; border-radius:2px; margin-bottom:8px; align-self:flex-start; }
-  .bc-cr { font-size:6.5px; color:rgba(255,255,255,0.2); }
-  .book-shadow { position:absolute; bottom:-18px; left:10px; right:-10px; height:20px; background:radial-gradient(ellipse,rgba(0,0,0,0.35),transparent 70%); filter:blur(6px); }
-
-  .pp-title { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:12px; }
-  .pp-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-  .pp-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 11px; display:flex; gap:8px; transition:background .2s,border-color .2s; }
-  .pp-card:hover { background:rgba(255,255,255,0.10); border-color:rgba(91,224,216,0.3); }
-  .pp-card-num { font-family:'DM Mono',monospace; font-size:11px; font-weight:600; color:white; background:rgba(26,74,138,0.8); width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .pp-card-num.teal   { background:rgba(26,122,110,0.8); }
-  .pp-card-num.gold   { background:rgba(168,120,42,0.8); }
-  .pp-card-num.rust   { background:rgba(176,56,32,0.8); }
-  .pp-card-num.violet { background:rgba(92,58,138,0.8); }
-  .pp-card-head { font-size:10.5px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:4px; }
-  .pp-card-desc { font-size:9.5px; color:rgba(255,255,255,0.45); line-height:1.55; margin-bottom:6px; }
-  .pp-tags { display:flex; gap:4px; flex-wrap:wrap; }
-  .pp-tag { font-family:'DM Mono',monospace; font-size:7px; color:white; background:rgba(26,74,138,0.7); padding:2px 6px; border-radius:3px; }
-  .pp-tag.teal   { background:rgba(26,122,110,0.7); }
-  .pp-tag.gold   { background:rgba(168,120,42,0.7); }
-  .pp-tag.rust   { background:rgba(176,56,32,0.7); }
-  .pp-tag.violet { background:rgba(92,58,138,0.7); }
-  .pp-stat-card { flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(26,122,110,0.2),rgba(26,74,138,0.2)); border-color:rgba(91,224,216,0.2); }
-  .pp-stats { display:flex; gap:14px; margin-bottom:8px; }
-  .pp-stat { text-align:center; }
-  .pp-stat-val { font-family:'Noto Serif',serif; font-size:22px; font-weight:700; color:#5be0d8; line-height:1; }
-  .pp-stat-label { font-size:8px; color:rgba(255,255,255,0.4); font-family:'DM Mono',monospace; letter-spacing:.5px; margin-top:2px; }
-  .pp-cta-note { font-size:9px; color:rgba(255,255,255,0.35); text-align:center; font-family:'DM Mono',monospace; line-height:1.4; }
-
-  /* Series strip */
-  .series-strip-title { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold-mid); margin-bottom:16px; }
-  .series-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
-  .series-card { border-radius:12px; padding:16px; border:1px solid transparent; transition:transform .2s,box-shadow .2s; cursor:default; }
-  .series-card:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.10); }
-  .sc-blue   { background:linear-gradient(135deg,#e8f0fb,#f0f5ff); border-color:rgba(26,74,138,0.2); }
-  .sc-teal   { background:linear-gradient(135deg,#e4f3f0,#edfaf7); border-color:rgba(26,122,110,0.2); }
-  .sc-gold   { background:linear-gradient(135deg,#faf0da,#fff8ec); border-color:rgba(168,120,42,0.2); }
-  .sc-slate  { background:linear-gradient(135deg,#e8ecf4,#f0f3fa); border-color:rgba(46,58,78,0.18); }
-  .sc-violet { background:linear-gradient(135deg,#f0eaf8,#f8f4ff); border-color:rgba(92,58,138,0.2); }
-  .sc-rust   { background:linear-gradient(135deg,#faeae4,#fff2ee); border-color:rgba(176,56,32,0.2); }
-  .sc-green  { background:linear-gradient(135deg,#e4f5ec,#edfaf3); border-color:rgba(26,107,58,0.2); }
-  .sc-orange { background:linear-gradient(135deg,#faedde,#fff6ec); border-color:rgba(176,72,8,0.2); }
-  .sc-module { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-lt); margin-bottom:4px; }
-  .sc-title  { font-family:'Noto Serif',serif; font-weight:700; font-size:13.5px; color:var(--ink); line-height:1.2; margin-bottom:5px; }
-  .sc-desc   { font-size:10px; color:var(--ink-lt); line-height:1.55; margin-bottom:7px; }
-  .sc-meta   { font-family:'DM Mono',monospace; font-size:8px; color:var(--ink-lt); margin-bottom:7px; letter-spacing:.3px; }
-  .sc-price  { font-family:'Noto Serif',serif; font-weight:700; font-size:14px; color:var(--rust); }
-  .sc-price span { font-size:10px; font-weight:400; color:var(--ink-lt); }
+  .mod-preview-toc {
+    padding: 14px 20px 18px;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .toc-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-num {
+    font-family:'DM Mono',monospace; font-size:10px; font-weight:600;
+    color:#fff; min-width:24px; height:24px; border-radius:5px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .mp-blue .toc-num   { background:rgba(26,74,138,0.7); }
+  .mp-teal .toc-num   { background:rgba(26,122,110,0.7); }
+  .mp-gold .toc-num   { background:rgba(168,120,42,0.7); }
+  .mp-rust .toc-num   { background:rgba(176,56,32,0.7); }
+  .mp-violet .toc-num { background:rgba(92,58,138,0.7); }
+  .mp-green .toc-num  { background:rgba(26,107,58,0.7); }
+  .toc-text {
+    font-size:10.5px; color:rgba(255,255,255,0.75); line-height:1.4;
+    padding-top:2px;
+  }
+  .toc-text small {
+    display:block; font-size:9px; color:rgba(255,255,255,0.35);
+    margin-top:1px; line-height:1.4;
+  }
+  .mod-preview-footer {
+    padding: 0 20px 16px; display:flex; align-items:center;
+    justify-content:flex-end; gap:12px;
+  }
+  .mod-preview-stats {
+    display:flex; gap:16px;
+  }
+  .mp-stat {
+    text-align:center;
+  }
+  .mp-stat-val {
+    font-family:'Noto Serif',serif; font-size:18px; font-weight:700; line-height:1;
+  }
+  .mp-blue .mp-stat-val   { color:#5a8cdc; }
+  .mp-teal .mp-stat-val   { color:#5be0d8; }
+  .mp-gold .mp-stat-val   { color:#d4a84a; }
+  .mp-rust .mp-stat-val   { color:#e06848; }
+  .mp-violet .mp-stat-val { color:#9a70d0; }
+  .mp-green .mp-stat-val  { color:#4ade80; }
+  .mp-stat-label {
+    font-size:7.5px; color:rgba(255,255,255,0.35);
+    font-family:'DM Mono',monospace; letter-spacing:.5px; margin-top:2px;
+  }
+  .mod-preview-price {
+    font-family:'Noto Serif',serif; font-weight:700; font-size:16px;
+  }
+  .mp-blue .mod-preview-price   { color:#5a8cdc; }
+  .mp-teal .mod-preview-price   { color:#5be0d8; }
+  .mp-gold .mod-preview-price   { color:#d4a84a; }
+  .mp-rust .mod-preview-price   { color:#e06848; }
+  .mp-violet .mod-preview-price { color:#9a70d0; }
+  .mp-green .mod-preview-price  { color:#4ade80; }
+  .mod-preview-price span {
+    font-size:10px; font-weight:400; color:rgba(255,255,255,0.35);
+  }
+  .mod-preview-price .price-orig {
+    text-decoration:line-through; font-size:11px; font-weight:400;
+    color:rgba(255,255,255,0.3); margin-right:4px;
+  }
+  .mod-preview-price .price-free {
+    font-size:11px; color:var(--green); background:var(--green-bg);
+    border:1px solid rgba(46,125,79,0.25); border-radius:20px;
+    padding:3px 11px; font-weight:500; font-family:'DM Sans',sans-serif;
+  }
 
   /* Value bar */
   .value-bar {
@@ -430,9 +449,18 @@
   .vb-item { display:flex; align-items:center; gap:8px; flex:1; font-size:12px; color:var(--ink-mid); min-width:180px; }
   .vb-icon { font-size:16px; color:var(--green); font-weight:700; }
   .vb-div  { width:1px; height:32px; background:rgba(128,86,4,0.18); }
+
+  @media(max-width:1100px){
+    .module-preview-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media(max-width:700px){
+    .module-preview-grid { grid-template-columns: 1fr; }
+  }
   @media(max-width:600px){
     .vb-div { display:none; }
     .value-bar { flex-direction:column; }
+    .mod-preview-title { font-size:16px; }
+    .mod-preview-footer { flex-direction:column; align-items:flex-start; }
   }
 
   /* ── PRICING SECTION ── */
@@ -506,6 +534,51 @@
     .price-table thead th, .price-table tbody td { padding:10px 8px; font-size:11px; }
   }
 
+  /* ── FAQ SECTION ── */
+  .faq-section { background: var(--bg-mid); }
+  .faq-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 14px; margin-top: 4px;
+  }
+  .faq-item {
+    background: var(--surface); border: 1px solid var(--border-lt);
+    border-radius: 12px; overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .faq-item:hover { border-color: rgba(168,120,42,0.25); }
+  .faq-item.open { border-color: rgba(168,120,42,0.35); box-shadow: 0 4px 18px rgba(35,26,15,0.06); }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; cursor: pointer; gap: 12px;
+    user-select: none; -webkit-user-select: none;
+  }
+  .faq-q-text {
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+    font-weight: 600; color: var(--ink); line-height: 1.4;
+  }
+  .faq-q-icon {
+    font-family: 'DM Mono', monospace; font-size: 16px;
+    color: var(--gold-mid); flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(168,120,42,0.08); display: flex;
+    align-items: center; justify-content: center;
+    transition: transform .25s ease, background .2s;
+  }
+  .faq-item.open .faq-q-icon { transform: rotate(45deg); background: rgba(168,120,42,0.15); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(0.22,1,0.36,1), padding .25s;
+    padding: 0 20px;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 18px; }
+  .faq-a-text {
+    font-size: 12.5px; color: var(--ink-lt); line-height: 1.7;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .faq-a-text strong { color: var(--ink); font-weight: 600; }
+  @media(max-width:768px){
+    .faq-grid { grid-template-columns: 1fr; }
+  }
+
   /* ── CONTACT SECTION ── */
   .contact-section { background: var(--bg); }
   .contact-grid {
@@ -524,6 +597,37 @@
   .ci-icon  { font-size: 24px; flex-shrink: 0; }
   .ci-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
   .ci-val   { font-size:13px; color:var(--ink-mid); font-weight:500; }
+
+  /* UPI Trust Badges */
+  .upi-trust-strip {
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    padding:10px 0 6px; flex-wrap:wrap;
+  }
+  .upi-trust-badge {
+    display:flex; align-items:center; gap:6px;
+    background:var(--cream); border:1px solid var(--border-lt);
+    border-radius:8px; padding:6px 12px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .upi-trust-badge:hover {
+    border-color:rgba(168,120,42,0.3);
+    box-shadow:0 2px 10px rgba(168,120,42,0.08);
+  }
+  .upi-trust-icon { width:24px; height:24px; flex-shrink:0; }
+  .upi-trust-icon img { width:100%; height:100%; object-fit:contain; border-radius:4px; }
+  .upi-trust-name {
+    font-family:'DM Sans',sans-serif; font-size:10px; font-weight:600;
+    color:var(--ink-mid); white-space:nowrap;
+  }
+  .upi-trust-note {
+    text-align:center; font-family:'DM Mono',monospace; font-size:8.5px;
+    letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-lt);
+    margin-top:6px;
+  }
+  .upi-trust-lock {
+    display:inline-flex; align-items:center; gap:4px; color:var(--green);
+    font-size:9px; font-weight:600; font-family:'DM Mono',monospace;
+  }
 
   /* Pay section (in contact area) */
   .pay-section { margin-top: 0; }
@@ -873,6 +977,166 @@
   }
   #adm-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+  /* ── TESTIMONIALS MARQUEE ── */
+  .testi-section {
+    background: var(--navy);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(201,148,62,0.12);
+  }
+  .testi-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(201,148,62,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .testi-header {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px 32px;
+    text-align: center;
+    position: relative;
+  }
+  .testi-section .section-label { color: var(--gold-dim); }
+  .testi-section .section-title { color: #fff; }
+  .testi-section .section-sub { color: rgba(255,248,244,0.5); }
+
+  .testi-marquee {
+    position: relative;
+    overflow: hidden;
+    padding: 8px 0;
+  }
+  .testi-marquee::before,
+  .testi-marquee::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .testi-marquee::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--navy) 0%, transparent 100%);
+  }
+  .testi-marquee::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--navy) 0%, transparent 100%);
+  }
+
+  .testi-track {
+    display: flex;
+    gap: 20px;
+    animation: scrollTestimonials 60s linear infinite;
+    width: max-content;
+  }
+  .testi-track:hover { animation-play-state: paused; }
+  @keyframes scrollTestimonials {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .testi-track-reverse {
+    display: flex;
+    gap: 20px;
+    animation: scrollTestimonialsReverse 55s linear infinite;
+    width: max-content;
+    margin-top: 20px;
+  }
+  .testi-track-reverse:hover { animation-play-state: paused; }
+  @keyframes scrollTestimonialsReverse {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  .testi-card {
+    flex-shrink: 0;
+    width: 380px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,148,62,0.15);
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    cursor: default;
+  }
+  .testi-card:hover {
+    border-color: rgba(201,148,62,0.35);
+    background: rgba(255,255,255,0.07);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.25);
+  }
+  .testi-quote {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: rgba(255,248,244,0.72);
+    flex: 1;
+    padding-left: 14px;
+    border-left: 2px solid rgba(201,148,62,0.3);
+  }
+  .testi-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .testi-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68rem; font-weight: 700;
+    color: #fff; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .testi-info { flex: 1; min-width: 0; }
+  .testi-name {
+    font-weight: 600; font-size: 0.78rem;
+    color: rgba(255,248,244,0.88);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .testi-module {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.5px;
+    color: var(--gold-lt); opacity: 0.7; margin-top: 2px;
+  }
+  .testi-li-icon {
+    width: 18px; height: 18px; border-radius: 3px;
+    opacity: 0.4; flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+  .testi-card:hover .testi-li-icon { opacity: 0.75; }
+
+  .testi-cta {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin: 32px auto 0;
+    padding: 11px 26px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,148,62,0.2);
+    border-radius: 8px;
+    color: rgba(255,248,244,0.7);
+    text-decoration: none;
+    font-size: 0.8rem; font-weight: 500;
+    transition: all 0.25s;
+    width: fit-content;
+    position: relative;
+  }
+  .testi-cta:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(201,148,62,0.4);
+    color: #fff;
+  }
+  .testi-cta img { width: 16px; height: 16px; border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    .testi-card { width: 300px; padding: 18px 20px; }
+    .testi-section { padding: 48px 0 40px; }
+  }
+
 </style>
 </head>
 <body>
@@ -963,150 +1227,130 @@
     <p class="section-sub">A glimpse into the depth and quality of FullonBaan training materials</p>
     <div class="gold-bar"></div>
 
-    <!-- Spotlight -->
-    <div class="spotlight">
-      <div class="spotlight-badge">Featured Module — Infor LN Development</div>
-      <div class="spotlight-inner">
-        <!-- Book cover -->
-        <div class="book-cover-wrap">
-          <div class="book-cover">
-            <div class="bc-front">
-              <div class="bc-logo-area">
-                <div class="bc-logo-text">Fullon<span>Baan</span></div>
-                <div class="bc-logo-sub">One stop destination for IT solutions</div>
-              </div>
-              <div class="bc-badge-area">OFFICIAL TRAINING GUIDE</div>
-              <div class="bc-main-title">Architecture</div>
-              <div class="bc-sub-title">Infor ERPLN 6.1 Tools</div>
-              <div class="bc-topics">Architecture · Session Management · System Tiers · VRC Concepts</div>
-              <div class="bc-edition">PREMIUM EDITION</div>
-              <div class="bc-cr">© 2025 FullonBaan IT Solutions</div>
-            </div>
-          </div>
-          <div class="book-shadow"></div>
-        </div>
-        <!-- Page previews -->
-        <div class="page-previews">
-          <div class="pp-title">Inside this eBook — 5 comprehensive sections:</div>
-          <div class="pp-grid">
-            <div class="pp-card">
-              <div class="pp-card-num">01</div>
-              <div class="pp-card-body">
-                <div class="pp-card-head">Software Architecture</div>
-                <div class="pp-card-desc">The five session components: OBJ, FRM, TBL, RPT, CHT. Forms, Table Definitions, Overview vs Details sessions.</div>
-                <div class="pp-tags"><span class="pp-tag">Sessions</span><span class="pp-tag">Forms</span><span class="pp-tag">Objects</span></div>
-              </div>
-            </div>
-            <div class="pp-card">
-              <div class="pp-card-num teal">02</div>
-              <div class="pp-card-body">
-                <div class="pp-card-head">Session Startup Flow</div>
-                <div class="pp-card-desc">The complete 12-step lifecycle: from runtime components to license check, loading forms, data definitions, user defaults.</div>
-                <div class="pp-tags"><span class="pp-tag teal">Lifecycle</span><span class="pp-tag teal">bshell</span><span class="pp-tag teal">Runtime</span></div>
-              </div>
-            </div>
-            <div class="pp-card">
-              <div class="pp-card-num gold">03</div>
-              <div class="pp-card-body">
-                <div class="pp-card-head">System Architecture &amp; Tiers</div>
-                <div class="pp-card-desc">Three-tier design: Tier 1 Presentation, Tier 2 Business Logic (bshell VM), Tier 3 Data Management.</div>
-                <div class="pp-tags"><span class="pp-tag gold">3-Tier</span><span class="pp-tag gold">Webtop</span><span class="pp-tag gold">Worktop</span></div>
-              </div>
-            </div>
-            <div class="pp-card">
-              <div class="pp-card-num rust">04</div>
-              <div class="pp-card-body">
-                <div class="pp-card-head">Data Dictionary</div>
-                <div class="pp-card-desc">APDD vs RTDD. The Convert to Runtime process and the four key sessions.</div>
-                <div class="pp-tags"><span class="pp-tag rust">APDD</span><span class="pp-tag rust">RTDD</span><span class="pp-tag rust">Convert</span></div>
-              </div>
-            </div>
-            <div class="pp-card">
-              <div class="pp-card-num violet">05</div>
-              <div class="pp-card-body">
-                <div class="pp-card-head">Version Release Customization</div>
-                <div class="pp-card-desc">VRC explained: Version, Release, Customization. Package VRC derivation hierarchy and multi-user version control.</div>
-                <div class="pp-tags"><span class="pp-tag violet">VRC</span><span class="pp-tag violet">Packages</span><span class="pp-tag violet">Lifecycle</span></div>
-              </div>
-            </div>
-            <div class="pp-card pp-stat-card">
-              <div class="pp-stats">
-                <div class="pp-stat"><div class="pp-stat-val">22</div><div class="pp-stat-label">Pages</div></div>
-                <div class="pp-stat"><div class="pp-stat-val">5</div><div class="pp-stat-label">Sections</div></div>
-                <div class="pp-stat"><div class="pp-stat-val">6</div><div class="pp-stat-label">Objectives</div></div>
-              </div>
-              <div class="pp-cta-note">Part of the Infor LN Development eBook bundle</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Module Preview Cards -->
+    <div class="module-preview-grid">
 
-    <!-- Series strip -->
-    <div class="series-strip-title">◆ The Complete FullonBaan Technical eBook Library ◆</div>
-    <div class="series-strip">
-      <div class="series-card sc-blue">
-        <div class="sc-module">Development <span class="tag-best-value">Best Value</span></div>
-        <div class="sc-title">Architecture &amp; VRC</div>
-        <div class="sc-desc">Session components, startup flow, 3-tier system, data dictionary, VRC concepts</div>
-        <div class="sc-meta">5 sections · 22 slides</div>
-        <div class="sc-price"><span class="price-orig">&#x20B9;2,999</span>&#x20B9;1,999 <span>/ eBook</span></div>
+      <!-- 1. Infor LN Administration / Development -->
+      <div class="mod-preview mp-blue">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Administration &amp; Development</div>
+          <div class="mod-preview-title">Infor LN Architecture &amp; Tools</div>
+          <div class="mod-preview-sub">Session management, system tiers, data dictionary &amp; VRC concepts</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Software Architecture<small>Sessions, Forms, Tables, Reports, Charts &amp; Objects</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">Session Startup Flow<small>12-step lifecycle from runtime to user defaults</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">System Architecture &amp; Tiers<small>3-tier design: Presentation, Business Logic, Data</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Data Dictionary<small>APDD vs RTDD &amp; Convert to Runtime process</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Version Release Customization<small>VRC hierarchy, packages &amp; multi-user version control</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price"><span class="price-orig">&#x20B9;2,999</span>&#x20B9;1,999</div>
+        </div>
       </div>
-      <div class="series-card sc-teal">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Domain &amp; Data Types</div>
-        <div class="sc-desc">11 data types, additional attributes, validations, legal/illegal chars, format masks</div>
-        <div class="sc-meta">4 deep topics · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
+
+      <!-- 2. Infor LN Finance -->
+      <div class="mod-preview mp-gold">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Functional Module</div>
+          <div class="mod-preview-title">Infor LN Finance</div>
+          <div class="mod-preview-sub">End-to-end financial processes, multi-company concepts &amp; India localisation</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Process Overview &amp; Multi-Company<small>Financial architecture &amp; inter-company concepts</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">General Ledger (GLD)<small>Chart of accounts, journal entries &amp; reporting</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Accounts Payable &amp; Receivable<small>ACP, ACR &amp; Cash Management (CMG)</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Perpetual Inventory &amp; Integration<small>INV module, Job Costing &amp; Cost Allocation</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Financial Statements &amp; Budgets<small>FST, FBS, Fixed Assets &amp; India Localisation</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price"><span class="price-orig">&#x20B9;2,999</span>&#x20B9;1,999</div>
+        </div>
       </div>
-      <div class="series-card sc-gold">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Tables in Baan/LN</div>
-        <div class="sc-desc">Table lifecycle, Convert to Runtime, Reference Mode, Referential Integrity, FK enforcement</div>
-        <div class="sc-meta">5 lifecycle steps · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
+
+      <!-- 3. Infor LN Logistics -->
+      <div class="mod-preview mp-rust">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Functional Module</div>
+          <div class="mod-preview-title">Infor LN Logistics</div>
+          <div class="mod-preview-sub">Procure-to-Pay lifecycle — from PO creation to invoice finalization</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Purchase Order Creation<small>Order header setup &amp; configuration</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">Purchase Order Lines &amp; Activities<small>Print POs, release to warehousing, awaiting receipts</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Receipt &amp; Invoice Processing<small>Purchase invoice entry &amp; print workflows</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Invoice Matching<small>3-way matching: PO, receipt &amp; invoice reconciliation</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Invoice Approval &amp; Finalization<small>Approval workflows &amp; closing the procure-to-pay cycle</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price"><span class="price-free">FREE eBook</span></div>
+        </div>
       </div>
-      <div class="series-card sc-slate">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Dev Objects &amp; Migration</div>
-        <div class="sc-desc">10 dev object types, DEV-UAT-PROD pipeline, Patch vs PMC Solutions migration</div>
-        <div class="sc-meta">3-env pipeline · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
+
+      <!-- 4. Infor LN Manufacturing -->
+      <div class="mod-preview mp-green">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Functional Module</div>
+          <div class="mod-preview-title">Infor LN Manufacturing</div>
+          <div class="mod-preview-sub">Shop floor control, scheduling &amp; production order execution</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">BOM &amp; Routing Recap<small>Bill of Materials, routing structures &amp; PRP overview</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">Production Order Lifecycle<small>Order creation, release &amp; management</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">SFC Order Flow<small>Shop Floor Control order processing steps</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Scheduling<small>Forward/backward scheduling &amp; capacity planning</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Execution<small>Material issues, operation reporting &amp; order completion</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price"><span class="price-free">FREE eBook</span></div>
+        </div>
       </div>
-      <div class="series-card sc-violet">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Functions vs Libraries</div>
-        <div class="sc-desc">DLL vs embedded functions, compilation, memory, performance, decision guide</div>
-        <div class="sc-meta">Performance deep-dive · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
+
+      <!-- 5. Infor BOD -->
+      <div class="mod-preview mp-teal">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Integration</div>
+          <div class="mod-preview-title">Infor BOD Development</div>
+          <div class="mod-preview-sub">Business Object Documents — architecture, development &amp; error handling</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">BOD Architecture &amp; Message Flow<small>Understanding the BOD messaging framework</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">ION &amp; BOD Fundamentals<small>Core concepts of ION integration with BODs</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">BOD Development with Business Studio<small>Building BODs using Infor Business Studio</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">BOD Runtime &amp; Error Handling<small>Runtime processing, debugging &amp; error resolution</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Customization &amp; Staging<small>BOD customization, staging &amp; automatic processing</small></div></div>
+          <div class="toc-item"><div class="toc-num">06</div><div class="toc-text">Specifics for Infor LN<small>LN-specific BOD configurations &amp; best practices</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price">&#x20B9;699</div>
+        </div>
       </div>
-      <div class="series-card sc-rust">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Report Types &amp; Structure</div>
-        <div class="sc-desc">3 report types, 7-band structure, aggregate functions, Before/After field groups</div>
-        <div class="sc-meta">7-band architecture · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
+
+      <!-- 6. Infor ION -->
+      <div class="mod-preview mp-violet">
+        <div class="mod-preview-header">
+          <div class="mod-preview-badge">Integration</div>
+          <div class="mod-preview-title">Infor ION Platform</div>
+          <div class="mod-preview-sub">ION Desk, Connect, Workflow, Event Management &amp; Pulse</div>
+        </div>
+        <div class="mod-preview-toc"><div class="toc-label">Preview Topics</div>
+          <div class="toc-item"><div class="toc-num">01</div><div class="toc-text">Introduction to Infor ION<small>Platform overview &amp; architecture</small></div></div>
+          <div class="toc-item"><div class="toc-num">02</div><div class="toc-text">ION Desk &amp; ION Connect<small>Monitoring, troubleshooting &amp; data integration</small></div></div>
+          <div class="toc-item"><div class="toc-num">03</div><div class="toc-text">Workflow &amp; Event Management<small>Business process automation &amp; event-driven actions</small></div></div>
+          <div class="toc-item"><div class="toc-num">04</div><div class="toc-text">Pulse &amp; Connectors<small>Real-time analytics &amp; system connectors</small></div></div>
+          <div class="toc-item"><div class="toc-num">05</div><div class="toc-text">Custom BOD for Transformation<small>Building custom BODs for data transformation</small></div></div>
+        </div>
+        <div class="mod-preview-footer">
+          <div class="mod-preview-price">&#x20B9;699</div>
+        </div>
       </div>
-      <div class="series-card sc-green">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">3GL vs 4GL &amp; Script Architecture</div>
-        <div class="sc-desc">Declaration, Form, Group, Choice, Field, I/O sections — full 4GL program anatomy</div>
-        <div class="sc-meta">8 section types · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
-      </div>
-      <div class="series-card sc-orange">
-        <div class="sc-module">Tools Series</div>
-        <div class="sc-title">Sequential Dump vs Exchange</div>
-        <div class="sc-desc">Data migration, server-to-server, export/import flows, AFS/DAL programs</div>
-        <div class="sc-meta">9 sections · Premium</div>
-        <div class="sc-price">Included <span>in bundle</span></div>
-      </div>
+
     </div>
 
     <div class="value-bar">
-      <div class="vb-item"><div class="vb-icon">✔</div><div><strong>8+ Premium eBooks</strong> in the Development bundle</div></div>
+      <div class="vb-item"><div class="vb-icon">✔</div><div><strong>6 Premium eBooks</strong> covering all Infor LN modules</div></div>
       <div class="vb-div"></div>
-      <div class="vb-item"><div class="vb-icon">✔</div><div><strong>Real code examples</strong> — not just theory</div></div>
+      <div class="vb-item"><div class="vb-icon">✔</div><div><strong>Real-world examples</strong> — not just theory</div></div>
       <div class="vb-div"></div>
       <div class="vb-item"><div class="vb-icon">✔</div><div><strong>Practitioner-authored</strong> by certified LN consultants</div></div>
       <div class="vb-div"></div>
@@ -1160,37 +1404,6 @@
   </div>
 </section>
 
-<!-- ── WHY CHOOSE ── -->
-<section id="why" class="why-section">
-  <div class="why-inner">
-    <div class="section-label">Why Choose FullonBaan?</div>
-    <h2 class="section-title">Built by Practitioners, Not Academics</h2>
-    <p class="section-sub" style="margin-bottom:36px;">Everything we teach comes from real-world Infor LN implementations — not textbooks.</p>
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon">🎯</div>
-        <div class="why-title">Live Classes</div>
-        <div class="why-desc">Interactive online sessions with industry experts — not pre-recorded lectures</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">🏆</div>
-        <div class="why-title">Certified Trainers</div>
-        <div class="why-desc">10+ years hands-on Infor LN experience. Real projects, real solutions</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">💼</div>
-        <div class="why-title">Job Assistance</div>
-        <div class="why-desc">Placement prep, resume review, and direct referrals to Infor LN employers</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">🌐</div>
-        <div class="why-title">Community Access</div>
-        <div class="why-desc">WhatsApp groups for live queries, job alerts, and peer networking</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ── CONTACT + PAY ── -->
 <section id="contact" class="contact-section">
   <div class="section-wrap">
@@ -1239,6 +1452,43 @@
         <button class="pay-btn" id="payBtn" onclick="togglePay()">
           <span>🛒</span>&nbsp; Buy Now — Select Your Module &nbsp;<span class="arrow">▼</span>
         </button>
+
+        <!-- UPI Trust Badges -->
+        <div class="upi-trust-strip">
+          <div class="upi-trust-badge">
+            <div class="upi-trust-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/120px-PhonePe_Logo.svg.png" alt="PhonePe" loading="lazy">
+            </div>
+            <span class="upi-trust-name">PhonePe</span>
+          </div>
+          <div class="upi-trust-badge">
+            <div class="upi-trust-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/120px-Google_Pay_Logo.svg.png" alt="Google Pay" loading="lazy">
+            </div>
+            <span class="upi-trust-name">Google Pay</span>
+          </div>
+          <div class="upi-trust-badge">
+            <div class="upi-trust-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/120px-UPI-Logo-vector.svg.png" alt="UPI" loading="lazy">
+            </div>
+            <span class="upi-trust-name">UPI</span>
+          </div>
+          <div class="upi-trust-badge">
+            <div class="upi-trust-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/120px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" loading="lazy">
+            </div>
+            <span class="upi-trust-name">Paytm</span>
+          </div>
+          <div class="upi-trust-badge">
+            <div class="upi-trust-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/120px-WhatsApp.svg.png" alt="WhatsApp Pay" loading="lazy">
+            </div>
+            <span class="upi-trust-name">WhatsApp Pay</span>
+          </div>
+        </div>
+        <div class="upi-trust-note">
+          <span class="upi-trust-lock">🔒 Secured</span> &nbsp;·&nbsp; Direct UPI Payment &nbsp;·&nbsp; No intermediary
+        </div>
 
         <div class="pay-panel" id="payPanel">
           <div class="pay-inner">
@@ -1478,6 +1728,360 @@
   </div>
 </section>
 
+<!-- ── WHY CHOOSE ── -->
+<section id="why" class="why-section">
+  <div class="why-inner">
+    <div class="section-label">Why Choose FullonBaan?</div>
+    <h2 class="section-title">Built by Practitioners, Not Academics</h2>
+    <p class="section-sub" style="margin-bottom:36px;">Everything we teach comes from real-world Infor LN implementations — not textbooks.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🎯</div>
+        <div class="why-title">Live Classes</div>
+        <div class="why-desc">Interactive online sessions with industry experts — not pre-recorded lectures</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏆</div>
+        <div class="why-title">Certified Trainers</div>
+        <div class="why-desc">10+ years hands-on Infor LN experience. Real projects, real solutions</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💼</div>
+        <div class="why-title">Job Assistance</div>
+        <div class="why-desc">Placement prep, resume review, and direct referrals to Infor LN employers</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌐</div>
+        <div class="why-title">Community Access</div>
+        <div class="why-desc">WhatsApp groups for live queries, job alerts, and peer networking</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS MARQUEE ── -->
+<section id="testimonials" class="testi-section">
+  <div class="testi-header">
+    <div class="section-label">What Our Students Say</div>
+    <h2 class="section-title">Trusted by Infor LN Professionals</h2>
+    <p class="section-sub">Real feedback from verified LinkedIn recommendations — from professionals who trained with FullonBaan.</p>
+  </div>
+
+  <!-- Row 1 — scrolls left -->
+  <div class="testi-marquee">
+    <div class="testi-track">
+
+      <div class="testi-card">
+        <div class="testi-quote">The sessions were well-organized, and the hands-on approach was especially helpful in building my understanding of the ERP LN platform. The practical examples and support with real-world scenarios made the learning process engaging and effective.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">RR</div>
+          <div class="testi-info"><div class="testi-name">Rishikesh Ravi</div><div class="testi-module">Infor LN Development &middot; Nov 2025</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you FULLONBAAN. The training has been extremely helpful!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">HC</div>
+          <div class="testi-info"><div class="testi-name">Hitesh Chotrani</div><div class="testi-module">Infor BOD Development &middot; Jan 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">The training was very informative and helped me understand the core concepts of development within Infor LN. The explanations on technical architecture, table structures, session design, and coding standards were particularly useful. It has definitely improved my confidence in working with the Infor LN development environment.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">PM</div>
+          <div class="testi-info"><div class="testi-name">Prashanth Myadagoni</div><div class="testi-module">Infor LN Development &middot; Nov 2025</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">The Infor LN class was excellent. The content was clear and relevant, and the instructor made everything easy to understand. The hands-on environment helped me apply what I learned right away. Overall, it was a valuable experience that improved my skills with Infor LN.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SA</div>
+          <div class="testi-info"><div class="testi-name">Swarnalatha Alagan</div><div class="testi-module">Infor LN Manufacturing &middot; Sep 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you for the engaging and interactive Baan training sessions! Your clear explanations, dedicated doubt sessions, and focus on practical knowledge made the learning experience truly valuable. Looking forward to applying what I've learned!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SR</div>
+          <div class="testi-info"><div class="testi-name">Sumit Raghav</div><div class="testi-module">Infor LN Development &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you, FULLONBAAN, for the excellent Infor BOD Development Training. It was a valuable learning experience.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">AP</div>
+          <div class="testi-info"><div class="testi-name">Amit Powar</div><div class="testi-module">Infor BOD Development &middot; Jan 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <!-- duplicate set for seamless loop -->
+      <div class="testi-card">
+        <div class="testi-quote">The sessions were well-organized, and the hands-on approach was especially helpful in building my understanding of the ERP LN platform. The practical examples and support with real-world scenarios made the learning process engaging and effective.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">RR</div>
+          <div class="testi-info"><div class="testi-name">Rishikesh Ravi</div><div class="testi-module">Infor LN Development &middot; Nov 2025</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you FULLONBAAN. The training has been extremely helpful!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">HC</div>
+          <div class="testi-info"><div class="testi-name">Hitesh Chotrani</div><div class="testi-module">Infor BOD Development &middot; Jan 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">The training was very informative and helped me understand the core concepts of development within Infor LN. The explanations on technical architecture, table structures, session design, and coding standards were particularly useful. It has definitely improved my confidence in working with the Infor LN development environment.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">PM</div>
+          <div class="testi-info"><div class="testi-name">Prashanth Myadagoni</div><div class="testi-module">Infor LN Development &middot; Nov 2025</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">The Infor LN class was excellent. The content was clear and relevant, and the instructor made everything easy to understand. The hands-on environment helped me apply what I learned right away. Overall, it was a valuable experience that improved my skills with Infor LN.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SA</div>
+          <div class="testi-info"><div class="testi-name">Swarnalatha Alagan</div><div class="testi-module">Infor LN Manufacturing &middot; Sep 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you for the engaging and interactive Baan training sessions! Your clear explanations, dedicated doubt sessions, and focus on practical knowledge made the learning experience truly valuable. Looking forward to applying what I've learned!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SR</div>
+          <div class="testi-info"><div class="testi-name">Sumit Raghav</div><div class="testi-module">Infor LN Development &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Thank you, FULLONBAAN, for the excellent Infor BOD Development Training. It was a valuable learning experience.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">AP</div>
+          <div class="testi-info"><div class="testi-name">Amit Powar</div><div class="testi-module">Infor BOD Development &middot; Jan 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Row 2 — scrolls right (reverse) -->
+  <div class="testi-marquee">
+    <div class="testi-track-reverse">
+
+      <div class="testi-card">
+        <div class="testi-quote">The training on InforLN was really informative. It helped me in building a foundation of this topic. After each topic there were some exercises which helped further. And there theoretical material as well. Overall it was a good experience.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SM</div>
+          <div class="testi-info"><div class="testi-name">Shivani Mohanty</div><div class="testi-module">Infor LN Development &middot; Feb 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Everything was per the schedule and additional efforts from Trainer to explain all the scenarios were very easy and I felt comfortable throughout the training days.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SA</div>
+          <div class="testi-info"><div class="testi-name">Syed Abid Ali</div><div class="testi-module">Infor LN Manufacturing &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Great presentation style with lots of opportunities to ask questions and demonstration of live examples which all made for a really enjoyable and informative course. A wonderfully practical course - both personally and professionally.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">MS</div>
+          <div class="testi-info"><div class="testi-name">Manish Sharma</div><div class="testi-module">Infor LN Administration &middot; Sep 2023</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Infor Planning, successfully completed. It was fantastic to participate in a training with you. We will soon have another one. If you want to learn about manufacturing and how to work with the best tool on the market for this, it is with #fullonbaan.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">HP</div>
+          <div class="testi-info"><div class="testi-name">Hugo Pimenta</div><div class="testi-module">Infor LN Planning &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">I want to express my gratitude for your dedication and the effort you put into making this training so valuable. Your guidance and expertise have been greatly appreciated, and I feel well-prepared to apply what I&rsquo;ve learned in my future endeavors.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">MO</div>
+          <div class="testi-info"><div class="testi-name">Mohamed Sayed Osman</div><div class="testi-module">Infor LN Logistics &middot; Sep 2023</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">I took wonderful decision to pursue Training in FullonBaan especially in Warehousing Module in Infor 10.8 version. My Trainer taught me from the base to Indepth in warehousing. He coordinated really well. Thanks a lot FullonBaan team!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">BS</div>
+          <div class="testi-info"><div class="testi-name">Bala Subramanian</div><div class="testi-module">Infor LN Warehousing &middot; Jul 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <!-- duplicate set for seamless loop -->
+      <div class="testi-card">
+        <div class="testi-quote">The training on InforLN was really informative. It helped me in building a foundation of this topic. After each topic there were some exercises which helped further. And there theoretical material as well. Overall it was a good experience.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SM</div>
+          <div class="testi-info"><div class="testi-name">Shivani Mohanty</div><div class="testi-module">Infor LN Development &middot; Feb 2026</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Everything was per the schedule and additional efforts from Trainer to explain all the scenarios were very easy and I felt comfortable throughout the training days.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">SA</div>
+          <div class="testi-info"><div class="testi-name">Syed Abid Ali</div><div class="testi-module">Infor LN Manufacturing &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Great presentation style with lots of opportunities to ask questions and demonstration of live examples which all made for a really enjoyable and informative course. A wonderfully practical course - both personally and professionally.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">MS</div>
+          <div class="testi-info"><div class="testi-name">Manish Sharma</div><div class="testi-module">Infor LN Administration &middot; Sep 2023</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">Infor Planning, successfully completed. It was fantastic to participate in a training with you. We will soon have another one. If you want to learn about manufacturing and how to work with the best tool on the market for this, it is with #fullonbaan.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">HP</div>
+          <div class="testi-info"><div class="testi-name">Hugo Pimenta</div><div class="testi-module">Infor LN Planning &middot; Oct 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">I want to express my gratitude for your dedication and the effort you put into making this training so valuable. Your guidance and expertise have been greatly appreciated, and I feel well-prepared to apply what I&rsquo;ve learned in my future endeavors.</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">MO</div>
+          <div class="testi-info"><div class="testi-name">Mohamed Sayed Osman</div><div class="testi-module">Infor LN Logistics &middot; Sep 2023</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-quote">I took wonderful decision to pursue Training in FullonBaan especially in Warehousing Module in Infor 10.8 version. My Trainer taught me from the base to Indepth in warehousing. He coordinated really well. Thanks a lot FullonBaan team!</div>
+        <div class="testi-footer">
+          <div class="testi-avatar">BS</div>
+          <div class="testi-info"><div class="testi-name">Bala Subramanian</div><div class="testi-module">Infor LN Warehousing &middot; Jul 2024</div></div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="testi-li-icon">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="testi-header">
+    <a href="https://www.linkedin.com/in/fullon-baan-58700844/details/honors/" target="_blank" rel="noopener" class="testi-cta">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn">
+      View All Recommendations on LinkedIn
+    </a>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section id="faq" class="faq-section">
+  <div class="section-wrap">
+    <div class="section-label">Support</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know before purchasing the training eBooks.</p>
+    <div class="gold-bar"></div>
+
+    <div class="faq-grid">
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">What format are the eBooks in?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">All eBooks are delivered as high-quality <strong>PDF files</strong> that you can read on any device — laptop, tablet, or phone. They are optimized for both screen reading and printing.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">How do I access after purchase?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">Once your UPI payment is confirmed, you'll receive a <strong>download link via email</strong> within minutes. You can also reach out on WhatsApp for instant delivery.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">Are future updates included?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">Yes! When we update an eBook with new content or Infor LN version changes, existing buyers get the <strong>updated edition free of charge</strong>. We'll notify you via email.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">Can I get a refund?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">Since eBooks are digital products delivered instantly, we generally don't offer refunds. However, if you're unsatisfied, <strong>reach out within 7 days</strong> and we'll work with you to resolve the issue.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">Can I buy individual modules?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">Absolutely. Each module is available as a <strong>standalone purchase</strong>. Select the specific eBook you need from the dropdown before clicking Buy Now. Bundle pricing is also available for multiple modules.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span class="faq-q-text">Is the payment secure?</span>
+          <span class="faq-q-icon">+</span>
+        </div>
+        <div class="faq-a">
+          <p class="faq-a-text">Yes. Payments are processed via <strong>direct UPI transfer</strong> — the same secure infrastructure used by PhonePe, Google Pay, Paytm, and all major banks. No card details are stored or shared.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 <!-- ── ECOSYSTEM ── -->
 <section class="eco-section">
   <div class="eco-inner">
@@ -1542,6 +2146,19 @@
 </footer>
 
 <script>
+  // ═══════════════════════════════════════════════════════════════
+  //  FAQ ACCORDION
+  // ═══════════════════════════════════════════════════════════════
+  function toggleFaq(el) {
+    var isOpen = el.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-item.open').forEach(function(item) {
+      item.classList.remove('open');
+    });
+    // toggle clicked
+    if (!isOpen) el.classList.add('open');
+  }
+
   // ═══════════════════════════════════════════════════════════════
   //  EMAILJS CREDENTIALS
   // ═══════════════════════════════════════════════════════════════
