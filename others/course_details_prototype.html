@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#06132a",
+              "surface-dim": "#06132a",
+              "on-secondary-container": "#a9b5d4",
+              "surface-bright": "#2e3952",
+              "surface-container-high": "#1e2a42",
+              "on-error-container": "#ffdad6",
+              "secondary": "#bbc6e6",
+              "error-container": "#93000a",
+              "inverse-primary": "#805604",
+              "on-secondary": "#253049",
+              "surface-container-highest": "#29344e",
+              "on-surface-variant": "#d4c4b2",
+              "surface-tint": "#f6bc68",
+              "surface-variant": "#29344e",
+              "error": "#ffb4ab",
+              "surface-container": "#131f37",
+              "surface-container-lowest": "#020d25",
+              "tertiary": "#d5c4b2",
+              "primary-fixed": "#ffddb1",
+              "primary-fixed-dim": "#f6bc68",
+              "on-primary-fixed": "#291800",
+              "tertiary-container": "#9d8e7e",
+              "secondary-fixed-dim": "#bbc6e6",
+              "secondary-fixed": "#d8e2ff",
+              "on-background": "#d8e2ff",
+              "on-tertiary-fixed": "#231a0f",
+              "tertiary-fixed": "#f2e0cd",
+              "on-tertiary-fixed-variant": "#504538",
+              "on-tertiary-container": "#32281c",
+              "on-primary-container": "#3b2500",
+              "inverse-on-surface": "#253049",
+              "inverse-surface": "#d8e2ff",
+              "tertiary-fixed-dim": "#d5c4b2",
+              "on-tertiary": "#392f22",
+              "surface-container-low": "#0f1b33",
+              "on-error": "#690005",
+              "on-primary-fixed-variant": "#624000",
+              "primary": "#f6bc68",
+              "outline": "#9c8f7e",
+              "on-secondary-fixed-variant": "#3b4661",
+              "primary-container": "#ba8738",
+              "on-surface": "#d8e2ff",
+              "background": "#06132a",
+              "outline-variant": "#504538",
+              "on-secondary-fixed": "#0f1b33",
+              "secondary-container": "#3b4661",
+              "on-primary": "#442b00"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Work Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #f6bc68 0%, #ba8738 100%);
+        }
+        .glass-panel {
+            background: rgba(41, 52, 78, 0.7);
+            backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#06132a]/80 backdrop-blur-md shadow-2xl shadow-black/40">
+<div class="flex justify-between items-center px-8 h-20 w-full max-w-screen-2xl mx-auto">
+<div class="text-xl font-bold text-[#f6bc68] uppercase tracking-widest font-headline">FOB TRAINING</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-[#f6bc68] font-semibold border-b-2 border-[#f6bc68] pb-1 font-headline tracking-tight" href="#">Catalog</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300 font-headline tracking-tight" href="#">E-Books</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300 font-headline tracking-tight" href="#">Pricing</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300 font-headline tracking-tight" href="#">About</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300 font-headline tracking-tight" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#f6bc68] font-medium px-6 py-2 rounded-full border border-outline-variant/15 hover:bg-surface-container-high transition-all active:scale-90">Sign In</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative w-full py-24 px-8 overflow-hidden bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7 z-10">
+<div class="inline-flex items-center gap-2 bg-secondary-container px-4 py-1.5 rounded-full mb-6">
+<span class="material-symbols-outlined text-sm text-primary">architecture</span>
+<span class="text-xs font-label font-semibold tracking-wider text-secondary uppercase">Enterprise Course</span>
+</div>
+<h1 class="text-5xl lg:text-7xl font-headline font-extrabold text-on-surface leading-tight tracking-tight mb-8">
+                        Infor LN <br/><span class="text-primary italic">Architecture &amp; Tools</span>
+</h1>
+<p class="text-xl text-on-surface-variant max-w-2xl leading-relaxed mb-10">
+                        Master the core technical foundations of Infor LN. From software architecture layers to complex session startup flows, this professional curriculum is designed for technical consultants and architects.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="editorial-gradient text-on-primary font-semibold px-8 py-4 rounded-full text-lg shadow-xl shadow-primary/10 transition-transform active:scale-95">Enroll for $499</button>
+<button class="px-8 py-4 rounded-full border border-outline-variant/20 font-semibold text-primary hover:bg-surface-container-high transition-all">View Syllabus</button>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="aspect-video lg:aspect-square bg-surface-container-high rounded-3xl overflow-hidden shadow-2xl border border-outline-variant/10 relative group">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="Modern server room with glowing blue hardware lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi8VURWcsfz9P8ag0n33EWcbdM0r6-dRACKFfRDKEPRWPjjazMd3uhEWZg5DAG79NoHgbGTkd7r3eXZh3nvc8MorAZbLgnV39FDgQzzbF4FummfZpuaRkzb8AdOGzkBUXybFyRXDhWLGqKQZ_owjqjZW6u64ixQLI5wsgYAuC7SALIjcS8V5g0sWVe7QvXdQWbIe7D6zngxPrun6x44IkMtgNcKr5EVO3G9kSqrutnsa2admGEFE3GYPZnuNvJH0ukVoS48JaAFxc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8 right-8 p-6 glass-panel rounded-2xl border border-white/5">
+<div class="flex items-center justify-between mb-4">
+<span class="text-primary font-label text-sm font-bold uppercase tracking-widest">Live Preview Available</span>
+<span class="material-symbols-outlined text-primary">play_circle</span>
+</div>
+<div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full w-1/3 editorial-gradient"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Course Content Bento Grid -->
+<section class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="text-3xl font-headline font-bold mb-4">What's Inside</h2>
+<div class="w-20 h-1 bg-primary"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[600px]">
+<div class="md:col-span-2 md:row-span-2 bg-surface-container-low p-10 rounded-3xl flex flex-col justify-between border border-outline-variant/5">
+<div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6">layers</span>
+<h3 class="text-3xl font-headline font-bold mb-6">Complete Software Architecture Deep-Dive</h3>
+<p class="text-on-surface-variant leading-relaxed text-lg">Understand the 3-tier architecture, tools layer, and the application layer. We go beyond documentation to show real-world schema execution.</p>
+</div>
+<ul class="space-y-4 mt-8">
+<li class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Multi-Tenant vs Single-Tenant Logic</span>
+</li>
+<li class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Database Abstraction Layer (DBL) Mastery</span>
+</li>
+</ul>
+</div>
+<div class="md:col-span-2 bg-surface-container-high p-8 rounded-3xl border border-outline-variant/5 flex gap-6 items-center">
+<div class="bg-primary-container/20 p-4 rounded-2xl">
+<span class="material-symbols-outlined text-3xl text-primary">speed</span>
+</div>
+<div>
+<h4 class="text-xl font-headline font-bold mb-1">Session Startup Flow</h4>
+<p class="text-sm text-on-surface-variant">Step-by-step tracing of process initiation from UI to Kernel.</p>
+</div>
+</div>
+<div class="bg-surface-container p-8 rounded-3xl border border-outline-variant/5">
+<span class="material-symbols-outlined text-primary mb-4">terminal</span>
+<h4 class="font-bold mb-2">Tools Mastery</h4>
+<p class="text-xs text-on-surface-variant">BWC, Enterprise Modeler, and Dynamic Form Editor.</p>
+</div>
+<div class="bg-surface-container p-8 rounded-3xl border border-outline-variant/5">
+<span class="material-symbols-outlined text-primary mb-4">security</span>
+<h4 class="font-bold mb-2">Security Hub</h4>
+<p class="text-xs text-on-surface-variant">AMS principles and Role-based Access Control (RBAC).</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Preview Topics Table-less List -->
+<section class="py-24 px-8 bg-surface-container-lowest">
+<div class="max-w-4xl mx-auto">
+<div class="text-center mb-16">
+<span class="font-label text-primary text-sm tracking-widest uppercase font-bold">Curriculum Preview</span>
+<h2 class="text-4xl font-headline font-bold mt-4">Browse Session Topics</h2>
+</div>
+<div class="space-y-4">
+<!-- Item 1 -->
+<div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="flex items-center gap-6">
+<span class="text-3xl font-headline font-black text-on-surface/10 group-hover:text-primary/40 transition-colors">01</span>
+<div>
+<h4 class="text-lg font-bold group-hover:text-primary transition-colors">Infor LN Environment Setup</h4>
+<p class="text-sm text-on-surface-variant">Prerequisites and architectural components.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<!-- Item 2 (Active/Preview) -->
+<div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-highest border border-primary/20 transition-all cursor-pointer">
+<div class="flex items-center gap-6">
+<span class="text-3xl font-headline font-black text-primary/60">02</span>
+<div>
+<h4 class="text-lg font-bold text-primary">Session Startup Flow &amp; Tracing</h4>
+<p class="text-sm text-on-surface-variant">Deep dive into bshell and client communication.</p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full">
+<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">Preview</span>
+<span class="material-symbols-outlined text-primary text-sm">visibility</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="flex items-center gap-6">
+<span class="text-3xl font-headline font-black text-on-surface/10 group-hover:text-primary/40 transition-colors">03</span>
+<div>
+<h4 class="text-lg font-bold group-hover:text-primary transition-colors">Dictionary Management</h4>
+<p class="text-sm text-on-surface-variant">Managing domains, tables, and labels effectively.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<!-- Item 4 -->
+<div class="group flex items-center justify-between p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="flex items-center gap-6">
+<span class="text-3xl font-headline font-black text-on-surface/10 group-hover:text-primary/40 transition-colors">04</span>
+<div>
+<h4 class="text-lg font-bold group-hover:text-primary transition-colors">Dal2 Scripting Foundation</h4>
+<p class="text-sm text-on-surface-variant">Introduction to UI and Data Logic separation.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+</div>
+<div class="mt-12 text-center">
+<button class="text-secondary font-medium hover:text-primary underline underline-offset-8 decoration-primary/30 transition-all">Download Full Syllabus PDF</button>
+</div>
+</div>
+</section>
+<!-- Enrollment & Payment -->
+<section class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto glass-panel p-12 lg:p-20 rounded-[3rem] border border-outline-variant/10 relative overflow-hidden">
+<div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="text-4xl lg:text-5xl font-headline font-bold mb-6">Join the cohort today.</h2>
+<p class="text-lg text-on-surface-variant mb-8 leading-relaxed">
+                            Secure your spot in the next session starting Monday. Includes lifetime access to course materials, private Discord community, and weekly Q&amp;A sessions.
+                        </p>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<span class="font-medium">Industry-Recognized Certification</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<span class="font-medium">2,400+ Students Enrolled</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-8 lg:p-12 rounded-3xl shadow-inner shadow-black/20">
+<h3 class="text-xl font-bold mb-8 text-center uppercase tracking-widest font-label">Secure Checkout</h3>
+<div class="space-y-4">
+<button class="w-full bg-white text-black font-bold py-4 rounded-full flex items-center justify-center gap-3 transition-transform active:scale-95">
+<span class="text-sm">Pay with</span>
+<span class="text-xl tracking-tighter">Google Pay</span>
+</button>
+<button class="w-full bg-[#25D366] text-white font-bold py-4 rounded-full flex items-center justify-center gap-3 transition-transform active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span>Enroll via WhatsApp Pay</span>
+</button>
+<div class="flex items-center gap-4 py-4">
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+<span class="text-xs font-label text-on-surface-variant uppercase tracking-widest">Or Use Card</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<button class="w-full editorial-gradient text-on-primary font-bold py-4 rounded-full transition-transform active:scale-95">
+                                Debit or Credit Card
+                            </button>
+</div>
+<p class="text-center text-[10px] text-on-surface-variant/60 mt-6 font-label uppercase tracking-widest">
+                            SSL Secure | 14-Day Money Back Guarantee
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-24 px-8 bg-surface-container-lowest">
+<div class="max-w-4xl mx-auto">
+<h2 class="text-3xl font-headline font-bold text-center mb-16">Frequently Asked Questions</h2>
+<div class="space-y-2">
+<!-- FAQ 1 -->
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/5">
+<button class="w-full flex justify-between items-center text-left">
+<span class="font-bold text-lg">Do I need prior programming experience?</span>
+<span class="material-symbols-outlined text-primary">expand_more</span>
+</button>
+<div class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Basic understanding of ERP concepts is recommended. Knowledge of any C-based language will help with the technical scripting modules, but we cover the basics for LN-specific syntax.
+                        </div>
+</div>
+<!-- FAQ 2 -->
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/5">
+<button class="w-full flex justify-between items-center text-left">
+<span class="font-bold text-lg">Is the certification valid globally?</span>
+<span class="material-symbols-outlined text-primary">expand_more</span>
+</button>
+</div>
+<!-- FAQ 3 -->
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/5">
+<button class="w-full flex justify-between items-center text-left">
+<span class="font-bold text-lg">How long do I have access to the materials?</span>
+<span class="material-symbols-outlined text-primary">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#06132a] w-full py-12 px-8 mt-12">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-6">
+<div class="text-lg font-bold text-[#f6bc68] font-headline">FOB TRAINING</div>
+<div class="flex flex-wrap justify-center gap-8 font-['Work_Sans'] text-sm tracking-wide">
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity" href="#">Privacy Policy</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity" href="#">Terms of Service</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity" href="#">Enterprise Solutions</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity" href="#">Support</a>
+</div>
+<div class="text-[#bbc6e6]/60 text-[10px] tracking-widest font-label">
+                © 2024 FOB TRAINING. ALL RIGHTS RESERVED.
+            </div>
+</div>
+</footer>
+</body></html>

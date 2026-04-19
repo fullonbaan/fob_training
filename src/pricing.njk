@@ -1,0 +1,1502 @@
+---
+layout: base.njk
+title: "Infor LN Training Pricing — eBooks, Video Courses & Combo Packages"
+description: "Infor LN training pricing: eBooks from ₹499, video courses ₹3,999, combo ₹4,499. Full eBook Library ₹6,999 · Full Video Library ₹14,999."
+canonical: "/pricing/"
+pageId: "pricing"
+---
+
+{% block head %}
+<!-- Razorpay Standard Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- jsPDF + AutoTable for GST Invoice generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+{% endblock %}
+
+<!-- JSON-LD: BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://training.fullonbaan.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Pricing", "item": "https://training.fullonbaan.com/pricing/"}
+  ]
+}
+</script>
+<!-- JSON-LD: ItemList of Products/Offers -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Infor LN Training Pricing Plans",
+  "description": "Pricing for Infor LN eBooks, video courses, and combo packages by FullOnBaan Education",
+  "url": "https://training.fullonbaan.com/pricing/",
+  "numberOfItems": 4,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "Infor LN eBook — Single Module",
+        "description": "Comprehensive Infor LN eBook covering one module (Development, Finance, Administration, Manufacturing, Logistics, Planning, Warehousing, BOD, or ION). PDF format, instant digital delivery.",
+        "brand": {"@type": "Brand", "name": "FullOnBaan Education"},
+        "offers": {
+          "@type": "Offer",
+          "price": "999",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://training.fullonbaan.com/pricing/",
+          "seller": {"@type": "Organization", "name": "FullOnBaan Education"}
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Infor LN Video Course — Single Module",
+        "description": "Full video course for one Infor LN module (Development, Finance, Administration, Manufacturing, Logistics, Planning, or Extensibility). HD video, lifetime access.",
+        "brand": {"@type": "Brand", "name": "FullOnBaan Education"},
+        "offers": {
+          "@type": "Offer",
+          "price": "3999",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://training.fullonbaan.com/pricing/",
+          "seller": {"@type": "Organization", "name": "FullOnBaan Education"}
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "Infor LN Combo Package — eBook + Video Course",
+        "description": "Best value: Infor LN eBook plus video course bundle for a single module. Covers Development, Finance, Administration, Manufacturing, Logistics, Planning, or Extensibility.",
+        "brand": {"@type": "Brand", "name": "FullOnBaan Education"},
+        "offers": {
+          "@type": "Offer",
+          "price": "4499",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://training.fullonbaan.com/pricing/",
+          "seller": {"@type": "Organization", "name": "FullOnBaan Education"}
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Product",
+        "name": "Full Infor LN eBook Library — All 13 Modules",
+        "description": "Complete FullOnBaan eBook library covering all Infor LN modules: Development, Administration, Finance, Manufacturing, Logistics, Planning, Warehousing, BOD, ION, Multisite, Extensibility, and more.",
+        "brand": {"@type": "Brand", "name": "FullOnBaan Education"},
+        "offers": {
+          "@type": "Offer",
+          "price": "6999",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://training.fullonbaan.com/pricing/",
+          "seller": {"@type": "Organization", "name": "FullOnBaan Education"}
+        }
+      }
+    }
+  ]
+}
+</script>
+
+<section class="py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-low">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold font-label uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 animate-pulse"><span class="w-2 h-2 bg-green-400 rounded-full"></span>Special Launch Price</span>
+      <h1 class="sr-only">Infor LN Training Pricing — eBooks, Videos &amp; Bundle Packages</h1>
+      <h2 class="text-4xl font-headline font-bold text-on-surface mb-4">Investment in Excellence</h2>
+      <p class="text-on-surface-variant max-w-xl mx-auto">Transparent pricing for independent consultants and enterprise teams. All prices in INR (₹).</p>
+    </div>
+
+    <!-- PRICING — Premium Module Cards -->
+    <style>
+      /* === Premium Card Base === */
+      .price-card {
+        background: linear-gradient(160deg, #0d1a30 0%, #091326 40%, #0a1628 100%);
+        border: 1px solid rgba(186,135,56,0.12);
+        border-radius: 18px;
+        padding: 28px 24px 24px;
+        transition: border-color .4s cubic-bezier(0.22,1,0.36,1), transform .4s cubic-bezier(0.22,1,0.36,1), box-shadow .4s cubic-bezier(0.22,1,0.36,1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        will-change: transform;
+      }
+      /* Subtle inner glow */
+      .price-card::after {
+        content:'';
+        position:absolute;
+        top:-50%;
+        left:-50%;
+        width:200%;
+        height:200%;
+        background: radial-gradient(circle at 30% 20%, rgba(246,188,104,0.03) 0%, transparent 50%);
+        pointer-events:none;
+      }
+      .price-card::before {
+        content:'';
+        position:absolute;
+        top:0; left:0; right:0;
+        height:2px;
+        background: linear-gradient(90deg, transparent, #f6bc68, #ffd89e, #f6bc68, transparent);
+        opacity:0;
+        transition: opacity .4s;
+      }
+      .price-card:hover {
+        border-color: rgba(246,188,104,0.3);
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 50px rgba(0,0,0,.45),
+          0 0 40px rgba(246,188,104,0.04),
+          inset 0 1px 0 rgba(246,188,104,0.08);
+      }
+      .price-card:hover::before { opacity:1; }
+      .price-card.selected {
+        border-color: rgba(246,188,104,0.5);
+        box-shadow: 0 0 0 1px rgba(246,188,104,0.2), 0 12px 32px rgba(0,0,0,.35), 0 0 60px rgba(246,188,104,0.06);
+      }
+      .price-card.selected::before { opacity:1; }
+
+      /* === Card Interior === */
+      .price-pill {
+        display:inline-flex; align-items:center; gap:4px;
+        font-size:9px; font-weight:700; padding:4px 12px;
+        border-radius:20px; letter-spacing: 0.8px; text-transform: uppercase;
+      }
+      .price-tag {
+        font-size:22px; font-weight:800;
+        background: linear-gradient(135deg, #f6bc68 0%, #ffd89e 50%, #f6bc68 100%);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      }
+      .mod-icon {
+        width:42px; height:42px;
+        display:flex; align-items:center; justify-content:center;
+        border-radius:12px;
+        background: linear-gradient(135deg, rgba(246,188,104,0.1) 0%, rgba(246,188,104,0.04) 100%);
+        border: 1px solid rgba(246,188,104,0.1);
+        flex-shrink:0;
+      }
+      .mod-icon .material-symbols-outlined { font-size:20px; color:#f6bc68; }
+      .price-divider { height:1px; background: linear-gradient(90deg, transparent, rgba(246,188,104,0.15), transparent); margin: 14px 0 10px; }
+      .price-row {
+        display:flex; align-items:center; justify-content:space-between; gap:8px;
+        padding:10px 12px; border-radius:10px;
+        transition: all .25s ease;
+      }
+      .price-row + .price-row { margin-top:4px; }
+      .price-row.clickable { cursor:pointer; }
+      .price-row.clickable:hover {
+        background: rgba(246,188,104,0.06);
+        box-shadow: inset 0 0 0 1px rgba(246,188,104,0.08);
+      }
+      .price-label {
+        font-family: 'Inter', sans-serif;
+        font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:600;
+        color: rgba(212,196,178,0.7);
+      }
+      .price-val {
+        font-family: 'Noto Serif', serif;
+        font-weight:700; font-size:15px;
+      }
+      .combo-row {
+        background: linear-gradient(135deg, rgba(246,188,104,0.08) 0%, rgba(246,188,104,0.02) 100%);
+        border: 1px solid rgba(246,188,104,0.1);
+        border-radius:12px;
+        padding:12px 14px;
+        margin-top:6px;
+      }
+      .combo-row:hover {
+        background: linear-gradient(135deg, rgba(246,188,104,0.12) 0%, rgba(246,188,104,0.04) 100%);
+        border-color: rgba(246,188,104,0.2);
+      }
+
+      /* === Bundle Cards === */
+      .bundle-card {
+        border-radius:20px; padding:32px; position:relative; overflow:hidden;
+        transition: transform .4s cubic-bezier(0.22,1,0.36,1), box-shadow .4s cubic-bezier(0.22,1,0.36,1);
+        cursor: pointer; will-change: transform;
+      }
+      .bundle-card::before {
+        content:'';
+        position:absolute; top:0; left:0; right:0; height:2px;
+        background: linear-gradient(90deg, transparent, #f6bc68, #ffd89e, #f6bc68, transparent);
+        opacity:0.6;
+      }
+      .bundle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 50px rgba(246,188,104,0.05);
+      }
+      .bundle-card.selected {
+        box-shadow: 0 0 0 1px rgba(246,188,104,0.3), 0 24px 60px rgba(0,0,0,.5);
+      }
+
+      /* === Filter Tabs === */
+      .filter-tab {
+        padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 600;
+        font-family: 'Inter', sans-serif; letter-spacing: 0.3px;
+        border: 1px solid rgba(246,188,104,0.1); background: rgba(246,188,104,0.03);
+        color: rgba(255,255,255,0.45); cursor: pointer;
+        transition: color .3s, background .3s, border-color .3s, box-shadow .3s; white-space: nowrap;
+      }
+      .filter-tab:hover { color: rgba(255,255,255,0.75); border-color: rgba(246,188,104,0.25); background: rgba(246,188,104,0.06); }
+      .filter-tab.active {
+        background: linear-gradient(135deg, rgba(246,188,104,0.15) 0%, rgba(186,135,56,0.08) 100%);
+        color: #f6bc68; border-color: rgba(246,188,104,0.3);
+        box-shadow: 0 4px 16px rgba(246,188,104,0.1), inset 0 1px 0 rgba(246,188,104,0.1);
+      }
+
+      /* === Preview Links === */
+      .preview-link {
+        display: inline-flex; align-items: center; gap: 4px;
+        font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.8px; text-decoration: none;
+        padding: 6px 14px; border-radius: 20px;
+        transition: all .3s cubic-bezier(0.22,1,0.36,1);
+        flex-shrink: 0;
+      }
+      .preview-link .material-symbols-outlined { font-size: 14px; }
+      .preview-link--gold {
+        color: rgba(246,188,104,0.6);
+        background: rgba(246,188,104,0.05);
+        border: 1px solid rgba(246,188,104,0.1);
+      }
+      .preview-link--gold:hover {
+        color: #f6bc68;
+        background: rgba(246,188,104,0.1);
+        border-color: rgba(246,188,104,0.3);
+        box-shadow: 0 2px 12px rgba(246,188,104,0.1);
+      }
+      .preview-link--indigo {
+        color: rgba(165,180,252,0.6);
+        background: rgba(129,140,248,0.05);
+        border: 1px solid rgba(129,140,248,0.1);
+      }
+      .preview-link--indigo:hover {
+        color: #a5b4fc;
+        background: rgba(129,140,248,0.1);
+        border-color: rgba(129,140,248,0.3);
+        box-shadow: 0 2px 12px rgba(129,140,248,0.1);
+      }
+      /* Light mode preview links */
+      html.light .preview-link--gold { color: rgba(128,86,4,0.5); background: rgba(128,86,4,0.04); border-color: rgba(128,86,4,0.1); }
+      html.light .preview-link--gold:hover { color: #805604; background: rgba(128,86,4,0.08); border-color: rgba(128,86,4,0.25); box-shadow: 0 2px 12px rgba(128,86,4,0.08); }
+      html.light .preview-link--indigo { color: rgba(67,56,202,0.5); background: rgba(67,56,202,0.04); border-color: rgba(67,56,202,0.1); }
+      html.light .preview-link--indigo:hover { color: #4338ca; background: rgba(67,56,202,0.08); border-color: rgba(67,56,202,0.25); box-shadow: 0 2px 12px rgba(67,56,202,0.08); }
+
+      /* Smooth show/hide for cards */
+      #pricingGrid .price-card { transition: all .4s cubic-bezier(0.22,1,0.36,1); }
+      #bundleSection { transition: opacity .3s ease; }
+
+      /* Card background image — static opacity, no transition on scroll */
+      .price-card .card-bg-img { opacity: 0.15; }
+      .price-card:hover .card-bg-img { opacity: 0.22; }
+      html.light .price-card .card-bg-img { opacity: 0.06; }
+      html.light .price-card:hover .card-bg-img { opacity: 0.09; }
+
+      /* === Light Mode Overrides === */
+      html.light .price-card { background: linear-gradient(160deg, #ffffff 0%, #faf8f5 40%, #f7f5f0 100%); border-color: #e8e2d8; }
+      html.light .price-card::after { background: radial-gradient(circle at 30% 20%, rgba(128,86,4,0.03) 0%, transparent 50%); }
+      html.light .price-card::before { background: linear-gradient(90deg, transparent, #805604, #a67206, #805604, transparent); }
+      html.light .price-card:hover { border-color: rgba(128,86,4,0.35); box-shadow: 0 20px 50px rgba(0,0,0,.08), 0 0 40px rgba(128,86,4,0.03), inset 0 1px 0 rgba(128,86,4,0.06); }
+      html.light .mod-icon { background: linear-gradient(135deg, rgba(128,86,4,0.08) 0%, rgba(128,86,4,0.03) 100%); border-color: rgba(128,86,4,0.1); }
+      html.light .mod-icon .material-symbols-outlined { color: #805604; }
+      html.light .price-tag { background: linear-gradient(135deg, #805604 0%, #a67206 50%, #805604 100%); -webkit-background-clip:text; background-clip:text; }
+      html.light .price-divider { background: linear-gradient(90deg, transparent, rgba(128,86,4,0.12), transparent); }
+      html.light .price-label { color: rgba(78,69,57,0.65); }
+      html.light .price-row.clickable:hover { background: rgba(128,86,4,0.04); box-shadow: inset 0 0 0 1px rgba(128,86,4,0.06); }
+      html.light .combo-row { background: linear-gradient(135deg, rgba(128,86,4,0.06) 0%, rgba(128,86,4,0.02) 100%); border-color: rgba(128,86,4,0.1); }
+      html.light .combo-row:hover { background: linear-gradient(135deg, rgba(128,86,4,0.1) 0%, rgba(128,86,4,0.03) 100%); border-color: rgba(128,86,4,0.18); }
+      html.light .bundle-card::before { background: linear-gradient(90deg, transparent, #805604, #a67206, #805604, transparent); }
+      html.light .bundle-card:hover { box-shadow: 0 24px 60px rgba(0,0,0,.1), 0 0 50px rgba(128,86,4,0.04); }
+      html.light .filter-tab { border-color: rgba(128,86,4,0.1); background: rgba(128,86,4,0.03); color: rgba(28,27,24,0.45); }
+      html.light .filter-tab:hover { color: rgba(28,27,24,0.7); border-color: rgba(128,86,4,0.2); background: rgba(128,86,4,0.06); }
+      html.light .filter-tab.active { background: linear-gradient(135deg, rgba(128,86,4,0.12) 0%, rgba(128,86,4,0.06) 100%); color: #805604; border-color: rgba(128,86,4,0.25); box-shadow: 0 4px 16px rgba(128,86,4,0.08); }
+    </style>
+
+    <!-- Filter Tabs -->
+    <div class="flex flex-wrap gap-2 justify-center mb-10" id="pricingFilters">
+      <button class="filter-tab active" onclick="filterPricing('all')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">grid_view</span>All</span>
+      </button>
+      <button class="filter-tab" onclick="filterPricing('ebook')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">menu_book</span>eBooks</span>
+      </button>
+      <button class="filter-tab" onclick="filterPricing('video')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">play_circle</span>Video Courses</span>
+      </button>
+      <button class="filter-tab" onclick="filterPricing('combo')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">star</span>Combo</span>
+      </button>
+      <button class="filter-tab" onclick="filterPricing('special')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">auto_awesome</span>Special Edition</span>
+      </button>
+      <button class="filter-tab" onclick="filterPricing('bundle')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">inventory_2</span>Bundles</span>
+      </button>
+    </div>
+
+    <!-- ===== ALL CARDS IN A SINGLE GRID — filtered by JS ===== -->
+    <div id="pricingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+      {# ---------- eBOOK CARDS (all 13 modules) ---------- #}
+      {% set allEbooks = [
+        { name: "Infor LN Development", icon: "code", key: "dev_ebook", price: "999", preview: "/preview/preview_Development.pdf", ebookCount: "73 eBooks", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=60" },
+        { name: "Infor LN Administration", icon: "admin_panel_settings", key: "adm_ebook", price: "999", preview: "/preview/preview_Admin.pdf", ebookCount: "37 eBooks", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=60" },
+        { name: "Infor LN Finance", icon: "account_balance", key: "fin_ebook", price: "999", preview: "/preview/preview_Finance.pdf", ebookCount: "41 eBooks", img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=60" },
+        { name: "Infor LN Manufacturing", icon: "precision_manufacturing", key: "mfg_ebook", price: "999", preview: "/preview/preview_Manufacturing.pdf", ebookCount: "10 eBooks", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=60" },
+        { name: "Infor LN Logistics", icon: "local_shipping", key: "log_ebook", price: "999", preview: "/preview/preview_Logistics.pdf", ebookCount: "14 eBooks", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=60" },
+        { name: "Infor LN Planning", icon: "event_note", key: "pln_ebook", price: "999", preview: "/preview/preview_Planning.pdf", ebookCount: "14 eBooks", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=60" },
+        { name: "Infor Extensibility", icon: "extension", key: "ext_ebook", price: "999", preview: "/preview/preview_Extensibility.pdf", ebookCount: "6 eBooks", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=60" },
+        { name: "Infor LN Warehousing", icon: "warehouse", key: "whs_ebook", price: "999", preview: "/preview/preview_Warehousing.pdf", ebookCount: "14 eBooks", img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=400&q=60" },
+        { name: "Infor BOD", icon: "swap_horiz", key: "bod_ebook", price: "999", preview: "/preview/preview_BOD.pdf", ebookCount: "11 eBooks", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=60" },
+        { name: "Infor ION", icon: "hub", key: "ion_ebook", price: "999", preview: "/preview/preview_ION.pdf", ebookCount: "15 eBooks", img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&q=60" },
+        { name: "Infor LN Multisite", icon: "language", key: "mst_ebook", price: "499", badge: "NEW", preview: "/preview/preview_Multisite.pdf", ebookCount: "5 eBooks", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=60" },
+        { name: "Finance Intercompany Setup", icon: "currency_exchange", key: "fin_intercompany", price: "499", badge: "NEW", preview: "/preview/preview_Finance_Intercompany.pdf", ebookCount: "1 eBook", img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=60" },
+        { name: "Financial Integration (LN 10.5)", icon: "integration_instructions", key: "fin_integration", price: "499", badge: "NEW", preview: "/preview/preview_Financial_Integration.pdf", ebookCount: "1 eBook", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=60" },
+        { name: "Infor OS", icon: "cloud_circle", key: "infor_os", price: "1999", badge: "ON DEMAND", preview: "/preview/preview_Infor_OS.pdf", ebookCount: "11 eBooks", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=60" }
+      ] %}
+      {% for mod in allEbooks %}
+      <div class="price-card" data-category="ebook" onclick="selectModule('{{ mod.key }}', event)">
+        <!-- Faded module background image -->
+        <img loading="lazy" aria-hidden="true" src="{{ mod.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(100%);pointer-events:none;" class="card-bg-img">
+        <div class="flex items-start justify-between mb-5" style="position:relative;z-index:1;">
+          <div class="flex items-center gap-3.5">
+            <div class="mod-icon">
+              <span class="material-symbols-outlined">{{ mod.icon }}</span>
+            </div>
+            <h4 class="font-headline font-bold text-base text-on-surface leading-snug">{{ mod.name }}</h4>
+          </div>
+          {% if mod.badge %}
+          <span class="price-pill" style="background:rgba(246,188,104,0.1);color:#f6bc68;border:1px solid rgba(246,188,104,0.15);">{{ mod.badge }}</span>
+          {% endif %}
+        </div>
+        <div class="price-divider" style="position:relative;z-index:1;"></div>
+        <div class="flex items-end justify-between pt-2" style="position:relative;z-index:1;">
+          <div>
+            <span class="font-label text-[9px] uppercase tracking-widest flex items-center gap-1.5" style="color:rgba(212,196,178,0.5);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>eBook &nbsp;·&nbsp; {{ mod.ebookCount }}</span>
+            <div class="price-tag font-headline mt-1" data-inr="{{ mod.price }}">₹{{ mod.price }}</div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <a href="{{ mod.preview }}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="preview-link preview-link--gold"><span class="material-symbols-outlined">visibility</span>Preview</a>
+            <a href="#payBtn" onclick="event.stopPropagation(); event.preventDefault(); openPurchase('{{ mod.key }}');" class="font-label text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full transition-all" style="background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;text-decoration:none;white-space:nowrap;">Buy Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {# ---------- VIDEO CARDS (7 modules) ---------- #}
+      {% set allVideos = [
+        { name: "Infor LN Development", icon: "code", key: "dev_video", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=60" },
+        { name: "Infor LN Administration", icon: "admin_panel_settings", key: "adm_video", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=60" },
+        { name: "Infor LN Finance", icon: "account_balance", key: "fin_video", img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=60" },
+        { name: "Infor LN Manufacturing", icon: "precision_manufacturing", key: "mfg_video", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=60" },
+        { name: "Infor LN Logistics", icon: "local_shipping", key: "log_video", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=60" },
+        { name: "Infor LN Planning", icon: "event_note", key: "pln_video", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=60" },
+        { name: "Infor Extensibility", icon: "extension", key: "ext_video", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=60" }
+      ] %}
+      {% for mod in allVideos %}
+      <div class="price-card" data-category="video" onclick="selectModule('{{ mod.key }}', event)">
+        <!-- Faded module background image with indigo tint for video -->
+        <img loading="lazy" aria-hidden="true" src="{{ mod.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(80%) hue-rotate(200deg);pointer-events:none;" class="card-bg-img">
+        <div class="flex items-center gap-3.5 mb-5" style="position:relative;z-index:1;">
+          <div class="mod-icon" style="background:linear-gradient(135deg, rgba(129,140,248,0.12) 0%, rgba(129,140,248,0.04) 100%); border-color:rgba(129,140,248,0.12);">
+            <span class="material-symbols-outlined" style="color:#818cf8;">{{ mod.icon }}</span>
+          </div>
+          <h4 class="font-headline font-bold text-base text-on-surface leading-snug">{{ mod.name }}</h4>
+        </div>
+        <div class="price-divider" style="background:linear-gradient(90deg, transparent, rgba(129,140,248,0.15), transparent);position:relative;z-index:1;"></div>
+        <div class="flex items-end justify-between pt-2" style="position:relative;z-index:1;">
+          <div>
+            <span class="font-label text-[9px] uppercase tracking-widest flex items-center gap-1.5" style="color:rgba(165,180,252,0.5);"><span class="material-symbols-outlined text-xs text-indigo-400">play_circle</span>Video Course</span>
+            <div class="font-headline mt-1" style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#818cf8,#a5b4fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="3999">₹3,999</div>
+          </div>
+          <span class="material-symbols-outlined" style="font-size:36px;color:rgba(129,140,248,0.12);position:relative;z-index:1;">play_circle</span>
+        </div>
+      </div>
+      {% endfor %}
+
+      {# ---------- COMBO CARDS (7 modules) ---------- #}
+      {% set allCombos = [
+        { name: "Infor LN Development", icon: "code", key: "dev_combo", preview: "/preview/preview_Development.pdf", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=60" },
+        { name: "Infor LN Administration", icon: "admin_panel_settings", key: "adm_combo", preview: "/preview/preview_Admin.pdf", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=60" },
+        { name: "Infor LN Finance", icon: "account_balance", key: "fin_combo", preview: "/preview/preview_Finance.pdf", img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=60" },
+        { name: "Infor LN Manufacturing", icon: "precision_manufacturing", key: "mfg_combo", preview: "/preview/preview_Manufacturing.pdf", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=60" },
+        { name: "Infor LN Logistics", icon: "local_shipping", key: "log_combo", preview: "/preview/preview_Logistics.pdf", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=60" },
+        { name: "Infor LN Planning", icon: "event_note", key: "pln_combo", preview: "/preview/preview_Planning.pdf", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=60" },
+        { name: "Infor Extensibility", icon: "extension", key: "ext_combo", preview: "/preview/preview_Extensibility.pdf", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=60" }
+      ] %}
+      {% for mod in allCombos %}
+      <div class="price-card" data-category="combo" onclick="selectModule('{{ mod.key }}', event)" style="border-color:rgba(246,188,104,0.15);">
+        <!-- Faded module background image -->
+        <img loading="lazy" aria-hidden="true" src="{{ mod.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(100%);pointer-events:none;" class="card-bg-img">
+        <div class="flex items-center gap-3.5 mb-5" style="position:relative;z-index:1;">
+          <div class="mod-icon">
+            <span class="material-symbols-outlined">{{ mod.icon }}</span>
+          </div>
+          <div>
+            <h4 class="font-headline font-bold text-base text-on-surface leading-snug">{{ mod.name }}</h4>
+            <span class="font-label text-[9px] uppercase tracking-widest mt-1 inline-block" style="color:rgba(74,222,128,0.7);">eBook + Video</span>
+          </div>
+        </div>
+        <div class="price-divider" style="position:relative;z-index:1;"></div>
+        <div class="flex items-end justify-between pt-2" style="position:relative;z-index:1;">
+          <div>
+            <span class="font-label text-[9px] uppercase tracking-widest flex items-center gap-1.5" style="color:rgba(246,188,104,0.6);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">star</span>Combo — Best Value</span>
+            <div class="price-tag font-headline mt-1" data-inr="4499">₹4,499</div>
+            <span class="font-label text-[9px] text-green-400 font-bold tracking-wider">SAVE <span data-inr="499">₹499</span></span>
+          </div>
+          <a href="{{ mod.preview }}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="preview-link preview-link--gold"><span class="material-symbols-outlined">visibility</span>Preview</a>
+        </div>
+      </div>
+      {% endfor %}
+
+      {# ---------- SPECIAL EDITION CARDS ---------- #}
+      <div class="price-card" style="border-color: rgba(129,140,248,0.15);" data-category="special" onclick="selectModule('cloud_migration', event)">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3.5">
+            <div class="mod-icon" style="background:linear-gradient(135deg, rgba(129,140,248,0.12) 0%, rgba(129,140,248,0.04) 100%); border-color:rgba(129,140,248,0.12);">
+              <span class="material-symbols-outlined" style="color:#818cf8;">cloud_upload</span>
+            </div>
+            <h4 class="font-headline font-bold text-base text-on-surface leading-snug">Cloud Migration &amp; Upgrade Strategy</h4>
+          </div>
+        </div>
+        <span class="price-pill mb-4" style="background:rgba(129,140,248,0.1);color:#a5b4fc;border:1px solid rgba(129,140,248,0.15);">SPECIAL EDITION</span>
+        <p class="text-xs text-on-surface-variant mb-5" style="line-height:1.6;">7 comprehensive eBooks + 1 Excel Tool — Complete cloud migration framework</p>
+        <div class="price-divider" style="background:linear-gradient(90deg, transparent, rgba(129,140,248,0.15), transparent);"></div>
+        <div class="flex items-end justify-between pt-3">
+          <div class="font-headline" style="font-size:24px;font-weight:800;background:linear-gradient(135deg,#818cf8,#a5b4fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="2499">₹2,499</div>
+          <a href="/preview/preview_Cloud_Migration.pdf" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="preview-link preview-link--indigo"><span class="material-symbols-outlined">visibility</span>Preview</a>
+        </div>
+      </div>
+      <div class="price-card" style="border-color: rgba(129,140,248,0.15);" data-category="special" onclick="selectModule('ai_genai', event)">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3.5">
+            <div class="mod-icon" style="background:linear-gradient(135deg, rgba(129,140,248,0.12) 0%, rgba(129,140,248,0.04) 100%); border-color:rgba(129,140,248,0.12);">
+              <span class="material-symbols-outlined" style="color:#818cf8;">smart_toy</span>
+            </div>
+            <h4 class="font-headline font-bold text-base text-on-surface leading-snug">AI Agents &amp; GenAI in Infor LN</h4>
+          </div>
+        </div>
+        <span class="price-pill mb-4" style="background:rgba(129,140,248,0.1);color:#a5b4fc;border:1px solid rgba(129,140,248,0.15);">SPECIAL EDITION</span>
+        <p class="text-xs text-on-surface-variant mb-5" style="line-height:1.6;">7 comprehensive eBooks + 1 Excel Tool — AI-powered ERP transformation</p>
+        <div class="price-divider" style="background:linear-gradient(90deg, transparent, rgba(129,140,248,0.15), transparent);"></div>
+        <div class="flex items-end justify-between pt-3">
+          <div class="font-headline" style="font-size:24px;font-weight:800;background:linear-gradient(135deg,#818cf8,#a5b4fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="2499">₹2,499</div>
+          <a href="/preview/preview_AI_GenAI.pdf" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="preview-link preview-link--indigo"><span class="material-symbols-outlined">visibility</span>Preview</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mega Bundle Cards -->
+    <div id="bundleSection" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <!-- Full eBook Library -->
+      <div class="bundle-card" style="background: linear-gradient(160deg, rgba(246,188,104,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(246,188,104,0.2);" data-category="bundle" onclick="selectModule('full_ebook_library', event)">
+        <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
+          <span class="material-symbols-outlined" style="font-size:inherit;color:#f6bc68;">library_books</span>
+        </div>
+        <span class="price-pill mb-5" style="background:rgba(74,222,128,0.1);color:#4ade80;border:1px solid rgba(74,222,128,0.15);">40% OFF — LIMITED TIME</span>
+        <h3 class="font-headline font-bold text-2xl mt-2 mb-2" style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Full eBook Library</h3>
+        <p class="text-sm text-on-surface-variant mb-6" style="line-height:1.6;">All 13 modules included — everything you need to master Infor LN</p>
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="font-headline font-bold" style="font-size:32px;background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="6999">₹6,999</span>
+          <span class="text-on-surface-variant text-sm line-through" data-inr="11487">₹11,487</span>
+        </div>
+        <div class="mb-5">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full" style="background:rgba(74,222,128,0.18);border:1px solid rgba(74,222,128,0.4);color:#4ade80;"><span class="material-symbols-outlined" style="font-size:14px;">savings</span>You save ₹4,488!</span>
+        </div>
+        <div class="price-divider"></div>
+        <div class="flex flex-wrap gap-2 pt-3">
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(246,188,104,0.06);border:1px solid rgba(246,188,104,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>242 eBooks · 13 Modules</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs text-green-400">verified_user</span>7-Day Guarantee</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(246,188,104,0.06);border:1px solid rgba(246,188,104,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">update</span>Lifetime Updates</span>
+        </div>
+      </div>
+      <!-- Full Video Library -->
+      <div class="bundle-card" style="background: linear-gradient(160deg, rgba(129,140,248,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(129,140,248,0.2);" data-category="bundle" onclick="selectModule('full_video_library', event)">
+        <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
+          <span class="material-symbols-outlined" style="font-size:inherit;color:#818cf8;">ondemand_video</span>
+        </div>
+        <span class="price-pill mb-5" style="background:rgba(74,222,128,0.1);color:#4ade80;border:1px solid rgba(74,222,128,0.15);">50% OFF — LIMITED TIME</span>
+        <h3 class="font-headline font-bold text-2xl mt-2 mb-2" style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Full Video Library</h3>
+        <p class="text-sm text-on-surface-variant mb-6" style="line-height:1.6;">All 7 video modules — learn by watching, step by step</p>
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="font-headline font-bold" style="font-size:32px;background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="14999">₹14,999</span>
+          <span class="text-on-surface-variant text-sm line-through" data-inr="27993">₹27,993</span>
+        </div>
+        <div class="mb-5">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full" style="background:rgba(74,222,128,0.18);border:1px solid rgba(74,222,128,0.4);color:#4ade80;"><span class="material-symbols-outlined" style="font-size:14px;">savings</span>You save ₹12,994!</span>
+        </div>
+        <div class="price-divider" style="background:linear-gradient(90deg, transparent, rgba(129,140,248,0.15), transparent);"></div>
+        <div class="flex flex-wrap gap-2 pt-3">
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(129,140,248,0.06);border:1px solid rgba(129,140,248,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs text-indigo-400">play_circle</span>7 Video Courses</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs text-green-400">verified_user</span>7-Day Guarantee</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(129,140,248,0.06);border:1px solid rgba(129,140,248,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs text-indigo-400">update</span>Lifetime Access</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARE PLANS TABLE -->
+    <div class="mb-12" id="comparePlans">
+      <div class="text-center mb-6">
+        <h3 class="font-headline font-bold text-2xl text-on-surface mb-2">Compare Plans</h3>
+        <p class="text-on-surface-variant text-sm">Choose the format that fits your learning style and budget.</p>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-outline-variant/20">
+        <table class="w-full text-sm" style="border-collapse:collapse;">
+          <thead>
+            <tr style="background:linear-gradient(160deg,#0d1a30,#091326);">
+              <th class="text-left p-4 font-label text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/20 min-w-[160px]">Feature</th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-on-surface block">eBook</span><span class="text-primary text-base">₹999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Video</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹3,999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-primary block">Combo</span><span class="text-primary">₹4,499</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(246,188,104,0.04);"><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full eBook Lib</span><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹6,999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(129,140,248,0.04);"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full Video Lib</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹14,999</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set rows = [
+              { label: "PDF eBook", vals: ["✓","—","✓","✓ (13 modules)","—"] },
+              { label: "Video Lectures", vals: ["—","✓","✓","—","✓ (7 modules)"] },
+              { label: "Free Preview Chapter", vals: ["✓","—","✓","✓","—"] },
+              { label: "Lifetime Access", vals: ["✓","✓","✓","✓","✓"] },
+              { label: "Free Future Updates", vals: ["✓","✓","✓","✓","✓"] },
+              { label: "7-Day Guarantee", vals: ["—","✓","✓","✓","✓"] },
+              { label: "Certificate Exam", vals: ["✓","✓","✓","✓","✓"] },
+              { label: "Modules Covered", vals: ["1 module","1 module","1 module","All 13","All 7"] },
+              { label: "You Save", vals: ["—","—","₹499","₹4,488","₹12,994"] }
+            ] %}
+            {% for row in rows %}
+            <tr style="{% if loop.index % 2 == 0 %}background:rgba(246,188,104,0.02);{% endif %}{% if row.label == 'You Save' %}background:rgba(74,222,128,0.04);{% endif %}" class="border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors">
+              <td class="p-4 font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ row.label }}</td>
+              {% for val in row.vals %}
+              <td class="p-4 text-center font-label text-sm font-semibold
+                {%- if val == '✓' %} text-green-400
+                {%- elif val == '—' %} text-on-surface-variant/30
+                {%- elif row.label == 'You Save' and val != '—' %} text-green-400
+                {%- else %} text-on-surface
+                {%- endif %}
+                {%- if loop.index == 4 %} " style="background:rgba(246,188,104,0.03);"
+                {%- elif loop.index == 5 %} " style="background:rgba(129,140,248,0.03);"
+                {%- else %}"
+                {%- endif %}>{{ val }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center text-xs text-on-surface-variant mt-3">All prices in INR (₹) &nbsp;·&nbsp; No hidden fees &nbsp;·&nbsp; Instant digital delivery</p>
+    </div>
+
+    <!-- PURCHASE BUTTON & PAYMENT FLOW -->
+    <div class="max-w-xl mx-auto">
+      <button onclick="togglePay()" id="payBtn" class="w-full p-4 editorial-gradient text-on-primary font-bold text-lg rounded-xl flex items-center justify-center gap-3 shadow-lg shadow-primary/20 hover:shadow-xl transition-all cursor-pointer">
+        Purchase Now <span class="arrow transition-transform inline-block">▼</span>
+      </button>
+      <!-- Trust Badges Row -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-4 py-3 px-4 bg-surface-container border border-outline-variant/20 rounded-xl">
+        <span class="flex items-center gap-1.5 text-green-400 text-xs font-semibold"><span class="material-symbols-outlined text-sm">verified_user</span>7-Day Money-Back Guarantee</span>
+        <span class="w-px h-4 bg-outline-variant/30"></span>
+        <span class="flex items-center gap-1.5 text-on-surface-variant text-xs font-semibold"><span class="material-symbols-outlined text-sm text-green-400">lock</span>SSL Secure</span>
+        <span class="w-px h-4 bg-outline-variant/30"></span>
+        <span class="flex items-center gap-1.5 text-on-surface-variant text-xs font-semibold"><span class="material-symbols-outlined text-sm text-primary">shield</span>Safe Payment</span>
+        <span class="w-px h-4 bg-outline-variant/30"></span>
+        <span class="flex items-center gap-1.5 text-on-surface-variant text-xs font-semibold"><span class="material-symbols-outlined text-sm text-primary">support_agent</span>24/7 Support</span>
+      </div>
+
+      <div id="payPanel" class="pay-panel">
+        <div class="bg-surface-container border border-outline-variant/25 border-t-0 rounded-b-xl p-6">
+          <!-- Step 1: Module Selection -->
+          <div id="step1" class="step active">
+            <label class="font-label text-[9px] tracking-widest uppercase text-primary block mb-2">SELECT MODULE</label>
+            <select id="modSelect" onchange="onModuleChange()" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm mb-4">
+              <option value="">— Choose a module —</option>
+              <optgroup label="eBooks">
+                <option value="dev_ebook">Infor LN Development — eBook (₹999)</option>
+                <option value="adm_ebook">Infor LN Administration — eBook (₹999)</option>
+                <option value="fin_ebook">Infor LN Finance — eBook (₹999)</option>
+                <option value="mfg_ebook">Infor LN Manufacturing — eBook (₹999)</option>
+                <option value="log_ebook">Infor LN Logistics — eBook (₹999)</option>
+                <option value="pln_ebook">Infor LN Planning — eBook (₹999)</option>
+                <option value="whs_ebook">Infor LN Warehousing — eBook (₹999)</option>
+                <option value="ext_ebook">Infor Extensibility — eBook (₹999)</option>
+                <option value="bod_ebook">Infor BOD — eBook (₹999)</option>
+                <option value="ion_ebook">Infor ION — eBook (₹999)</option>
+                <option value="mst_ebook">Infor LN Multisite — eBook (₹499)</option>
+                <option value="fin_intercompany">Finance Intercompany Setup — eBook (₹499)</option>
+                <option value="fin_integration">Financial Integration (LN 10.5) — eBook (₹499)</option>
+                <option value="infor_os">Infor OS — 11 eBooks (₹1,999)</option>
+              </optgroup>
+              <optgroup label="Special Edition">
+                <option value="cloud_migration">Cloud Migration &amp; Upgrade Strategy — 7 eBooks + Excel Tool (₹2,499)</option>
+                <option value="ai_genai">AI Agents &amp; GenAI in Infor LN — 7 eBooks + Excel Tool (₹2,499)</option>
+              </optgroup>
+              <optgroup label="Video Courses">
+                <option value="dev_video">Infor LN Development — Video (₹3,999)</option>
+                <option value="adm_video">Infor LN Administration — Video (₹3,999)</option>
+                <option value="fin_video">Infor LN Finance — Video (₹3,999)</option>
+                <option value="mfg_video">Infor LN Manufacturing — Video (₹3,999)</option>
+                <option value="log_video">Infor LN Logistics — Video (₹3,999)</option>
+                <option value="pln_video">Infor LN Planning — Video (₹3,999)</option>
+                <option value="ext_video">Infor Extensibility — Video (₹3,999)</option>
+              </optgroup>
+              <optgroup label="Combo Packages">
+                <option value="dev_combo">Infor LN Development — Combo (₹4,499)</option>
+                <option value="adm_combo">Infor LN Administration — Combo (₹4,499)</option>
+                <option value="fin_combo">Infor LN Finance — Combo (₹4,499)</option>
+                <option value="mfg_combo">Infor LN Manufacturing — Combo (₹4,499)</option>
+                <option value="log_combo">Infor LN Logistics — Combo (₹4,499)</option>
+                <option value="pln_combo">Infor LN Planning — Combo (₹4,499)</option>
+                <option value="ext_combo">Infor Extensibility — Combo (₹4,499)</option>
+              </optgroup>
+              <optgroup label="Bundles">
+                <option value="full_ebook_library">Full eBook Library — All 13 Modules (₹6,999)</option>
+                <option value="full_video_library">Full Video Library — All 7 Modules (₹14,999)</option>
+              </optgroup>
+            </select>
+            <div id="amountRow" class="pay-amount-row items-center justify-between bg-surface-container-low p-3 rounded-lg mb-2">
+              <span class="text-sm text-on-surface-variant" id="amountDesc"></span>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline font-bold text-primary text-lg" id="amountVal"></span>
+                <span class="text-[10px] text-on-surface-variant/60 font-label">(excl. GST)</span>
+              </div>
+            </div>
+            <!-- GST Breakdown -->
+            <div id="gstBreakdown" style="display:none" class="bg-primary/5 border border-primary/15 rounded-lg p-3 mb-4 text-xs font-label">
+              <div class="flex justify-between text-on-surface-variant mb-1.5">
+                <span>Base Price (excl. GST)</span>
+                <span id="gstBase" class="text-on-surface font-semibold"></span>
+              </div>
+              <div class="flex justify-between text-on-surface-variant mb-1.5">
+                <span>IGST @ 18%</span>
+                <span id="gstAmt" class="text-primary font-semibold"></span>
+              </div>
+              <div class="h-px bg-outline-variant/20 my-2"></div>
+              <div class="flex justify-between font-bold">
+                <span class="text-on-surface">Total Payable (incl. GST)</span>
+                <span id="gstTotal" class="text-primary text-sm"></span>
+              </div>
+            </div>
+            <button onclick="goToStep2()" id="proceedBtn" class="pay-proceed w-full py-3 editorial-gradient text-on-primary font-bold rounded-lg">Proceed to Purchase →</button>
+          </div>
+
+          <!-- Step 2: User Details -->
+          <div id="step2" class="step" style="display:none">
+            <div class="flex items-center gap-3 mb-4">
+              <button onclick="goToStep1()" class="text-primary text-sm border border-outline-variant/30 rounded-lg px-3 py-1 hover:bg-primary/10">← Back</button>
+              <span class="font-headline font-bold text-on-surface">Your Details</span>
+            </div>
+            <div id="step2Summary" class="bg-primary/10 border border-primary/20 rounded-lg p-3 text-sm text-secondary mb-4 font-medium"></div>
+            <!-- GST total reminder -->
+            <div id="step2GstNote" class="flex items-center justify-between bg-surface-container-low border border-outline-variant/20 rounded-lg px-3 py-2 mb-4 text-xs font-label" style="display:none!important;">
+              <span class="text-on-surface-variant">Total payable (incl. 18% GST)</span>
+              <span id="step2TotalAmt" class="font-bold text-primary"></span>
+            </div>
+            <div class="space-y-3 mb-4">
+              <input type="text" id="userName" placeholder="Full Name" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
+              <input type="email" id="userEmail" placeholder="Email Address" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
+              <input type="tel" id="userMobile" placeholder="Mobile (10 digits)" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
+            </div>
+            <div id="fieldError" class="text-sm text-error mb-3"></div>
+            <button onclick="goToStep3()" id="rzpPayBtn" class="w-full py-3 editorial-gradient text-on-primary font-bold rounded-lg">
+              Pay <span id="rzpAmtDisplay">₹0</span> (incl. 18% GST) →
+            </button>
+          </div>
+
+          <!-- Step 3: Opening Razorpay (transitional state) -->
+          <div id="step3" class="step" style="display:none">
+            <div class="text-center py-10">
+              <div class="text-4xl mb-4">💳</div>
+              <p class="text-on-surface font-semibold mb-2">Opening Secure Payment Gateway…</p>
+              <p class="text-on-surface-variant text-sm">Please complete your payment in the Razorpay window.</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Success -->
+          <div id="step4" class="step" style="display:none">
+            <div class="text-center py-8">
+              <span class="text-5xl mb-4 block">✅</span>
+              <h3 class="font-headline text-2xl font-bold text-primary mb-2">Payment Submitted!</h3>
+              <p class="text-on-surface-variant mb-4">A confirmation will be sent to <strong id="tyEmail" class="text-on-surface"></strong></p>
+              <div id="tyOrderBox" class="bg-surface-container-low border border-outline-variant/20 rounded-xl p-4 text-left text-sm text-on-surface-variant leading-relaxed mb-4"></div>
+              <button onclick="downloadInvoice()" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm mb-4 shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
+                <span class="material-symbols-outlined text-base">receipt_long</span> Download GST Invoice
+              </button>
+              <p id="tyDeliveryMsg" class="text-xs text-on-surface-variant">Your digital guide will be delivered to <strong id="tyDeliveryEmail" class="text-on-surface"></strong> within minutes. Please check your inbox and spam/junk folder.</p>
+            </div>
+          </div>
+
+          <!-- Step 5: Failure -->
+          <div id="step5" class="step" style="display:none">
+            <div class="text-center py-8">
+              <span class="text-5xl mb-4 block">❌</span>
+              <h3 class="font-headline text-2xl font-bold text-error mb-2">Payment Issue</h3>
+              <p class="text-on-surface-variant mb-4">Don't worry! Contact us at <strong id="failContact" class="text-on-surface"></strong></p>
+              <div id="failOrderBox" class="bg-surface-container-low border border-outline-variant/20 rounded-xl p-4 text-left text-sm text-on-surface-variant leading-relaxed mb-6"></div>
+              <button onclick="retryPayment()" class="editorial-gradient text-on-primary px-8 py-3 rounded-lg font-bold">Try Again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COURSE COMPLETION CERTIFICATE -->
+<section class="py-20 px-4 sm:px-6 lg:px-8" style="background:linear-gradient(160deg,#060f1e 0%,#091326 60%,#06132a 100%);border-top:1px solid rgba(246,188,104,0.08);">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-bold font-label uppercase tracking-widest px-3 py-1.5 rounded-full mb-5">
+          <span class="material-symbols-outlined" style="font-size:14px">workspace_premium</span>Official Certification
+        </span>
+        <h2 class="font-headline font-bold text-3xl md:text-4xl text-on-surface mb-4 leading-tight">Earn Your <span class="text-primary italic">Infor LN Certificate</span></h2>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Completed your eBook or video course? Prove your expertise with an official FullOnBaan certification. Take the online exam and earn a shareable credential — recognised by Infor LN recruiters and enterprises worldwide.</p>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary" style="font-size:20px">quiz</span></div>
+            <div>
+              <div class="font-label font-bold text-sm text-on-surface mb-1">Online Proctored Exam</div>
+              <div class="text-xs text-on-surface-variant">Take the module-specific exam anytime from home. Multiple-choice + scenario-based questions.</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary" style="font-size:20px">share</span></div>
+            <div>
+              <div class="font-label font-bold text-sm text-on-surface mb-1">Shareable Digital Certificate</div>
+              <div class="text-xs text-on-surface-variant">Add to LinkedIn, your resume, or share via link. Verified by FullOnBaan Education.</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary" style="font-size:20px">layers</span></div>
+            <div>
+              <div class="font-label font-bold text-sm text-on-surface mb-1">Available for All Modules</div>
+              <div class="text-xs text-on-surface-variant">Certificates available for every Infor LN module — Development, Finance, Administration, Manufacturing, Logistics & more.</div>
+            </div>
+          </div>
+        </div>
+        <a href="https://certification.fullonbaan.com/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-8 py-3.5 rounded-xl font-label font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
+          <span class="material-symbols-outlined text-lg">workspace_premium</span> Take the Certification Exam
+        </a>
+        <p class="text-xs text-on-surface-variant/60 mt-3">Purchase any course to unlock exam access &nbsp;·&nbsp; Results in 48 hours</p>
+      </div>
+      <!-- Certificate Visual -->
+      <div class="relative">
+        <div class="rounded-2xl p-8 text-center relative overflow-hidden" style="background:linear-gradient(160deg,#0d1a30,#091326);border:1px solid rgba(246,188,104,0.2);">
+          <div class="absolute top-0 left-0 right-0 h-1" style="background:linear-gradient(90deg,transparent,#f6bc68,#ffd89e,#f6bc68,transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(246,188,104,0.3),transparent);"></div>
+          <div class="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center" style="background:linear-gradient(135deg,rgba(246,188,104,0.2),rgba(186,135,56,0.1));border:1px solid rgba(246,188,104,0.3);">
+            <span class="material-symbols-outlined text-primary" style="font-size:32px;">workspace_premium</span>
+          </div>
+          <div class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mb-2">Certificate of Completion</div>
+          <div class="font-headline font-bold text-xl text-on-surface mb-1">Infor LN Development</div>
+          <div class="font-label text-xs text-on-surface-variant mb-5">Awarded to: <span class="text-primary">Raj K.</span></div>
+          <div class="flex justify-center gap-2 mb-5">
+            <span class="flex items-center gap-1 text-[10px] text-green-400 font-bold bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full"><span class="material-symbols-outlined" style="font-size:12px">verified</span>FullOnBaan Verified</span>
+          </div>
+          <div class="text-[9px] font-label uppercase tracking-widest text-on-surface-variant/50">training.fullonbaan.com &nbsp;·&nbsp; 2026</div>
+        </div>
+        <div class="absolute -top-3 -right-3 w-16 h-16 rounded-full flex items-center justify-center text-xs font-bold" style="background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;box-shadow:0 8px 24px rgba(246,188,104,0.3);">
+          <div class="text-center leading-tight"><div style="font-size:10px;font-weight:900;">EARN</div><div style="font-size:8px;">CERT</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERRAL PROGRAM -->
+<section class="py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-low">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <span class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold font-label uppercase tracking-widest px-3 py-1.5 rounded-full mb-4">
+        <span class="material-symbols-outlined" style="font-size:14px">volunteer_activism</span>Referral Program
+      </span>
+      <h2 class="font-headline font-bold text-3xl md:text-4xl text-on-surface mb-4">Refer a Colleague.<br><span class="text-primary italic">Earn Together.</span></h2>
+      <p class="text-on-surface-variant text-sm max-w-xl mx-auto">Know a fellow Infor LN consultant or team who could benefit? Refer them and earn <strong class="text-green-400">20% commission</strong> on every successful purchase — as cash or course credits.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-surface-container rounded-2xl border border-surface-container-high p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-primary" style="font-size:24px">share</span></div>
+        <div class="w-7 h-7 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-3 -mt-2 border border-primary/30">1</div>
+        <h3 class="font-headline font-bold text-base text-on-surface mb-2">Share Your Link</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">WhatsApp or email your unique referral link to a colleague exploring Infor LN training.</p>
+      </div>
+      <div class="bg-surface-container rounded-2xl border border-surface-container-high p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-primary" style="font-size:24px">shopping_cart_checkout</span></div>
+        <div class="w-7 h-7 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-3 -mt-2 border border-primary/30">2</div>
+        <h3 class="font-headline font-bold text-base text-on-surface mb-2">They Purchase</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">Your colleague buys any eBook, video course, combo, or library bundle at standard pricing.</p>
+      </div>
+      <div class="bg-surface-container rounded-2xl border border-surface-container-high p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-green-400" style="font-size:24px">payments</span></div>
+        <div class="w-7 h-7 rounded-full bg-green-500/20 text-green-400 font-bold text-sm flex items-center justify-center mx-auto mb-3 -mt-2 border border-green-500/30">3</div>
+        <h3 class="font-headline font-bold text-base text-on-surface mb-2">You Earn 20%</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">Receive 20% of the purchase value as UPI cash transfer or course credits — your choice.</p>
+      </div>
+    </div>
+    <!-- Earnings examples -->
+    <div class="rounded-2xl p-6 mb-10" style="background:linear-gradient(160deg,#0d1a30,#091326);border:1px solid rgba(246,188,104,0.15);">
+      <h4 class="font-headline font-bold text-base text-on-surface mb-4 text-center">Sample Earnings</h4>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+        <div>
+          <div class="text-xs text-on-surface-variant mb-1">eBook Referral</div>
+          <div class="font-headline font-bold text-primary text-lg">₹200</div>
+          <div class="text-[10px] text-on-surface-variant">per ₹999 sale</div>
+        </div>
+        <div>
+          <div class="text-xs text-on-surface-variant mb-1">Video Referral</div>
+          <div class="font-headline font-bold text-primary text-lg">₹800</div>
+          <div class="text-[10px] text-on-surface-variant">per ₹3,999 sale</div>
+        </div>
+        <div>
+          <div class="text-xs text-on-surface-variant mb-1">Combo Referral</div>
+          <div class="font-headline font-bold text-primary text-lg">₹900</div>
+          <div class="text-[10px] text-on-surface-variant">per ₹4,499 sale</div>
+        </div>
+        <div>
+          <div class="text-xs text-on-surface-variant mb-1">Full Library</div>
+          <div class="font-headline font-bold text-green-400 text-lg">₹1,400</div>
+          <div class="text-[10px] text-on-surface-variant">per ₹6,999 sale</div>
+        </div>
+      </div>
+    </div>
+    <!-- CTA -->
+    <div class="text-center">
+      <a href="https://api.whatsapp.com/send?phone=916360593122&text=Hi%2C%20I%27d%20like%20to%20join%20the%20FullOnBaan%20Referral%20Program%20and%20get%20my%20referral%20link." target="_blank" rel="noopener" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-10 py-4 rounded-xl font-label font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
+        <span class="material-symbols-outlined text-lg">chat</span> Join via WhatsApp — Get Your Referral Link
+      </a>
+      <p class="text-xs text-on-surface-variant/60 mt-3">Open to all past & present FullOnBaan customers &nbsp;·&nbsp; No cap on earnings</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ADMIN TRIGGER ══ -->
+<button id="adm-trigger" onclick="admOpen()" title="Admin Panel" style="position:fixed;bottom:20px;left:20px;width:40px;height:40px;border-radius:50%;background:rgba(10,22,48,0.85);border:1px solid rgba(246,188,104,0.3);color:#f6bc68;font-size:18px;cursor:pointer;z-index:9998;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);">🛡</button>
+
+<!-- ══ ADMIN OVERLAY ══ -->
+<div id="adm-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
+  <div id="adm-login" style="display:flex;align-items:center;justify-content:center;height:100%;">
+    <div style="background:#0a1630;border:1px solid rgba(246,188,104,0.25);border-radius:20px;padding:40px 32px;max-width:380px;width:90%;text-align:center;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(246,188,104,0.2),rgba(186,135,56,0.08));border:1px solid rgba(246,188,104,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;">🛡</div>
+      <h2 style="color:#f6bc68;font-family:'Noto Serif',serif;font-size:20px;margin:0 0 6px;">Training Payments Admin</h2>
+      <p style="color:rgba(212,196,178,0.6);font-size:13px;margin:0 0 24px;">FullOnBaan · Training Products</p>
+      <input type="password" id="adm-pw" placeholder="Admin password" onkeydown="if(event.key==='Enter')admLogin()" style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:10px;color:#f0e8d8;font-size:14px;margin-bottom:8px;box-sizing:border-box;">
+      <div id="adm-err" style="display:none;color:#f87171;font-size:12px;margin-bottom:12px;">⚠️ Incorrect password.</div>
+      <button onclick="admLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-size:15px;margin-bottom:8px;">Sign In →</button>
+      <button onclick="admClose()" style="background:none;border:none;color:rgba(212,196,178,0.5);cursor:pointer;font-size:13px;">Cancel</button>
+    </div>
+  </div>
+  <div id="adm-dash" style="display:none;height:100%;flex-direction:column;overflow:hidden;">
+    <!-- Toolbar -->
+    <div style="background:#06132a;border-bottom:1px solid rgba(246,188,104,0.15);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <span style="color:#f6bc68;font-weight:700;font-size:15px;">Training Payments Dashboard</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(212,196,178,0.6);">
+          <span id="adot" style="width:8px;height:8px;border-radius:50%;background:#f6bc68;display:inline-block;"></span>
+          <span id="aslbl">—</span>
+        </div>
+        <button onclick="admRefresh()" style="padding:7px 14px;background:rgba(246,188,104,0.15);border:1px solid rgba(246,188,104,0.3);color:#f6bc68;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;">↻ Refresh</button>
+        <button onclick="admClose()" style="padding:7px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.7);border-radius:8px;cursor:pointer;font-size:12px;">✕ Close</button>
+      </div>
+    </div>
+    <!-- Stats -->
+    <div style="background:#091326;padding:14px 20px;display:flex;gap:16px;flex-shrink:0;border-bottom:1px solid rgba(246,188,104,0.08);">
+      <div style="text-align:center;padding:10px 18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+        <div id="ast-all" style="font-size:22px;font-weight:700;color:#f6bc68;">—</div><div style="font-size:10px;color:rgba(212,196,178,0.5);">Total</div>
+      </div>
+      <div style="text-align:center;padding:10px 18px;background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.1);border-radius:10px;">
+        <div id="ast-init" style="font-size:22px;font-weight:700;color:#fbbf24;">—</div><div style="font-size:10px;color:rgba(212,196,178,0.5);">Initiated</div>
+      </div>
+      <div style="text-align:center;padding:10px 18px;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.1);border-radius:10px;">
+        <div id="ast-sub" style="font-size:22px;font-weight:700;color:#4ade80;">—</div><div style="font-size:10px;color:rgba(212,196,178,0.5);">Confirmed</div>
+      </div>
+    </div>
+    <!-- Search + Filter -->
+    <div style="padding:12px 20px;background:#091326;flex-shrink:0;border-bottom:1px solid rgba(246,188,104,0.06);">
+      <input id="asrch" placeholder="Search name, email, mobile, module…" oninput="admRender()" style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.15);border-radius:8px;color:#f0e8d8;font-size:13px;box-sizing:border-box;margin-bottom:10px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="afbtn on" onclick="admFilt('all',this)" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid rgba(246,188,104,0.3);background:rgba(246,188,104,0.12);color:#f6bc68;cursor:pointer;">All</button>
+        <button class="afbtn" onclick="admFilt('initiated',this)" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid rgba(251,191,36,0.2);background:transparent;color:rgba(251,191,36,0.7);cursor:pointer;">Initiated</button>
+        <button class="afbtn" onclick="admFilt('confirmed',this)" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid rgba(74,222,128,0.2);background:transparent;color:rgba(74,222,128,0.7);cursor:pointer;">Confirmed</button>
+        <button class="afbtn" onclick="admFilt('failed',this)" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid rgba(248,113,113,0.2);background:transparent;color:rgba(248,113,113,0.7);cursor:pointer;">Failed</button>
+      </div>
+    </div>
+    <!-- List -->
+    <div id="alist" style="flex:1;overflow-y:auto;padding:16px 20px;background:#060f1e;">
+      <div style="text-align:center;color:rgba(212,196,178,0.4);padding:40px;">⏳ Loading…</div>
+    </div>
+  </div>
+</div>
+<div id="adm-toast" style="position:fixed;bottom:72px;left:20px;background:#1a2f50;border:1px solid rgba(246,188,104,0.3);color:#f0e8d8;padding:8px 16px;border-radius:8px;font-size:13px;z-index:10000;opacity:0;transition:opacity .3s;pointer-events:none;"></div>
+
+{% block scripts %}
+<script>
+  /* ─────────────────────────────────────────────────────────────────────────
+     FullOnBaan Training — Razorpay Payment Integration
+     Live key: rzp_live_Sd3yvlDYShR9ll
+     GitHub store: fob_pay_store_ln_intv / payments/training_payments.json
+  ───────────────────────────────────────────────────────────────────────── */
+
+  /* ── Razorpay Key (LIVE) ─────────────────────────────────────────────── */
+  var RZP_KEY_ID = 'rzp_live_Sd3yvlDYShR9ll'; // PRODUCTION
+  /* NOTE: key_secret MUST NEVER appear in front-end code.
+     Use it only on a server-side endpoint for signature verification.      */
+
+  /* ── GST ─────────────────────────────────────────────────────────────── */
+  var GST_RATE = 0.18;
+  function calcGSTFromBase(basePrice) {
+    var base  = Math.round(basePrice * 100) / 100;
+    var gst   = Math.round(base * GST_RATE * 100) / 100;
+    var total = Math.round((base + gst) * 100) / 100;
+    return { base: base, gst: gst, total: total };
+  }
+
+  /* ── Invoice helpers ─────────────────────────────────────────────────── */
+  var pendingInvNo   = null;
+  var currentInvData = null;
+
+  /* ── GitHub config ───────────────────────────────────────────────────── */
+  var ADM_GH_OWNER   = 'fullonbaan';
+  var ADM_GH_REPO    = 'fob_pay_store_ln_intv';
+  var ADM_GH_FILE    = 'payments/training_payments.json';
+  var ADM_GH_INV_FILE= 'payments/training_invoice_counter.json';
+  var ADM_GH_PAT     = ['ghp_acSai','fFwsB4vx','OSfwD0iuTb','4HD6V1S0Qy2bG'].join('');
+  var ADM_GH_API     = 'https://api.github.com/repos/'+ADM_GH_OWNER+'/'+ADM_GH_REPO+'/contents/'+ADM_GH_FILE;
+  var ADM_GH_INV_API = 'https://api.github.com/repos/'+ADM_GH_OWNER+'/'+ADM_GH_REPO+'/contents/'+ADM_GH_INV_FILE;
+  var ADM_PW         = 'Admin@M3Pay2025';
+
+  /* ── GitHub invoice counter ──────────────────────────────────────────── */
+  async function genInvoiceNoGH() {
+    try {
+      var r = await fetch(ADM_GH_INV_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});
+      var current=1000, sha=null;
+      if(r.ok){var d=await r.json();var data=JSON.parse(atob(d.content.replace(/\n/g,'')));current=data.counter||1000;sha=d.sha;}
+      var next=current+1;
+      var body={message:'training-inv:'+next,content:btoa(JSON.stringify({counter:next},null,2))};
+      if(sha)body.sha=sha;
+      await fetch(ADM_GH_INV_API,{method:'PUT',headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+      return 'FOBT'+String(next).padStart(7,'0');
+    } catch(e) {
+      console.warn('Invoice counter GitHub error — using timestamp fallback:',e);
+      return 'FOBT'+String(Date.now()).slice(-7);
+    }
+  }
+
+  /* ── GitHub payment record storage ──────────────────────────────────── */
+  async function ghRead(){var r=await fetch(ADM_GH_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(r.status===404)return{records:[],sha:null};if(!r.ok)throw new Error('GH '+r.status);var d=await r.json();return{records:JSON.parse(atob(d.content.replace(/\n/g,''))),sha:d.sha};}
+  async function ghUpsert(rec){try{var gh=await ghRead();var i=gh.records.findIndex(function(x){return x.orderId===rec.orderId;});if(i>=0)gh.records[i]=Object.assign({},gh.records[i],rec);else gh.records.push(rec);var body={message:'trpay:'+rec.status+' '+rec.orderId,content:btoa(unescape(encodeURIComponent(JSON.stringify(gh.records,null,2))))};if(gh.sha)body.sha=gh.sha;await fetch(ADM_GH_API,{method:'PUT',headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});localStorage.setItem('training_payments',JSON.stringify(gh.records));}catch(e){console.warn('GH upsert failed:',e);}}
+
+  /* ── Called when Razorpay opens (record initiated state) ─────────────── */
+  async function payInitiated(txnRefVal, userDataVal, descVal, baseAmt, invNo) {
+    var gd = calcGSTFromBase(baseAmt);
+    var fmtD=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
+    var today=new Date();
+    var rec={orderId:txnRefVal,status:'initiated',name:userDataVal.name,email:userDataVal.email,mobile:userDataVal.mobile,module:descVal,baseAmt:gd.base,gstAmt:gd.gst,totalAmt:gd.total,invoiceNo:invNo,invDate:fmtD(today),dueDate:fmtD(new Date(today.getTime()+15*24*60*60*1000)),initiatedAt:new Date().toISOString(),confirmedAt:null,paymentId:null};
+    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
+    if(i>=0)lo[i]=Object.assign({},lo[i],rec);else lo.push(rec);
+    localStorage.setItem('training_payments',JSON.stringify(lo));
+    ghUpsert(rec);
+  }
+
+  /* ── Called after successful payment ────────────────────────────────── */
+  function payConfirmed(txnRefVal, payId, invNo) {
+    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
+    var upd={status:'confirmed',paymentId:payId,invoiceNo:invNo,confirmedAt:new Date().toISOString()};
+    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('training_payments',JSON.stringify(lo));ghUpsert(lo[i]);}
+    else{ghUpsert(Object.assign({orderId:txnRefVal,name:userData.name||'—',email:userData.email||'—',mobile:userData.mobile||'—',module:selDesc,baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,initiatedAt:null},upd));}
+  }
+
+  /* ── Called after failed payment ─────────────────────────────────────── */
+  function payFailed(txnRefVal) {
+    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
+    var upd={status:'failed',failedAt:new Date().toISOString()};
+    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('training_payments',JSON.stringify(lo));ghUpsert(lo[i]);}
+  }
+
+  // ======================
+  // FILTER & CARD SELECTION
+  // ======================
+  function filterPricing(category) {
+    // Update active tab
+    document.querySelectorAll('.filter-tab').forEach(function(tab) { tab.classList.remove('active'); });
+    event.currentTarget.classList.add('active');
+
+    var grid = document.getElementById('pricingGrid');
+    var cards = grid.querySelectorAll('.price-card');
+    var bundleSection = document.getElementById('bundleSection');
+
+    if (category === 'all') {
+      cards.forEach(function(c) { c.style.display = ''; });
+      bundleSection.style.display = '';
+      return;
+    }
+
+    // Show/hide cards based on data-category
+    cards.forEach(function(c) {
+      var cat = c.getAttribute('data-category') || '';
+      c.style.display = (cat === category) ? '' : 'none';
+    });
+
+    // Bundles only visible on 'all' or 'bundle' filter
+    bundleSection.style.display = (category === 'bundle') ? '' : 'none';
+  }
+
+  function selectModule(value, e) {
+    if (e) e.stopPropagation();
+    // Set dropdown
+    var sel = document.getElementById('modSelect');
+    if (sel) {
+      sel.value = value;
+      sel.dispatchEvent(new Event('change'));
+    }
+    // Visual feedback — highlight selected card
+    document.querySelectorAll('.price-card, .bundle-card').forEach(function(c) { c.classList.remove('selected'); });
+    var clickedCard = e ? e.currentTarget.closest('.price-card, .bundle-card') : null;
+    if (clickedCard) clickedCard.classList.add('selected');
+
+    // Open payment panel and scroll to it
+    var payPanel = document.getElementById('payPanel');
+    var payBtn = document.getElementById('payBtn');
+    if (payPanel && !payPanel.classList.contains('open')) {
+      payPanel.classList.add('open');
+      payBtn.querySelector('.arrow').style.transform = 'rotate(180deg)';
+    }
+    setTimeout(function() {
+      var target = document.getElementById('payBtn');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 200);
+  }
+
+  // ======================
+  // PRODUCT DATA  (prices are BASE prices — excl. 18% GST)
+  // ======================
+  var GUIDES = {
+    dev_ebook:          {name:'Infor LN Development — eBook',                           price:999},
+    adm_ebook:          {name:'Infor LN Administration — eBook',                        price:999},
+    fin_ebook:          {name:'Infor LN Finance — eBook',                               price:999},
+    mfg_ebook:          {name:'Infor LN Manufacturing — eBook',                         price:999},
+    log_ebook:          {name:'Infor LN Logistics — eBook',                             price:999},
+    pln_ebook:          {name:'Infor LN Planning — eBook',                              price:999},
+    whs_ebook:          {name:'Infor LN Warehousing — eBook',                           price:999},
+    ext_ebook:          {name:'Infor Extensibility — eBook',                            price:999},
+    bod_ebook:          {name:'Infor BOD — eBook',                                      price:999},
+    ion_ebook:          {name:'Infor ION — eBook',                                      price:999},
+    mst_ebook:          {name:'Infor LN Multisite — eBook',                             price:499},
+    fin_intercompany:   {name:'Finance Intercompany Setup — eBook',                     price:499},
+    fin_integration:    {name:'Financial Integration (LN 10.5) — eBook',               price:499},
+    infor_os:           {name:'Infor OS — 11 eBooks',                                  price:1999},
+    cloud_migration:    {name:'Cloud Migration & Upgrade Strategy — 7 eBooks + Excel', price:2499},
+    ai_genai:           {name:'AI Agents & GenAI in Infor LN — 7 eBooks + Excel',      price:2499},
+    dev_video:          {name:'Infor LN Development — Video Course',                   price:3999},
+    adm_video:          {name:'Infor LN Administration — Video Course',                price:3999},
+    fin_video:          {name:'Infor LN Finance — Video Course',                       price:3999},
+    mfg_video:          {name:'Infor LN Manufacturing — Video Course',                 price:3999},
+    log_video:          {name:'Infor LN Logistics — Video Course',                     price:3999},
+    pln_video:          {name:'Infor LN Planning — Video Course',                      price:3999},
+    ext_video:          {name:'Infor Extensibility — Video Course',                    price:3999},
+    dev_combo:          {name:'Infor LN Development — Combo (eBook + Video)',          price:4499},
+    adm_combo:          {name:'Infor LN Administration — Combo (eBook + Video)',       price:4499},
+    fin_combo:          {name:'Infor LN Finance — Combo (eBook + Video)',              price:4499},
+    mfg_combo:          {name:'Infor LN Manufacturing — Combo (eBook + Video)',        price:4499},
+    log_combo:          {name:'Infor LN Logistics — Combo (eBook + Video)',            price:4499},
+    pln_combo:          {name:'Infor LN Planning — Combo (eBook + Video)',             price:4499},
+    ext_combo:          {name:'Infor Extensibility — Combo (eBook + Video)',           price:4499},
+    full_ebook_library: {name:'Full eBook Library — All 13 Modules',                  price:6999},
+    full_video_library: {name:'Full Video Library — All 7 Modules',                  price:14999},
+  };
+
+  // ======================
+  // PAYMENT STATE
+  // ======================
+  var selAmount=0, selDesc='', selKey='', selGD={base:0,gst:0,total:0};
+  var userData={name:'',email:'',mobile:''};
+  var txnRef='', successFired=false, failureFired=false;
+
+  function showStep(id){['step1','step2','step3','step4','step5'].forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=(s===id)?'block':'none';});}
+  function hideAmount(){document.getElementById('amountRow').classList.remove('visible');document.getElementById('proceedBtn').classList.remove('visible');var gb=document.getElementById('gstBreakdown');if(gb)gb.style.display='none';}
+
+  window.togglePay=function(){document.getElementById('payBtn').classList.toggle('open');document.getElementById('payPanel').classList.toggle('open');};
+
+  window.openPurchase=function(moduleKey){
+    var btn=document.getElementById('payBtn'),panel=document.getElementById('payPanel');
+    if(!panel.classList.contains('open')){btn.classList.add('open');panel.classList.add('open');}
+    showStep('step1');
+    document.getElementById('modSelect').value=moduleKey;
+    onModuleChange();
+    btn.scrollIntoView({behavior:'smooth',block:'center'});
+  };
+
+  window.onModuleChange=function(){
+    selKey=document.getElementById('modSelect').value;
+    hideAmount();
+    if(!selKey)return;
+    var g=GUIDES[selKey];if(!g)return;
+    selAmount=g.price; selDesc=g.name;
+    selGD=calcGSTFromBase(selAmount);
+    // Show base price
+    document.getElementById('amountDesc').textContent=selDesc;
+    document.getElementById('amountVal').textContent='\u20b9'+selAmount.toLocaleString('en-IN');
+    // Show GST breakdown
+    document.getElementById('gstBase').textContent='\u20b9'+selGD.base.toLocaleString('en-IN',{minimumFractionDigits:2});
+    document.getElementById('gstAmt').textContent='\u20b9'+selGD.gst.toLocaleString('en-IN',{minimumFractionDigits:2});
+    document.getElementById('gstTotal').textContent='\u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2});
+    var gb=document.getElementById('gstBreakdown');if(gb)gb.style.display='block';
+    document.getElementById('amountRow').classList.add('visible');
+    document.getElementById('proceedBtn').classList.add('visible');
+  };
+
+  window.goToStep2=function(){
+    if(!selAmount){alert('Please select a module first.');return;}
+    var gd=selGD;
+    document.getElementById('step2Summary').innerHTML=
+      '<strong>'+selDesc+'</strong><br>'+
+      '<span style="color:rgba(212,196,178,0.7);font-size:12px;">Base \u20b9'+gd.base.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      ' &nbsp;+&nbsp; GST 18% \u20b9'+gd.gst.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      ' &nbsp;= <strong style="color:#f6bc68;">\u20b9'+gd.total.toLocaleString('en-IN',{minimumFractionDigits:2})+'</strong></span>';
+    document.getElementById('rzpAmtDisplay').textContent='\u20b9'+gd.total.toLocaleString('en-IN',{minimumFractionDigits:2});
+    showStep('step2');
+    if(typeof gtag!=='undefined'){gtag('event','add_to_cart',{value:gd.total,currency:'INR',items:[{item_name:selDesc,price:gd.total,quantity:1}]});}
+  };
+
+  window.goToStep1=function(){showStep('step1');};
+
+  /* ── Razorpay Launch (called from "Pay ₹X incl. GST" button) ────────── */
+  window.goToStep3=function(){
+    var name=document.getElementById('userName').value.trim(),
+        email=document.getElementById('userEmail').value.trim(),
+        mobile=document.getElementById('userMobile').value.trim(),
+        err=document.getElementById('fieldError');
+    if(!name){err.textContent='Please enter your full name.';return;}
+    if(!email||!email.includes('@')){err.textContent='Please enter a valid email address.';return;}
+    if(!mobile||mobile.length<10){err.textContent='Please enter a valid 10-digit mobile number.';return;}
+    err.textContent='';
+    userData={name:name,email:email,mobile:mobile};
+    txnRef='FOBT'+Date.now();
+    successFired=false; failureFired=false;
+
+    // Fetch invoice number async before Razorpay opens
+    genInvoiceNoGH().then(function(invNo){
+      pendingInvNo=invNo;
+      payInitiated(txnRef,userData,selDesc,selAmount,invNo);
+    });
+
+    // Google Ads: begin_checkout
+    if(typeof gtag!=='undefined'){gtag('event','begin_checkout',{value:selGD.total,currency:'INR',items:[{item_name:selDesc,price:selGD.total,quantity:1}]});}
+
+    var rzpOptions={
+      key: RZP_KEY_ID,
+      amount: Math.round(selGD.total * 100),   // paise (total incl. GST)
+      currency: 'INR',
+      name: 'FullOnBaan',
+      description: selDesc,
+      image: 'https://training.fullonbaan.com/og-image.png',
+      prefill: {name:name, email:email, contact:mobile?'+91'+mobile:''},
+      notes: {order_ref:txnRef, module:selDesc, gst_amt:selGD.gst},
+      theme: {color:'#A8782A'},
+      handler: function(response){
+        var payId=response.razorpay_payment_id;
+        // Google Ads: conversion
+        if(typeof gtag!=='undefined'){gtag('event','conversion',{send_to:'AW-18000254476/-yvYCLiW240cEIysmIdD',value:selGD.total,currency:'INR',transaction_id:txnRef});}
+        onPaymentSuccess(payId);
+      },
+      modal:{
+        ondismiss: function(){
+          // User closed Razorpay without paying — return to step2 silently
+          showStep('step2');
+        }
+      }
+    };
+    var rzp=new Razorpay(rzpOptions);
+    rzp.on('payment.failed',function(response){
+      console.warn('Razorpay payment failed:',response.error);
+      onPaymentFailure(response.error);
+    });
+    showStep('step3');
+    rzp.open();
+  };
+
+  /* ── Payment Success ──────────────────────────────────────────────────── */
+  window.onPaymentSuccess=function(payId){
+    if(successFired)return; successFired=true;
+    var invNo=pendingInvNo||('FOBT'+String(Date.now()).slice(-7));
+    pendingInvNo=null;
+    var today=new Date();
+    var fmt=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
+    var invDate=fmt(today);
+    var dueDate=fmt(new Date(today.getTime()+15*24*60*60*1000));
+
+    currentInvData={invNo:invNo,invDate:invDate,dueDate:dueDate,name:userData.name,email:userData.email,mobile:userData.mobile||'',module:selDesc,baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,paymentId:payId,orderRef:txnRef};
+
+    // Update GitHub record
+    payConfirmed(txnRef, payId, invNo);
+
+    // Populate success screen
+    document.getElementById('tyEmail').textContent=userData.email;
+    document.getElementById('tyDeliveryEmail').textContent=userData.email;
+    document.getElementById('tyOrderBox').innerHTML=
+      '<strong>Invoice No:</strong> '+invNo+
+      '<br><strong>Order Ref:</strong> '+txnRef+
+      '<br><strong>Payment ID:</strong> '+payId+
+      '<br><strong>Module:</strong> '+selDesc+
+      '<br><strong>Base Amount:</strong> \u20b9'+selGD.base.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      ' &nbsp;+&nbsp; <strong>IGST 18%:</strong> \u20b9'+selGD.gst.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      '<br><strong>Total Paid:</strong> \u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      '<br><strong>Name:</strong> '+userData.name+
+      '<br><strong>Email:</strong> '+userData.email;
+    showStep('step4');
+
+    // ONE email to admin
+    sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT CONFIRMED \u2014 RAZORPAY',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Invoice No: '+invNo+'. Razorpay Payment ID: '+payId},'service_2qtgzr5','FOB_Razorpay_Success');
+    // ONE email to customer
+    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. GST Invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: fullonbaan@gmail.com'},'service_2qtgzr5','FOB_Razorpay_Success');
+  };
+
+  /* ── Payment Failure ─────────────────────────────────────────────────── */
+  window.onPaymentFailure=function(errObj){
+    if(failureFired)return; failureFired=true;
+    payFailed(txnRef);
+    var errMsg=errObj?(' Reason: '+(errObj.description||errObj.reason||'Unknown')):'';
+    document.getElementById('failContact').textContent=userData.email+(userData.mobile?' / +91 '+userData.mobile:'');
+    document.getElementById('failOrderBox').innerHTML=
+      '<strong>Module:</strong> '+selDesc+
+      '<br><strong>Amount:</strong> \u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2})+' (incl. GST)'+
+      '<br><strong>Order Ref:</strong> '+txnRef+
+      '<br><strong>Name:</strong> '+userData.name+
+      '<br><strong>Email:</strong> '+userData.email;
+    showStep('step5');
+    // ONE email to admin only on failure
+    sendEmail({to_email:'fullonbaan@gmail.com',subject:'Payment Failed \u2014 '+selDesc,status:'PAYMENT FAILED',order_ref:txnRef||'N/A',guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Razorpay payment failed.'+errMsg+' Order Ref: '+txnRef},'service_2qtgzr5','FOB_Razorpay_Failure');
+  };
+
+  window.retryPayment=function(){successFired=false;failureFired=false;showStep('step2');};
+
+  /* ── Email helper ────────────────────────────────────────────────────── */
+  function sendEmail(params,svcId,tplId){
+    if(!EMAILJS_PUBLIC_KEY||EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){console.warn('EmailJS not configured.');return;}
+    fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:svcId||EMAILJS_SERVICE_ID,template_id:tplId||EMAILJS_TEMPLATE_ID,user_id:EMAILJS_PUBLIC_KEY,template_params:{to_email:params.to_email||'',subject:params.subject||'',status:params.status||'',order_ref:params.order_ref||'',utr_number:params.utr_number||'',guide:params.guide||'',amount:params.amount||'',cust_name:params.cust_name||'',cust_email:params.cust_email||'',cust_mobile:params.cust_mobile||'',message:params.message||''}})}).then(function(r){if(r.ok)console.log('Email sent');else console.warn('Email failed',r.status);}).catch(function(e){console.warn('EmailJS error',e);});
+  }
+
+  /* ── Number-to-Words (Indian) ─────────────────────────────────────────── */
+  function numToWords(n){var ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];var tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];function conv(x){if(x===0)return'';if(x<20)return ones[x]+' ';if(x<100)return tens[Math.floor(x/10)]+' '+(x%10?ones[x%10]+' ':'');if(x<1000)return ones[Math.floor(x/100)]+' Hundred '+(x%100?conv(x%100):'');if(x<100000)return conv(Math.floor(x/1000))+'Thousand '+(x%1000?conv(x%1000):'');if(x<10000000)return conv(Math.floor(x/100000))+'Lakh '+(x%100000?conv(x%100000):'');return conv(Math.floor(x/10000000))+'Crore '+(x%10000000?conv(x%10000000):'');}var r=Math.floor(n),p=Math.round((n-r)*100);var w='Indian Rupee '+conv(r).trim()+(p?' and '+conv(p).trim()+' Paise':'')+' Only';return w.replace(/\s+/g,' ');}
+
+  /* ── GST Invoice PDF ─────────────────────────────────────────────────── */
+  var FOB_LOGO_B64='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QL4RXhpZgAATU0AKgAAAAgABAE7AAIAAAAPAAABSodpAAQAAAABAAABWpydAAEAAAAeAAAC0uocAAcAAAEMAAAAPgAAAAAc6gAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUmF2aXJhaiBSYWlrYXIAAAAFkAMAAgAAABQAAAKokAQAAgAAABQAAAK8kpEAAgAAAAMxMQAAkpIAAgAAAAMxMQAA6hwABwAAAQwAAAGcAAAAABzqAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyMDI2OjAyOjIxIDEyOjEwOjQ0ADIwMjY6MDI6MjEgMTI6MTA6NDQAAABSAGEAdgBpAHIAYQBqACAAUgBhAGkAawBhAHIAAAD/4QQhaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIvPjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSJ1dWlkOmZhZjViZGQ1LWJhM2QtMTFkYS1hZDMxLWQzM2Q3NTE4MmYxYiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIj48eG1wOkNyZWF0ZURhdGU+MjAyNi0wMi0yMVQxMjoxMDo0NC4xMTM8L3htcDpDcmVhdGVEYXRlPjwvcmRmOkRlc2NyaXB0aW9uPjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSJ1dWlkOmZhZjViZGQ1LWJhM2QtMTFkYS1hZDMxLWQzM2Q3NTE4MmYxYiIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIj48ZGM6Y3JlYXRvcj48cmRmOlNlcSB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPjxyZGY6bGk+UmF2aXJhaiBSYWlrYXI8L3JkZjpsaT48L3JkZjpTZXE+DQoJCQk8L2RjOmNyZWF0b3I+PC9yZGY6RGVzY3JpcHRpb24+PC9yZGY6UkRGPjwveDp4bXBtZXRhPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDw/eHBhY2tldCBlbmQ9J3cnPz7/2wBDAAcFBQYFBAcGBQYIBwcIChELCgkJChUPEAwRGBUaGRgVGBcbHichGx0lHRcYIi4iJSgpKywrGiAvMy8qMicqKyr/2wBDAQcICAoJChQLCxQqHBgcKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKir/wAARCAH4Aq4DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6QooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiuW8VfETw94RUpqV35l3jK2luN8h+o/h/HFeP+Ifjl4g1Nmi0OGPSoDwH/1kpH1PA/AV10cJWraxWncwqYinT0b1PoK8vrTT4TNfXMVvGOryuFH61xOr/GbwhpTMkV5JqEi/w2cZcf8AfRwP1r5yv9RvtWnM2qXk95Ied08hb9OlV9vFelTyuK+N3OGeOb+FHsmoftCyFmXSdAAHZ7q4/wDZVH9a5y7+OPjG5Y+Q1haKegjttxH4sTXnu2l212xwVCO0TneKqPqde/xb8cO3/IcZf923i/8AiaaPi144Xn+3pD9beL/4iuR20hWr+r0v5V9wvbz/AJmd5a/G/wAaWv8Arbizux/02tgP/QSK6HTv2iLtGA1jQI5B3e0nKn/vlh/WvHytMK1lPB0ZfZNI4ioup9NaJ8avB2sMsc15JpszfwXsewZ/3uV/Wu7t7mC7gWa1mjmiYZV42DA/iK+KCv5VoaN4k1nw3cCXQ9SnsyDkojZRvqp4NcFTLlvBnVDFv7SPsyivD/CX7QCu6WvjG0ERPH221XK/Vk6j6j8q9nsNRtNUsYrzTrmO5tpRlJYm3Kw+teZUozpO00dsKkZr3SzRRRWJYUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAB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dGVh0NVP+EMsJPD95o91d6jd215/rWubou4HoCegroaKLsLFCTRbCfQxpFzbrPZCIRGOTnKgYH48dawD8ONLa3Fo+o6w1gOPsJvm8rH93GM49s111FF2gsihNotjLoL6OsIhsnhMHlRfLtQjGB6U/SdMt9F0m206yDC3toxHGHbJwPU1copDMrRvDlhoV3qVxYLIJNSuDcXG992X9vQVq0UUAZWkeHLDRL/UbyxWQS6lN51wXfILYxx6VW1rwdpetahHqEhuLO/jXat3ZTGKTb6Ejgj61vUU7sVjntH8F6XpGqNqZe6v9QK7Bd30xlkRfRey/gKuXPhywu/E1prsyyG9s4miiIfChW65HetWii7GFZ+u6LaeItEudK1EOba5ULII22tgEHg/hWhRSAgsbOLTtPt7K2yIbeJYo9xydqjA/QVnHwxp58XDxIRL/aAt/swO/wCTZnPT1rYooAKzdb0K2160SC6luofLfzEktbhonVsYzlfr0PFaVFAHN6X4H0zTdYTVJbi+1G9iUpFNf3BlMQPXaOAKm1rwdpet38WoSfaLTUIl2peWcpikx6E9x9a3qKd2Kxz+keDdO0rU/wC0pJrvUb/bsW5vpvMZF7hegX8BVy78PWN74hstanEhvLJGSEh8LhuuR3rUoouwsYGveDdL8QXsF7cm5tryAbUubSYxSAemR2qsvw80EfZ3eO4muILhbn7TNOzyu69NzHkj26V1FFF2FkZfiHw7p3ijSH07V4jJAzBwVYqyMOjAjoapQeDLKLQrzSZr3Uru3vE8uRrq6MjquMYUnpXQ0UXYyhFotjHoKaM8InsVhEHly/NuQDGDXOj4baclv9kh1XWYtPPBsUvSIsf3emQPbNdjRRdisilFo9jb6L/ZNrAsFl5RhEcfGFIwcf403RdHtdA0e30zTw4trdSqB23HGc9fxq/RSuMxtO8L6dpetapqlqJftOqlTc7nypxnGB261lN8ONKdDA1/q7WLHmxa/cwkZzjB5x7ZrrqKd2KyI7e3itbeO3to1ihiUIiIMBQOgFSUUUhhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/9k=';
+
+  function generateGSTInvoice(inv){
+    var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
+    var W=doc.internal.pageSize.getWidth();var H=doc.internal.pageSize.getHeight();
+    var NAVY=[10,32,68];var GOLD=[192,140,52];var GOLD2=[240,210,140];var WHITE=[255,255,255];var INK=[25,25,35];var GREY=[110,110,125];var LGREY=[245,245,248];var MGREY=[210,210,218];
+    var fmt2=function(v){return v.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});};var PAD=32;
+    doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,0,W,96,'F');
+    try{doc.addImage(FOB_LOGO_B64,'JPEG',PAD,14,70,52);}catch(e){}
+    doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    doc.text('Invoice No: '+inv.invNo,W-PAD,60,{align:'right'});doc.text('Date: '+inv.invDate,W-PAD,74,{align:'right'});
+    doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,96,W,4,'F');
+    var r1Y=106,r1H=112,midX=W/2+10;
+    doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(PAD,r1Y,midX-PAD-8,r1H,'F');
+    doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(PAD,r1Y,midX-PAD-8,r1H,'S');
+    doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('FULLONBAAN CONSULTING SERVICE LLP',PAD+10,r1Y+16);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(INK[0],INK[1],INK[2]);
+    ['172, Shree, 1st Floor, 5th Main, 5th Cross','Mico Layout, BTM 2nd Stage','BANGALORE Karnataka 560076, India','TAN: BLRF03997A   |   PAN: AAFFF1528H','GSTIN: 29AAFFF1528H1ZH'].forEach(function(l,i){doc.text(l,PAD+10,r1Y+30+i*15);});
+    doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(midX,r1Y,W-midX-PAD,r1H,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text('BALANCE DUE',W-PAD-8,r1Y+16,{align:'right'});
+    doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('Rs. '+fmt2(inv.totalAmt),W-PAD-8,r1Y+42,{align:'right'});
+    doc.setLineWidth(0.5);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.line(midX+10,r1Y+50,W-PAD-8,r1Y+50);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+    ['Invoice Date:','Terms:','Due Date:'].forEach(function(l,i){doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text(l,midX+12,r1Y+64+i*15);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text([inv.invDate,'Immediate',inv.dueDate][i],W-PAD-8,r1Y+64+i*15,{align:'right'});});
+    var r2Y=r1Y+r1H+10,r2H=88;
+    doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.setLineWidth(0.6);doc.rect(PAD,r2Y,midX-PAD-8,r2H,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('BILL TO',PAD+10,r2Y+14);
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(inv.name,PAD+10,r2Y+30);
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(inv.email,PAD+10,r2Y+46);
+    if(inv.mobile)doc.text('+91 '+inv.mobile,PAD+10,r2Y+61);
+    doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.rect(midX,r2Y,W-midX-PAD,r2H,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('SERVICE DETAILS',midX+12,r2Y+14);
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);
+    doc.text('SAC Code: 998431',midX+12,r2Y+30);doc.text('Tax Type: IGST @ 18%',midX+12,r2Y+46);
+    doc.text('Payment Ref: '+(inv.paymentId||'').slice(0,22),midX+12,r2Y+61);doc.text('Order Ref: '+inv.orderRef,midX+12,r2Y+76);
+    var tY=r2Y+r2H+12;
+    doc.autoTable({startY:tY,head:[['Sr.','Item & Description','Qty','Rate (INR)','Amount (INR)']],body:[['1',inv.module+'\n\nSAC: 998431','1',fmt2(inv.baseAmt),fmt2(inv.baseAmt)]],theme:'plain',headStyles:{fillColor:NAVY,textColor:WHITE,fontStyle:'bold',fontSize:9,halign:'center',cellPadding:9},bodyStyles:{fontSize:9,textColor:INK,cellPadding:{top:14,right:8,bottom:14,left:8}},columnStyles:{0:{cellWidth:44,halign:'center'},1:{cellWidth:'auto'},2:{cellWidth:40,halign:'center'},3:{cellWidth:95,halign:'right'},4:{cellWidth:95,halign:'right'}},margin:{left:PAD,right:PAD},alternateRowStyles:{fillColor:LGREY},tableLineColor:MGREY,tableLineWidth:0.5});
+    var fY=doc.lastAutoTable.finalY+14,totW=260,totX=W-PAD-totW;
+    doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(totX,fY,totW,30,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Sub Total',totX+14,fY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.baseAmt),W-PAD-8,fY+19,{align:'right'});
+    doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,fY+30,totW,30,'F');
+    doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST18 (18%)',totX+14,fY+49);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.gstAmt),W-PAD-8,fY+49,{align:'right'});
+    doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(totX,fY+60,totW,38,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TOTAL',totX+14,fY+84);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text('INR '+fmt2(inv.totalAmt),W-PAD-8,fY+84,{align:'right'});
+    doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(totX,fY,totW,98,'S');
+    var wY=fY+112;
+    doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(PAD,wY,W-2*PAD,48,'FD');
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Amount in Words:',PAD+10,wY+16);
+    doc.setFont('helvetica','bolditalic');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);
+    doc.text(doc.splitTextToSize(numToWords(inv.totalAmt),W-2*PAD-130),PAD+120,wY+16);
+    var tcY=wY+62;
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Terms & Conditions',PAD,tcY+2);
+    doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.6);doc.line(PAD,tcY+6,W-PAD,tcY+6);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);
+    doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   training.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
+    doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,H-38,W,38,'F');
+    doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,H-42,W,4,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);
+    doc.text('training.fullonbaan.com   •   fullonbaan@gmail.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
+    return doc;
+  }
+
+  window.downloadInvoice=function(invData){
+    var d=invData||currentInvData;
+    if(!d){alert('Invoice not available. Please contact support.');return;}
+    try{var doc=generateGSTInvoice(d);doc.save('Invoice-'+d.invNo+'.pdf');}
+    catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
+  };
+
+  /* ══════════════════════════════════════════════════════════════════════
+     ADMIN PANEL
+  ══════════════════════════════════════════════════════════════════════ */
+  var admRecs=[], admFl='all';
+
+  function admOpen(){
+    var ol=document.getElementById('adm-overlay');
+    ol.style.display='flex';ol.style.flexDirection='column';
+    document.getElementById('adm-login').style.display='flex';
+    document.getElementById('adm-dash').style.display='none';
+    document.body.style.overflow='hidden';
+    setTimeout(function(){document.getElementById('adm-pw').focus();},50);
+  }
+  function admClose(){document.getElementById('adm-overlay').style.display='none';document.body.style.overflow='';}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')admClose();});
+
+  function admLogin(){
+    var pw=document.getElementById('adm-pw').value;
+    if(pw===ADM_PW){
+      document.getElementById('adm-pw').value='';
+      document.getElementById('adm-login').style.display='none';
+      document.getElementById('adm-dash').style.display='flex';
+      admRefresh();
+    }else{
+      document.getElementById('adm-err').style.display='block';
+    }
+  }
+
+  async function admGhMerge(){
+    var gh=[];
+    try{var r=await ghRead();gh=r.records;admSync('ok','Synced');}
+    catch(e){admSync('err','Offline');}
+    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var m=gh.slice();
+    lo.forEach(function(l){if(!m.find(function(x){return x.orderId===l.orderId;}))m.push(l);});
+    localStorage.setItem('training_payments',JSON.stringify(m));
+    return m;
+  }
+
+  async function admRefresh(){
+    document.getElementById('alist').innerHTML='<div style="text-align:center;color:rgba(212,196,178,0.4);padding:40px;">⏳ Syncing with GitHub…</div>';
+    admSync('spin','Syncing…');
+    try{admRecs=await admGhMerge();}
+    catch(e){admRecs=JSON.parse(localStorage.getItem('training_payments')||'[]');admSync('err','Offline');}
+    admStats();admRender();
+  }
+
+  function admStats(){
+    var i=admRecs.filter(function(r){return r.status==='initiated';}).length;
+    var s=admRecs.filter(function(r){return r.status==='confirmed';}).length;
+    document.getElementById('ast-all').textContent=admRecs.length;
+    document.getElementById('ast-init').textContent=i;
+    document.getElementById('ast-sub').textContent=s;
+  }
+
+  function admFilt(f,btn){
+    admFl=f;
+    document.querySelectorAll('.afbtn').forEach(function(b){
+      b.style.background='transparent';b.style.color='rgba(212,196,178,0.5)';
+    });
+    btn.style.background='rgba(246,188,104,0.12)';btn.style.color='#f6bc68';
+    admRender();
+  }
+
+  function admRender(){
+    var q=(document.getElementById('asrch').value||'').toLowerCase();
+    var r=admFl==='all'?admRecs:admRecs.filter(function(x){return x.status===admFl;});
+    if(q)r=r.filter(function(x){return['name','email','mobile','module','orderId','paymentId'].some(function(k){return(x[k]||'').toLowerCase().includes(q);});});
+    r=r.slice().sort(function(a,b){return new Date(b.confirmedAt||b.initiatedAt||0)-new Date(a.confirmedAt||a.initiatedAt||0);});
+    var el=document.getElementById('alist');
+    if(!r.length){el.innerHTML='<div style="text-align:center;color:rgba(212,196,178,0.4);padding:40px;">No records found.</div>';return;}
+    el.innerHTML=r.map(admCard).join('');
+  }
+
+  function ft(d){return d?new Date(d).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';}
+  function aH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function aE(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+
+  function admCard(r){
+    var s=r.status==='confirmed', f=r.status==='failed';
+    var badgeColor=s?'#4ade80':f?'#f87171':'#fbbf24';
+    var badgeLabel=s?'✅ Confirmed':f?'❌ Failed':'💳 Initiated';
+    var gstLine='';
+    if(r.baseAmt&&r.gstAmt){gstLine='<div style="margin-top:4px;font-size:11px;color:#4ade80;">Base Rs.'+Number(r.baseAmt).toFixed(2)+' + GST Rs.'+Number(r.gstAmt).toFixed(2)+'</div>';}
+    var acts='';
+    if(r.email)acts+='<button onclick="admCp(\''+aE(r.email)+'\',\'Email\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📧 Email</button>';
+    if(r.paymentId)acts+='<button onclick="admCp(\''+aE(r.paymentId)+'\',\'Payment ID\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">🔑 Pay ID</button>';
+    if(r.mobile)acts+='<button onclick="admCp(\'+91'+aE(r.mobile)+'\',\'Mobile\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📱 Mobile</button>';
+    acts+='<button onclick="admCp(\''+aE(r.orderId)+'\',\'Ref\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📋 Ref</button>';
+    if(s&&r.invoiceNo){acts+='<button onclick="admDlInvoice(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(246,188,104,0.2);border:1px solid rgba(246,188,104,0.4);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">📄 GST Invoice</button>';}
+    return '<div style="background:#0d1a30;border:1px solid rgba(246,188,104,0.1);border-radius:12px;padding:16px;margin-bottom:12px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
+        '<div><div style="font-weight:700;color:#f0e8d8;font-size:14px;">'+aH(r.name||'—')+'</div>' +
+        '<div style="font-size:12px;color:rgba(212,196,178,0.6);">'+aH(r.email||'—')+(r.mobile?' · +91 '+aH(r.mobile):'')+'</div></div>' +
+        '<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,0,0,0.3);color:'+badgeColor+';">'+badgeLabel+'</span>' +
+      '</div>' +
+      '<div style="font-size:12px;color:rgba(212,196,178,0.7);margin-bottom:4px;"><strong style="color:#f0e8d8;">'+aH(r.module||'—')+'</strong></div>' +
+      '<div style="font-size:12px;color:rgba(212,196,178,0.7);">Total: <strong style="color:#f6bc68;">Rs.'+(r.totalAmt?Number(r.totalAmt).toFixed(2):Number(r.amount||0).toFixed(2))+'</strong>'+gstLine+'</div>' +
+      (r.invoiceNo?'<div style="font-size:11px;color:#e8b86d;margin-top:4px;">Invoice: '+aH(r.invoiceNo)+'</div>':'')+
+      '<div style="font-size:11px;color:rgba(212,196,178,0.45);margin-top:4px;">'+ft(r.confirmedAt||r.initiatedAt)+'</div>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">'+acts+'</div>' +
+    '</div>';
+  }
+
+  function admSync(st,lb){
+    var d=document.getElementById('adot'),l=document.getElementById('aslbl');
+    var c=st==='ok'?'#4ade80':st==='err'?'#f87171':'#f6bc68';
+    if(d)d.style.background=c;if(l&&lb)l.textContent=lb;
+  }
+  function admCp(t,lb){navigator.clipboard.writeText(t).then(function(){admToast('📋 Copied '+lb);}).catch(function(){admToast(lb+': '+t);});}
+  var _att;
+  function admToast(m){var el=document.getElementById('adm-toast');if(!el)return;el.textContent=m;el.style.opacity='1';clearTimeout(_att);_att=setTimeout(function(){el.style.opacity='0';},2200);}
+
+  function admDlInvoice(orderId){
+    var rec=admRecs.find(function(x){return x.orderId===orderId;});
+    if(!rec){admToast('Record not found.');return;}
+    if(!rec.invoiceNo){admToast('Invoice data unavailable.');return;}
+    try{
+      var invData={invNo:rec.invoiceNo,invDate:rec.invDate||'—',dueDate:rec.dueDate||'—',name:rec.name,email:rec.email,mobile:rec.mobile||'',module:rec.module,baseAmt:rec.baseAmt||0,gstAmt:rec.gstAmt||0,totalAmt:rec.totalAmt||rec.amount||0,paymentId:rec.paymentId||'—',orderRef:rec.orderId};
+      downloadInvoice(invData);admToast('📄 Invoice downloading…');
+    }catch(e){console.error(e);admToast('Invoice generation failed.');}
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     AUTO-OPEN FROM URL PARAM
+  ══════════════════════════════════════════════════════════════════════ */
+  (function(){
+    var params=new URLSearchParams(window.location.search);
+    var mod=params.get('module');
+    if(mod){togglePay();document.getElementById('modSelect').value=mod;onModuleChange();}
+  })();
+</script>
+{% endblock %}

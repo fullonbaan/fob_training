@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FOB TRAINING | Enterprise Software Mastery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#06132a",
+              "surface-dim": "#06132a",
+              "on-secondary-container": "#a9b5d4",
+              "surface-bright": "#2e3952",
+              "surface-container-high": "#1e2a42",
+              "on-error-container": "#ffdad6",
+              "secondary": "#bbc6e6",
+              "error-container": "#93000a",
+              "inverse-primary": "#805604",
+              "on-secondary": "#253049",
+              "surface-container-highest": "#29344e",
+              "on-surface-variant": "#d4c4b2",
+              "surface-tint": "#f6bc68",
+              "surface-variant": "#29344e",
+              "error": "#ffb4ab",
+              "surface-container": "#131f37",
+              "surface-container-lowest": "#020d25",
+              "tertiary": "#d5c4b2",
+              "primary-fixed": "#ffddb1",
+              "primary-fixed-dim": "#f6bc68",
+              "on-primary-fixed": "#291800",
+              "tertiary-container": "#9d8e7e",
+              "secondary-fixed-dim": "#bbc6e6",
+              "secondary-fixed": "#d8e2ff",
+              "on-background": "#d8e2ff",
+              "on-tertiary-fixed": "#231a0f",
+              "tertiary-fixed": "#f2e0cd",
+              "on-tertiary-fixed-variant": "#504538",
+              "on-tertiary-container": "#32281c",
+              "on-primary-container": "#3b2500",
+              "inverse-on-surface": "#253049",
+              "inverse-surface": "#d8e2ff",
+              "tertiary-fixed-dim": "#d5c4b2",
+              "on-tertiary": "#392f22",
+              "surface-container-low": "#0f1b33",
+              "on-error": "#690005",
+              "on-primary-fixed-variant": "#624000",
+              "primary": "#f6bc68",
+              "outline": "#9c8f7e",
+              "on-secondary-fixed-variant": "#3b4661",
+              "primary-container": "#ba8738",
+              "on-surface": "#d8e2ff",
+              "background": "#06132a",
+              "outline-variant": "#504538",
+              "on-secondary-fixed": "#0f1b33",
+              "secondary-container": "#3b4661",
+              "on-primary": "#442b00"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Work Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #f6bc68 0%, #ba8738 100%);
+        }
+        .glass-nav {
+            background: rgba(6, 19, 42, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav shadow-2xl shadow-black/40 h-20 flex justify-between items-center px-8">
+<div class="flex items-center gap-12">
+<span class="text-xl font-bold text-primary uppercase tracking-widest font-headline">FOB TRAINING</span>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 font-headline tracking-tight transition-colors duration-300" href="#">Catalog</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-300 font-headline tracking-tight" href="#">E-Books</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-300 font-headline tracking-tight" href="#">Pricing</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-300 font-headline tracking-tight" href="#">About</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-300 font-headline tracking-tight" href="#">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-secondary font-medium hover:text-primary transition-colors">Sign In</button>
+<button class="editorial-gradient text-on-primary px-6 py-2 rounded-full font-semibold scale-95 active:scale-90 transition-transform">Get Started</button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center px-8 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/90 to-transparent z-10"></div>
+<img alt="Background" class="w-full h-full object-cover grayscale opacity-40" data-alt="Deep blue abstract high tech server room environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK5y3HKw9PUjYkSrGjkDU0iE8LoiQTemGNojS5waNDc-qKK8seLk5MFFwLmEnWRtBwLfCzIKyMT--em_5DeOhpbhzRFjamV1InKVwMnvaLywmKWdF85pDrB6RdHJsMXRkvPcJPBauIDNtljoMJ3lqZwiB-DChhljKeXB1R_PNPMi_ORw6mkLYMiUpVobZPMUEkp4HED-1XzCJQcK377NRT9PpO-LPF-IsCP9QeGo-2ZHzBafQyy5vTaqNGAjojxLtSgb_4rwN4gFA"/>
+</div>
+<div class="relative z-20 max-w-5xl">
+<span class="inline-block py-1 px-3 mb-6 rounded-full bg-secondary-container text-primary text-xs font-label uppercase tracking-widest">Enterprise Software Mastery</span>
+<h1 class="text-6xl md:text-8xl font-headline font-extrabold text-on-surface leading-[0.9] tracking-tighter mb-8">
+                    ARCHITECTING <br/> <span class="text-primary">PRECISION.</span>
+</h1>
+<p class="text-xl text-on-surface-variant max-w-2xl font-light leading-relaxed mb-10">
+                    High-performance training for the modern ERP specialist. Curated insights into Infor LN Architecture, Finance, and Enterprise Tools designed for the editorial athlete.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="editorial-gradient text-on-primary px-10 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/20 hover:scale-105 transition-transform">Explore Catalog</button>
+<button class="bg-surface-container-highest text-on-surface px-10 py-4 rounded-full text-lg font-medium border border-outline-variant/15 hover:bg-surface-bright transition-colors">View Pricing</button>
+</div>
+</div>
+</section>
+<!-- E-Book Bento Grid -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h2 class="text-4xl font-headline font-bold text-on-surface tracking-tight">Premium E-Book Series</h2>
+<p class="text-on-surface-variant mt-2">Comprehensive guides for technical excellence.</p>
+</div>
+<a class="text-primary font-semibold flex items-center gap-2 group" href="#">
+                    View All Series 
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Large Feature Card -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-low aspect-[16/9] flex flex-col justify-end p-8 border border-outline-variant/10">
+<img alt="Infor LN Architecture" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" data-alt="Modern clean workspace with architecture blueprints" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQgvzH2QETQbfuIryJijghhgxTwqFXzCteeqUsQ9mryUy_6eE4XodZ5nJnKUgtfNFJY__eG7kQpJByRAQIiruuawsjLUPUg2ysKz8jPkxULeJAdsy6EInpx0Kd-uwZXqK7gXB7ukQBXv1ExDiP7rWzMXokoRtxFjgPeul5quisAnz3EiUGLVFzBDUBgCaITcbflVlNvfgUhLTsnTcQ5sAtKDl8bouMC9HvKwFAz5RkTb793zUsI8T-D4NPRhqIQxMkRQo13hD2VOs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+<div class="relative z-10">
+<span class="text-primary font-label text-xs uppercase tracking-widest mb-2 block">Enterprise Core</span>
+<h3 class="text-4xl font-headline font-bold mb-4">Infor LN Architecture &amp; Tools</h3>
+<p class="text-on-surface-variant max-w-md mb-6">The definitive guide to the underlying frameworks and development environment of modern Infor LN systems.</p>
+<button class="flex items-center gap-3 text-on-surface font-semibold">
+<span class="p-3 rounded-full bg-primary text-on-primary material-symbols-outlined" data-icon="download">download</span>
+                            Download Sample
+                        </button>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl bg-surface-container-high p-8 border border-outline-variant/10">
+<div class="h-full flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="account_balance">account_balance</span>
+<div>
+<h3 class="text-2xl font-headline font-bold mb-2">Infor LN Finance</h3>
+<p class="text-on-surface-variant text-sm mb-6">Advanced financial module configurations and strategic reporting techniques.</p>
+<a class="text-primary font-medium hover:underline" href="#">Learn More</a>
+</div>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl bg-surface-container-high p-8 border border-outline-variant/10">
+<div class="h-full flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="settings_suggest">settings_suggest</span>
+<div>
+<h3 class="text-2xl font-headline font-bold mb-2">Integration Tools</h3>
+<p class="text-on-surface-variant text-sm mb-6">Seamlessly connecting your ERP ecosystem with ION and BODs.</p>
+<a class="text-primary font-medium hover:underline" href="#">Learn More</a>
+</div>
+</div>
+</div>
+<!-- Medium Card -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-low p-8 flex flex-col md:flex-row gap-8 border border-outline-variant/10">
+<div class="w-full md:w-1/3">
+<img alt="Data Analytics" class="rounded-lg w-full aspect-square object-cover" data-alt="Digital analytics dashboard on a screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXGz6k5rFlJbbQ7Cf8t3X4ldXwdMziSDAkGHoLjeuTs2ULGc9I8bIX2_IdGvSaphnSQOiu7swPCv1PyaTEvEJFHTjU26ghwd8oehGEdBf35wWbSnhigPUY3bJJXEINFCRTaQo12_Ui7mnwDwtqblITkU6klH6CsVKLIiiHbUESnL4dsq19GHJ7JGgmh6trFFaWBcAz4sWIlbBDcfm42h9tzGNHX6ujuiY3gqZSnpckHSunWWvRGaeqKaA5QGb8t6jdhQ05RJbjh6c"/>
+</div>
+<div class="w-full md:w-2/3 flex flex-col justify-center">
+<span class="text-tertiary font-label text-xs uppercase tracking-widest mb-2 block">Specialized Module</span>
+<h3 class="text-3xl font-headline font-bold mb-4">Supply Chain Logistics</h3>
+<p class="text-on-surface-variant mb-6">Mastering warehousing, freight, and procurement logic within the Infor framework.</p>
+<button class="self-start px-6 py-2 border border-primary text-primary rounded-full hover:bg-primary/10 transition-colors">Pre-order Now</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing & Plans -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-headline font-bold text-on-surface mb-4">Investment in Excellence</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto">Scalable training solutions for independent consultants and enterprise teams alike.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-2xl overflow-hidden border border-outline-variant/20 shadow-2xl">
+<!-- Standard Plan -->
+<div class="bg-surface-container p-10 flex flex-col">
+<h3 class="text-xl font-headline font-semibold mb-2">Professional</h3>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-bold font-headline">$49</span>
+<span class="text-on-surface-variant font-label">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Access to all E-Books
+                            </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Community Forum Access
+                            </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Monthly Q&amp;A Sessions
+                            </li>
+</ul>
+<button class="w-full py-3 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-bright transition-colors">Start Free Trial</button>
+</div>
+<!-- Recommended Plan -->
+<div class="bg-surface-container-highest p-10 flex flex-col relative z-10 shadow-[0_0_40px_rgba(0,0,0,0.3)] transform md:scale-105">
+<div class="absolute top-0 right-0 mt-4 mr-4 px-3 py-1 bg-primary rounded-full text-[10px] font-bold text-on-primary uppercase tracking-widest">Most Popular</div>
+<h3 class="text-xl font-headline font-semibold mb-2 text-primary">Enterprise Elite</h3>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-bold font-headline">$199</span>
+<span class="text-on-surface-variant font-label">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Everything in Professional
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Private Slack Channel
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                1-on-1 Mentorship (2hrs/mo)
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Custom Learning Paths
+                            </li>
+</ul>
+<button class="w-full py-4 rounded-full editorial-gradient text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">Get Full Access</button>
+</div>
+<!-- Custom Plan -->
+<div class="bg-surface-container p-10 flex flex-col">
+<h3 class="text-xl font-headline font-semibold mb-2">Corporate</h3>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-bold font-headline">Custom</span>
+</div>
+<p class="text-on-surface-variant mb-8 text-sm">Tailored solutions for teams of 10+ including on-site workshops and full library licenses.</p>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Dedicated Account Manager
+                            </li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Multi-user SSO Integration
+                            </li>
+</ul>
+<button class="w-full py-3 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-bright transition-colors">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<h2 class="text-4xl font-headline font-bold text-center mb-16">Trusted by Professionals</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="relative">
+<span class="material-symbols-outlined text-primary/20 text-8xl absolute -top-8 -left-8" data-icon="format_quote">format_quote</span>
+<div class="relative z-10 bg-surface-container p-8 rounded-xl border-l-4 border-primary">
+<p class="text-xl font-headline italic leading-relaxed text-on-surface mb-6">
+                            "The FOB TRAINING series on Infor LN Finance transformed how we approach our month-end closings. The technical depth is unmatched in the industry."
+                        </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright">
+<img alt="John Doe" data-alt="Portrait of a professional consultant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIW5FWtn7rvcRCuS_Rf97Eduuhu-j0TPs6dzLV0_6LRHQuoDPlwC9OIQ61rhrCrPLPMOo7dthhL-H95RnaR4VDHgrQEc-_99LB1jEJocfwizJDa7XXxpYQ06MFdaFuO4Ct8jwMlIhfed4c4Q3KcBJqt3OjtPfahIshpGAYHJVEmUvbwWXGjRHwZ1YvCJxgfR2RJfDxztvFHLLqpTrAWyXaesAho3AofFpyGSHwivRDpUfqozE24n9usDUbSjKj9nL9eXyE0CHgVlU"/>
+</div>
+<div>
+<h4 class="font-bold">Marcus Chen</h4>
+<p class="text-xs text-on-surface-variant font-label uppercase">ERP Lead, Global Logistics Corp</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined text-primary/20 text-8xl absolute -top-8 -left-8" data-icon="format_quote">format_quote</span>
+<div class="relative z-10 bg-surface-container p-8 rounded-xl border-l-4 border-primary">
+<p class="text-xl font-headline italic leading-relaxed text-on-surface mb-6">
+                            "Finding high-quality, up-to-date documentation for Infor LN Tools is difficult. FullonBaan provides exactly what enterprise architects need."
+                        </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright">
+<img alt="Jane Smith" data-alt="Portrait of a tech lead" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsUKMkdAresBg4T2Swbhp815BjSxCx07v1Z5VjwpEc_0r0n6QztqS6SycOVyiVyWCSO1LazaSdejgGUTkb_alKbkv4zJAd8dAW92GzOZgoX6YfkJdH1hC7DDzwUeYdNgerL_3T3G5Pdv9d-DzbnLl0GivDQYhBFB3ocbWZZSLzalgYFf9D1mkwnZxWiamT05yKHv5YEENagMfOvt7rOPPnFqpe8HixBfbDNbuDGSmTyPGqoTn2w3qqYIyJRyJu8Be2ixBHmyTvUNM"/>
+</div>
+<div>
+<h4 class="font-bold">Sarah Jenkins</h4>
+<p class="text-xs text-on-surface-variant font-label uppercase">Technical Architect, Cloud Systems</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="py-24 bg-primary-container text-on-primary-container">
+<div class="max-w-4xl mx-auto px-8 text-center">
+<h2 class="text-4xl font-headline font-extrabold mb-6">Elevate Your Enterprise Knowledge</h2>
+<p class="text-lg mb-10 opacity-90">Join 5,000+ consultants receiving our monthly architecture breakdown.</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+<input class="flex-grow px-6 py-4 rounded-full bg-white/10 border-none text-white placeholder:text-white/60 focus:ring-2 focus:ring-primary" placeholder="Enter your corporate email" type="email"/>
+<button class="px-8 py-4 bg-surface text-primary font-bold rounded-full hover:bg-surface-bright transition-colors">Subscribe Now</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface py-12 px-8">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="text-lg font-bold text-primary font-headline">FOB TRAINING</span>
+<p class="text-[#bbc6e6]/60 font-['Work_Sans'] text-sm tracking-wide uppercase">© 2024 FOB TRAINING. ALL RIGHTS RESERVED.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-[#bbc6e6]/60 hover:text-primary underline-offset-4 hover:underline transition-opacity font-['Work_Sans'] text-sm tracking-wide" href="#">Privacy Policy</a>
+<a class="text-[#bbc6e6]/60 hover:text-primary underline-offset-4 hover:underline transition-opacity font-['Work_Sans'] text-sm tracking-wide" href="#">Terms of Service</a>
+<a class="text-[#bbc6e6]/60 hover:text-primary underline-offset-4 hover:underline transition-opacity font-['Work_Sans'] text-sm tracking-wide" href="#">Enterprise Solutions</a>
+<a class="text-[#bbc6e6]/60 hover:text-primary underline-offset-4 hover:underline transition-opacity font-['Work_Sans'] text-sm tracking-wide" href="#">Support</a>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#bbc6e6]/60 hover:text-primary cursor-pointer transition-colors" data-icon="language">language</span>
+<span class="material-symbols-outlined text-[#bbc6e6]/60 hover:text-primary cursor-pointer transition-colors" data-icon="share">share</span>
+</div>
+</div>
+</footer>
+</body></html>

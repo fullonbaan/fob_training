@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FullOnBaan — Infor LN Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --gold:#DAA520;--gold-light:#FFD700;--gold-dark:#B8860B;
+    --purple:#1a0a30;--purple-mid:#2a1248;--purple-light:#6b4c9a;
+    --lavender:#c4b5e0;
+    --bg:#0c0618;--card:#150d2a;--card-border:#2a1a4a;
+    --white:#fff;--off-white:#ede8f5;--gray:#9a8ec0;--dim:#5a4d78;
+    --green:#4ade80;
+  }
+  body{
+    background:var(--bg);color:var(--white);
+    font-family:'Inter',sans-serif;
+    width:1080px;min-height:1920px;margin:0 auto;
+    position:relative;overflow:hidden;
+  }
+
+  /* Background effects */
+  body::before{
+    content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+    width:900px;height:900px;
+    background:radial-gradient(ellipse,rgba(107,76,154,0.12) 0%,rgba(184,134,11,0.06) 40%,transparent 70%);
+    pointer-events:none;z-index:0;
+  }
+  body::after{
+    content:'';position:absolute;bottom:-200px;left:50%;transform:translateX(-50%);
+    width:800px;height:800px;
+    background:radial-gradient(ellipse,rgba(107,76,154,0.08) 0%,rgba(184,134,11,0.04) 40%,transparent 70%);
+    pointer-events:none;z-index:0;
+  }
+
+  .poster{position:relative;z-index:1;padding:50px 60px 40px;}
+
+  /* Side accent lines */
+  .side-line-left,.side-line-right{
+    position:fixed;top:0;width:3px;height:100%;
+    background:linear-gradient(to bottom,transparent,var(--purple-light),var(--gold),var(--purple-light),transparent);
+    opacity:0.5;z-index:2;
+  }
+  .side-line-left{left:0}
+  .side-line-right{right:0}
+
+  /* Header */
+  .header{text-align:center;margin-bottom:36px;}
+  .ornament{
+    display:inline-block;width:60px;height:1px;
+    background:linear-gradient(to right,transparent,var(--gold),transparent);
+    vertical-align:middle;
+  }
+  .diamond{
+    display:inline-block;width:8px;height:8px;
+    background:var(--gold);transform:rotate(45deg);
+    margin:0 12px;vertical-align:middle;
+  }
+  .brand-name{
+    font-family:'Playfair Display',serif;
+    font-size:52px;font-weight:800;
+    background:linear-gradient(135deg,var(--gold-dark),var(--gold-light),var(--gold));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    letter-spacing:3px;margin:14px 0 6px;
+  }
+  .brand-sub{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:13px;letter-spacing:8px;color:var(--gray);
+    text-transform:uppercase;
+  }
+  .header-line{
+    width:500px;height:1px;margin:20px auto;
+    background:linear-gradient(to right,transparent,var(--purple-light) 15%,var(--gold-dark) 35%,var(--gold) 50%,var(--gold-dark) 65%,var(--purple-light) 85%,transparent);
+  }
+  .header-line.thin{opacity:0.4;margin:6px auto;}
+
+  /* Title */
+  .main-title{text-align:center;margin-bottom:12px;}
+  .main-title h1{
+    font-family:'Playfair Display',serif;
+    font-size:60px;font-weight:900;letter-spacing:4px;
+    color:var(--white);text-shadow:0 0 60px rgba(107,76,154,0.25),0 0 120px rgba(218,165,32,0.1);
+  }
+  .title-accent{
+    width:200px;height:2px;margin:10px auto 16px;
+    background:linear-gradient(to right,transparent,var(--gold),transparent);
+  }
+  .main-title h2{
+    font-family:'Playfair Display',serif;
+    font-size:36px;font-weight:600;
+    background:linear-gradient(to right,var(--gold-dark),var(--gold-light));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .main-title p{
+    font-size:18px;color:var(--gray);margin-top:12px;font-weight:300;
+    letter-spacing:0.5px;
+  }
+
+  /* Stats */
+  .stats{
+    display:flex;justify-content:center;gap:0;
+    margin:30px auto;max-width:700px;
+    border:1.5px solid var(--gold-dark);border-radius:16px;
+    background:linear-gradient(135deg,rgba(21,13,42,0.95),rgba(42,18,72,0.85));
+    backdrop-filter:blur(10px);overflow:hidden;
+  }
+  .stat{
+    flex:1;text-align:center;padding:22px 0;
+    position:relative;
+  }
+  .stat+.stat::before{
+    content:'';position:absolute;left:0;top:20%;height:60%;width:1px;
+    background:linear-gradient(to bottom,transparent,var(--gold-dark),transparent);
+  }
+  .stat-num{
+    font-family:'Playfair Display',serif;
+    font-size:36px;font-weight:800;color:var(--gold-light);
+  }
+  .stat-label{font-size:13px;color:var(--lavender);margin-top:4px;letter-spacing:1px;}
+
+  /* Section label */
+  .section-label{
+    text-align:center;font-size:11px;letter-spacing:6px;
+    color:var(--dim);text-transform:uppercase;margin:28px 0 18px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+  }
+
+  /* Module grid */
+  .modules{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    margin-bottom:28px;
+  }
+  .mod-card{
+    background:linear-gradient(160deg,var(--card),#1a0e35);
+    border:1px solid var(--card-border);border-radius:14px;
+    padding:20px 18px;position:relative;overflow:hidden;
+    transition:all 0.3s;
+  }
+  .mod-card::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(to bottom,var(--gold),var(--purple-light));
+    border-radius:3px 0 0 3px;
+  }
+  .mod-card::after{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(to right,transparent,rgba(107,76,154,0.3),rgba(218,165,32,0.2),transparent);
+  }
+  .mod-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .mod-badge{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:11px;font-weight:700;letter-spacing:1px;
+    background:linear-gradient(135deg,var(--purple-light),var(--gold));
+    color:#0a0e1a;padding:4px 10px;border-radius:6px;
+  }
+  .mod-name{
+    font-family:'Inter',sans-serif;
+    font-size:17px;font-weight:700;color:var(--white);
+  }
+  .mod-ebooks{font-size:13px;color:var(--lavender);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .mod-ebooks::before{
+    content:'';display:inline-block;width:5px;height:5px;
+    background:var(--purple-light);border-radius:50%;
+  }
+  .mod-price{
+    font-family:'Playfair Display',serif;
+    font-size:26px;font-weight:800;
+    background:linear-gradient(to right,var(--gold),var(--gold-light));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .mod-price span{font-size:16px;font-weight:600;}
+
+  /* Offer box */
+  .offer{
+    margin:10px 0 28px;padding:28px 30px;text-align:center;
+    border:2px solid var(--gold);border-radius:20px;
+    background:linear-gradient(160deg,rgba(26,10,48,0.9),rgba(30,22,5,0.7),rgba(16,8,30,0.95));
+    position:relative;overflow:hidden;
+  }
+  .offer::before{
+    content:'';position:absolute;inset:4px;border:1px solid rgba(107,76,154,0.25);
+    border-radius:16px;pointer-events:none;
+  }
+  .offer-corner{
+    position:absolute;width:16px;height:16px;
+    border:2px solid var(--gold-dark);
+  }
+  .offer-corner.tl{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:4px 0 0 0;}
+  .offer-corner.tr{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 4px 0 0;}
+  .offer-corner.bl{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 4px;}
+  .offer-corner.br{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 4px 0;}
+  .offer h3{
+    font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--white);
+  }
+  .offer .modules-text{
+    font-size:12px;letter-spacing:5px;color:var(--gray);
+    margin:4px 0 14px;text-transform:uppercase;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .offer .price-row{display:flex;align-items:center;justify-content:center;gap:16px;}
+  .offer .old-price{
+    font-size:20px;color:var(--dim);text-decoration:line-through;
+    text-decoration-color:rgba(220,60,60,0.7);text-decoration-thickness:2px;
+    font-weight:600;
+  }
+  .offer .big-price{
+    font-family:'Playfair Display',serif;font-size:52px;font-weight:900;
+    background:linear-gradient(to right,var(--gold-dark),var(--gold-light),var(--gold));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .offer .savings-badge{
+    display:inline-block;margin-top:10px;
+    background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);
+    color:var(--green);font-weight:700;font-size:16px;
+    padding:6px 24px;border-radius:30px;letter-spacing:1px;
+  }
+
+  /* Video section */
+  .video-section{text-align:center;margin-bottom:32px;}
+  .video-section h3{
+    font-family:'Playfair Display',serif;font-size:28px;font-weight:700;
+    color:var(--white);margin-bottom:8px;
+  }
+  .video-section p{font-size:16px;color:var(--gray);font-weight:300;}
+  .video-section .sub{font-size:14px;color:var(--dim);margin-top:4px;}
+
+  /* CTA */
+  .cta{
+    display:block;width:520px;margin:0 auto 28px;text-align:center;
+    padding:20px 0;border-radius:40px;
+    background:linear-gradient(135deg,var(--gold-dark),var(--gold-light),var(--gold));
+    font-family:'Inter',sans-serif;font-size:20px;font-weight:800;
+    color:#0a0e1a;letter-spacing:2px;text-transform:uppercase;
+    text-decoration:none;
+    box-shadow:0 8px 30px rgba(218,165,32,0.25),0 0 60px rgba(107,76,154,0.15);
+    position:relative;overflow:hidden;
+  }
+  .cta::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:50%;
+    background:linear-gradient(to bottom,rgba(255,255,255,0.15),transparent);
+    border-radius:40px 40px 0 0;
+  }
+
+  /* Footer */
+  .footer{text-align:center;}
+  .footer-url{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:18px;font-weight:600;color:var(--gold);
+    letter-spacing:1px;margin-bottom:10px;
+  }
+  .footer-contact{font-size:16px;color:var(--gray);margin-bottom:8px;}
+  .footer-social{font-size:13px;color:var(--dim);letter-spacing:1px;margin-bottom:16px;}
+  .footer-line{
+    width:350px;height:1px;margin:0 auto 12px;
+    background:linear-gradient(to right,transparent,var(--purple-light),var(--gold-dark),var(--purple-light),transparent);
+  }
+  .footer-copy{font-size:12px;color:var(--dim);letter-spacing:2px;}
+
+  /* Floating particles */
+  .particle{
+    position:absolute;border-radius:50%;pointer-events:none;
+  }
+  .p1{width:350px;height:350px;top:350px;right:-120px;background:radial-gradient(circle,rgba(107,76,154,0.12),transparent);}
+  .p2{width:250px;height:250px;top:850px;left:-80px;background:radial-gradient(circle,rgba(218,165,32,0.08),transparent);}
+  .p3{width:300px;height:300px;bottom:250px;right:-90px;background:radial-gradient(circle,rgba(107,76,154,0.1),transparent);}
+  .p4{width:200px;height:200px;top:150px;left:-50px;background:radial-gradient(circle,rgba(218,165,32,0.06),transparent);}
+</style>
+</head>
+<body>
+
+<div class="side-line-left"></div>
+<div class="side-line-right"></div>
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+
+<div class="poster">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="ornament"></span><span class="diamond"></span><span class="ornament"></span>
+    <div class="brand-name">FullOnBaan</div>
+    <div class="brand-sub">Education</div>
+    <div class="header-line"></div>
+    <div class="header-line thin"></div>
+  </div>
+
+  <!-- Main Title -->
+  <div class="main-title">
+    <h1>INFOR LN</h1>
+    <div class="title-accent"></div>
+    <h2>eBooks & Video Courses</h2>
+    <p>200+ Professionally Authored Training Materials</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num">200+</div><div class="stat-label">eBooks</div></div>
+    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Video Courses</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">Modules</div></div>
+  </div>
+
+  <!-- Module Cards -->
+  <div class="section-label">Training Modules</div>
+  <div class="modules">
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">DEV</span><span class="mod-name">Development</span></div>
+      <div class="mod-ebooks">73 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>1,999</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">ADM</span><span class="mod-name">Administration</span></div>
+      <div class="mod-ebooks">37 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>1,999</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">FIN</span><span class="mod-name">Finance</span></div>
+      <div class="mod-ebooks">41 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>1,999</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">MFG</span><span class="mod-name">Manufacturing</span></div>
+      <div class="mod-ebooks">14 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">LOG</span><span class="mod-name">Logistics</span></div>
+      <div class="mod-ebooks">14 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">WHS</span><span class="mod-name">Warehousing</span></div>
+      <div class="mod-ebooks">14 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">PLN</span><span class="mod-name">Planning</span></div>
+      <div class="mod-ebooks">14 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">EXT</span><span class="mod-name">Extensibility</span></div>
+      <div class="mod-ebooks">10 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>499</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">BOD</span><span class="mod-name">BOD</span></div>
+      <div class="mod-ebooks">11 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-header"><span class="mod-badge">ION</span><span class="mod-name">ION</span></div>
+      <div class="mod-ebooks">15 eBooks</div>
+      <div class="mod-price"><span>Rs.</span>699</div>
+    </div>
+  </div>
+
+  <!-- Offer -->
+  <div class="offer">
+    <div class="offer-corner tl"></div>
+    <div class="offer-corner tr"></div>
+    <div class="offer-corner bl"></div>
+    <div class="offer-corner br"></div>
+    <h3>Full eBook Library</h3>
+    <div class="modules-text">All 9 Modules Included</div>
+    <div class="price-row">
+      <span class="old-price">Rs.9,991</span>
+      <span class="big-price">Rs.4,999</span>
+    </div>
+    <div class="savings-badge">50% OFF — Limited Time Only!</div>
+  </div>
+
+  <!-- Video Section -->
+  <div class="video-section">
+    <h3>Video Courses Also Available</h3>
+    <p>Step-by-step screen recordings, live demos & real-world scenarios</p>
+    <p class="sub">From Rs.3,999 &nbsp;|&nbsp; Combo Packages Available</p>
+  </div>
+
+  <!-- CTA -->
+  <a class="cta" href="https://fob-ln-training.vercel.app">Explore & Purchase Now</a>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-url">fob-ln-training.vercel.app</div>
+    <div class="footer-contact">fullonbaan@gmail.com &nbsp;|&nbsp; +91 63605 93122</div>
+    <div class="footer-social">LinkedIn &nbsp;|&nbsp; YouTube &nbsp;|&nbsp; Instagram &nbsp;|&nbsp; Facebook</div>
+    <div class="footer-line"></div>
+    <div class="footer-copy">FullOnBaan Education &nbsp;·&nbsp; Bangalore, India</div>
+  </div>
+
+</div>
+</body>
+</html>

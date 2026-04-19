@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#06132a",
+              "surface-dim": "#06132a",
+              "on-secondary-container": "#a9b5d4",
+              "surface-bright": "#2e3952",
+              "surface-container-high": "#1e2a42",
+              "on-error-container": "#ffdad6",
+              "secondary": "#bbc6e6",
+              "error-container": "#93000a",
+              "inverse-primary": "#805604",
+              "on-secondary": "#253049",
+              "surface-container-highest": "#29344e",
+              "on-surface-variant": "#d4c4b2",
+              "surface-tint": "#f6bc68",
+              "surface-variant": "#29344e",
+              "error": "#ffb4ab",
+              "surface-container": "#131f37",
+              "surface-container-lowest": "#020d25",
+              "tertiary": "#d5c4b2",
+              "primary-fixed": "#ffddb1",
+              "primary-fixed-dim": "#f6bc68",
+              "on-primary-fixed": "#291800",
+              "tertiary-container": "#9d8e7e",
+              "secondary-fixed-dim": "#bbc6e6",
+              "secondary-fixed": "#d8e2ff",
+              "on-background": "#d8e2ff",
+              "on-tertiary-fixed": "#231a0f",
+              "tertiary-fixed": "#f2e0cd",
+              "on-tertiary-fixed-variant": "#504538",
+              "on-tertiary-container": "#32281c",
+              "on-primary-container": "#3b2500",
+              "inverse-on-surface": "#253049",
+              "inverse-surface": "#d8e2ff",
+              "tertiary-fixed-dim": "#d5c4b2",
+              "on-tertiary": "#392f22",
+              "surface-container-low": "#0f1b33",
+              "on-error": "#690005",
+              "on-primary-fixed-variant": "#624000",
+              "primary": "#f6bc68",
+              "outline": "#9c8f7e",
+              "on-secondary-fixed-variant": "#3b4661",
+              "primary-container": "#ba8738",
+              "on-surface": "#d8e2ff",
+              "background": "#06132a",
+              "outline-variant": "#504538",
+              "on-secondary-fixed": "#0f1b33",
+              "secondary-container": "#3b4661",
+              "on-primary": "#442b00"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Work Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #06132a;
+            color: #d8e2ff;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary/30 selection:text-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#06132a]/80 backdrop-blur-md shadow-2xl shadow-black/40 h-20 flex justify-between items-center px-8 font-['Noto_Serif'] tracking-tight">
+<div class="text-xl font-bold text-[#f6bc68] uppercase tracking-widest">FOB TRAINING</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300" href="#">Catalog</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300" href="#">E-Books</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300" href="#">Pricing</a>
+<a class="text-[#bbc6e6] font-medium hover:text-[#f6bc68] transition-colors duration-300" href="#">About</a>
+<a class="text-[#f6bc68] font-semibold border-b-2 border-[#f6bc68] pb-1 hover:text-[#f6bc68] transition-colors duration-300" href="#">Contact</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2 rounded-full font-semibold scale-95 active:scale-90 transition-transform">
+            Sign In
+        </button>
+</nav>
+<main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+<!-- Hero Section -->
+<header class="mb-20 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-8">
+<div class="max-w-3xl">
+<span class="font-label text-primary tracking-[0.2em] text-xs font-bold uppercase mb-4 block">Connect with our Elite Coaches</span>
+<h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight text-on-surface">
+                    Enroll &amp; <span class="text-primary italic">Contact Us</span>
+</h1>
+</div>
+<div class="hidden md:block w-32 h-[1px] bg-outline-variant/20 mb-6"></div>
+</header>
+<!-- Bento Contact Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-24">
+<!-- Featured Image / Portal Card -->
+<div class="md:col-span-7 relative group overflow-hidden rounded-xl bg-surface-container h-[400px] md:h-auto">
+<img alt="Professional fitness training center" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" data-alt="Interior of a luxury modern gym with dark aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoB1GGk5fesVfsqdBb28F96KHHcUTh2cB3p0F9p2sRUvJQ9m7Q4UQ2W9xQNXhZgTv1Jij5ZEYw2qNVuIxwBwzwO7waO4bI3oO9UE4B12gCV3InwDksUo67ejc8XBnUZP2aE4A5tSjCzZZp-jN2LJwOvIRCHGZviMwEdMZ4objkQD65bh3kJagsTLUs6LQf-anOosF9agTHgywHnr8SFzRM68L73qcnSPN-vmSZClKSgob-1oRbTzFgwvmXTBjaTV9MGsIsZHNCg_c"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-10 w-full">
+<h2 class="font-headline text-3xl font-bold mb-4 text-white">Certification Portal</h2>
+<p class="text-on-surface-variant max-w-md mb-8 font-light">Access your credentials, track course progress, and download official FOB Training certifications.</p>
+<a class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-8 py-4 rounded-full text-white font-semibold hover:bg-white hover:text-surface transition-all duration-300 group" href="#">
+                        Access Portal
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Contact Methods Column -->
+<div class="md:col-span-5 flex flex-col gap-6">
+<!-- WhatsApp Card -->
+<div class="bg-surface-container-low p-8 rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-colors duration-300">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">chat</span>
+</div>
+<div>
+<p class="font-label text-xs tracking-widest text-on-surface-variant mb-1">IMMEDIATE SUPPORT</p>
+<h3 class="text-xl font-bold text-on-surface">WhatsApp</h3>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">open_in_new</span>
+</div>
+<!-- Email Card -->
+<div class="bg-surface-container-low p-8 rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-colors duration-300">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl">mail</span>
+</div>
+<div>
+<p class="font-label text-xs tracking-widest text-on-surface-variant mb-1">GENERAL ENQUIRIES</p>
+<h3 class="text-xl font-bold text-on-surface">Email Us</h3>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors">open_in_new</span>
+</div>
+<!-- Website/Booking Card -->
+<div class="bg-surface-container-low p-8 rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-colors duration-300">
+<div class="flex items-center gap-6">
+<div class="w-14 h-14 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl">language</span>
+</div>
+<div>
+<p class="font-label text-xs tracking-widest text-on-surface-variant mb-1">MAIN DOMAIN</p>
+<h3 class="text-xl font-bold text-on-surface">Website</h3>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary transition-colors">open_in_new</span>
+</div>
+</div>
+</section>
+<!-- Form and FAQ Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+<!-- Enrollment Form -->
+<div class="lg:col-span-5 space-y-10">
+<div class="bg-surface-container p-10 rounded-xl">
+<h2 class="font-headline text-2xl font-bold mb-8 text-primary">Enrollment Inquiry</h2>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="font-label text-xs tracking-widest text-on-surface-variant">FULL NAME</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 focus:border-primary focus:ring-0 px-0 py-3 transition-colors text-on-surface" placeholder="Johnathan Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-xs tracking-widest text-on-surface-variant">PREFERRED PROGRAM</label>
+<select class="w-full bg-transparent border-0 border-b border-outline-variant/30 focus:border-primary focus:ring-0 px-0 py-3 transition-colors text-on-surface">
+<option class="bg-surface">Elite Performance Athlete</option>
+<option class="bg-surface">Conditioning Fundamentals</option>
+<option class="bg-surface">The Editorial Athlete (Masterclass)</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="font-label text-xs tracking-widest text-on-surface-variant">MESSAGE</label>
+<textarea class="w-full bg-transparent border-0 border-b border-outline-variant/30 focus:border-primary focus:ring-0 px-0 py-3 transition-colors text-on-surface" placeholder="Tell us about your goals..." rows="3"></textarea>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-full hover:shadow-[0_0_20px_rgba(246,188,104,0.3)] transition-all" type="submit">Submit Enrollment Request</button>
+</form>
+</div>
+</div>
+<!-- FAQ Section -->
+<div class="lg:col-span-7 space-y-12">
+<div>
+<h2 class="font-headline text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+<p class="text-on-surface-variant mb-12">Everything you need to know about the onboarding process and the FOB ecosystem.</p>
+</div>
+<div class="space-y-6">
+<!-- FAQ Item 1 -->
+<div class="bg-surface-container-low rounded-xl p-8 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-center gap-4">
+<h3 class="font-headline text-xl font-semibold text-on-surface">How do I start the enrollment process?</h3>
+<span class="material-symbols-outlined text-primary group-hover:rotate-45 transition-transform">add</span>
+</div>
+<div class="mt-4 text-on-surface-variant font-light leading-relaxed">
+                            Start by submitting the inquiry form. Our performance coordinators will reach out within 24 hours to schedule your initial athletic assessment and program mapping.
+                        </div>
+</div>
+<!-- FAQ Item 2 -->
+<div class="bg-surface-container-low rounded-xl p-8 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-center gap-4">
+<h3 class="font-headline text-xl font-semibold text-on-surface">Are the certifications globally recognized?</h3>
+<span class="material-symbols-outlined text-primary group-hover:rotate-45 transition-transform">add</span>
+</div>
+<div class="mt-4 text-on-surface-variant font-light leading-relaxed hidden">
+                            Yes, FOB Training certifications are accredited by international athletic bodies and recognized across luxury fitness chains and professional sports franchises worldwide.
+                        </div>
+</div>
+<!-- FAQ Item 3 -->
+<div class="bg-surface-container-low rounded-xl p-8 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-center gap-4">
+<h3 class="font-headline text-xl font-semibold text-on-surface">Can I access programs from multiple devices?</h3>
+<span class="material-symbols-outlined text-primary group-hover:rotate-45 transition-transform">add</span>
+</div>
+<div class="mt-4 text-on-surface-variant font-light leading-relaxed hidden">
+                            Absolutely. Our digital platform is fully responsive and offers dedicated applications for iOS and Android, ensuring your training data is synced everywhere.
+                        </div>
+</div>
+<!-- FAQ Item 4 -->
+<div class="bg-surface-container-low rounded-xl p-8 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-center gap-4">
+<h3 class="font-headline text-xl font-semibold text-on-surface">What is the Digital Curator philosophy?</h3>
+<span class="material-symbols-outlined text-primary group-hover:rotate-45 transition-transform">add</span>
+</div>
+<div class="mt-4 text-on-surface-variant font-light leading-relaxed hidden">
+                            It is our approach to elite fitness: treating your physical development with the same meticulous precision and premium care as a curated art editorial.
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#06132a] w-full py-12 px-8 border-t border-outline-variant/10">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-6 font-['Work_Sans'] text-sm tracking-wide">
+<div class="text-lg font-bold text-[#f6bc68]">FOB TRAINING</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Enterprise Solutions</a>
+<a class="text-[#bbc6e6]/60 hover:text-[#f6bc68] underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+<div class="text-[#bbc6e6]/60 uppercase text-[10px] tracking-[0.3em]">
+                © 2024 FOB TRAINING. ALL RIGHTS RESERVED.
+            </div>
+</div>
+</footer>
+</body></html>

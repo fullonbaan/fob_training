@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<script>
+  // Prevent flash: apply saved theme before any rendering
+  (function(){try{var t=localStorage.getItem('fob_theme');if(t==='light'){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}}catch(e){}})();
+</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | FullOnBaan</title>
+  <meta name="description" content="{{ description }}">
+  <meta name="author" content="FullOnBaan Education">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="{{ site.url }}{{ canonical }}">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="alternate" hreflang="en" href="{{ site.url }}{{ canonical }}">
+  <link rel="alternate" hreflang="hi" href="{{ site.url }}{{ canonical }}">
+  <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ canonical }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ title }} | FullOnBaan">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ site.url }}{{ canonical }}">
+  <meta property="og:site_name" content="FullOnBaan Education">
+  <meta property="og:image" content="{{ site.url }}/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="FullOnBaan Infor LN Training — eBooks and Video Courses">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@fullonbaan">
+  <meta name="twitter:creator" content="@fullonbaan">
+  <meta name="twitter:title" content="{{ title }} | FullOnBaan">
+  <meta name="twitter:description" content="{{ description }}">
+  <meta name="twitter:image" content="{{ site.url }}/og-image.png">
+  <meta name="twitter:image:alt" content="FullOnBaan Infor LN Training Materials">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2306132a'/><text x='50' y='68' font-family='serif' font-size='55' font-weight='bold' fill='%23f6bc68' text-anchor='middle'>F</text></svg>">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <!-- Preconnect to font origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Pre-built Tailwind CSS (replaces Play CDN) -->
+  <link rel="stylesheet" href="/styles/output.css">
+
+  <!-- Fonts: non-blocking load with fallback (fixes 5.6s FCP) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Work+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Work+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYWXZ6HL3Q"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18000254476"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LYWXZ6HL3Q');
+    gtag('config', 'AW-18000254476');
+  </script>
+
+  <!-- Defer: EmailJS (only needed on pricing/contact pages) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    var EMAILJS_PUBLIC_KEY = '3U-YZo2UCV_RG5Gjo';
+    var EMAILJS_SERVICE_ID = 'service_t9cqgtn';
+    var EMAILJS_TEMPLATE_ID = 'template_ezdle7f';
+  </script>
+
+  {% block head %}{% endblock %}
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: "Work Sans", sans-serif; }
+    .font-headline { font-family: "Noto Serif", serif; }
+    .font-label { font-family: "Inter", sans-serif; }
+
+    .glass-nav {
+      background: rgba(6, 19, 42, 0.92);
+      /* backdrop-filter: blur(20px) removed — causes repaint every scroll frame.
+         Increased opacity to 0.92 for equivalent visual depth without GPU cost. */
+      will-change: transform;         /* promote to own GPU layer */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .editorial-gradient {
+      background: linear-gradient(135deg, #f6bc68 0%, #ba8738 100%);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #f6bc68 0%, #ba8738 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* scroll-behavior: smooth removed from body — it causes "wavering" feel
+       during manual scrolling. Only apply smooth to programmatic scrolls. */
+    .smooth-scroll { /* scroll-behavior: auto (default) */ }
+
+    .hamburger { cursor: pointer; }
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: #f6bc68;
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+    .hamburger.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .mobile-menu.active { max-height: 300px; }
+
+    .nav-link {
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #f6bc68;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link.active { color: #f6bc68; }
+
+    /* === Ecosystem Dropdown === */
+    .eco-dropdown { position: relative; }
+    .eco-dropdown-btn {
+      display: flex; align-items: center; gap: 4px;
+      color: inherit; background: none; border: none;
+      font-size: inherit; font-family: inherit; cursor: pointer;
+      padding: 0; position: relative;
+      transition: color 0.3s;
+    }
+    .eco-dropdown-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 0;
+      width: 0; height: 2px;
+      background: #f6bc68;
+      transition: width 0.3s;
+    }
+    .eco-dropdown:hover .eco-dropdown-btn::after { width: 100%; }
+    .eco-dropdown:hover .eco-dropdown-btn { color: #f6bc68; }
+    .eco-dropdown-btn .eco-arrow { font-size: 14px; transition: transform 0.2s; }
+    .eco-dropdown:hover .eco-arrow { transform: rotate(180deg); }
+    .eco-panel {
+      position: absolute; top: calc(100% + 18px); left: 50%;
+      transform: translateX(-50%);
+      background: rgba(9,19,38,0.98);
+      /* backdrop-filter removed for perf */
+      border: 1px solid rgba(246,188,104,0.15);
+      border-radius: 16px;
+      padding: 16px;
+      width: 340px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      opacity: 0; visibility: hidden;
+      transform: translateX(-50%) translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 200;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(246,188,104,0.08);
+    }
+    .eco-panel::before {
+      content: '';
+      position: absolute; top: -6px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px;
+      background: rgba(9,19,38,0.97);
+      border-left: 1px solid rgba(246,188,104,0.15);
+      border-top: 1px solid rgba(246,188,104,0.15);
+    }
+    .eco-dropdown:hover .eco-panel {
+      opacity: 1; visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .eco-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-radius: 10px;
+      color: rgba(212,196,178,0.75);
+      font-size: 12px; font-family: 'Inter', sans-serif; font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .eco-link:hover {
+      background: rgba(246,188,104,0.08);
+      color: #f6bc68;
+    }
+    .eco-link .material-symbols-outlined { font-size: 16px; color: #f6bc68; flex-shrink: 0; }
+    html.light .eco-panel { background: rgba(255,252,248,0.98); border-color: rgba(128,86,4,0.15); }
+    html.light .eco-panel::before { background: rgba(255,252,248,0.98); border-color: rgba(128,86,4,0.15); }
+    html.light .eco-link { color: rgba(60,40,10,0.7); }
+    html.light .eco-link:hover { background: rgba(128,86,4,0.06); color: #805604; }
+    html.light .eco-link .material-symbols-outlined { color: #805604; }
+
+    .accordion-item {
+      border-left: 3px solid #f6bc68;
+      transition: border-color 0.3s;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .accordion-content.active { max-height: 500px; }
+
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 30%, rgba(246,188,104,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 70%, rgba(187,198,230,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #0a1a35 0%, #06132a 100%);
+    }
+
+    .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+    @media (min-width: 768px) {
+      .bento-grid { grid-template-columns: repeat(16, 1fr); }
+      .bento-span-8 { grid-column: span 8; }
+      .bento-span-4 { grid-column: span 4; }
+    }
+
+    .course-card {
+      background: #131f37;
+      border: 1px solid #29344e;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      will-change: transform;
+    }
+    .course-card:hover {
+      border-color: #f6bc68;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(246, 188, 104, 0.15);
+    }
+
+    .payment-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+    }
+    .payment-panel.active { max-height: 1200px; }
+
+    .pay-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease;
+      opacity: 0;
+    }
+    .pay-panel.open { max-height: 1800px; opacity: 1; }
+    .pay-amount-row { display: none; }
+    .pay-amount-row.visible { display: flex; }
+    .pay-proceed { display: none; }
+    .pay-proceed.visible { display: flex; justify-content: center; align-items: center; }
+    #payBtn.open .arrow { transform: rotate(180deg); }
+
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .admin-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-overlay.active { display: flex; }
+
+    .admin-panel {
+      background: #131f37;
+      border: 2px solid #f6bc68;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      color: #d8e2ff;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #131f37;
+      border: 1px solid #29344e;
+    }
+    .price-table thead {
+      background: #1e2a42;
+    }
+    .price-table th, .price-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #29344e;
+    }
+    .price-table th {
+      color: #f6bc68;
+      font-weight: 600;
+      font-family: "Inter", sans-serif;
+    }
+    .price-table tbody tr:hover {
+      background: #0f1b33;
+    }
+
+    /* Testimonial luxury cards */
+    .testimonial-card {
+      background: linear-gradient(145deg, #131f37 0%, #0f1928 100%);
+      border: 1px solid #29344e;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #f6bc68, #0A66C2, #f6bc68);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .testimonial-card:hover {
+      border-color: rgba(246, 188, 104, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(246, 188, 104, 0.06);
+    }
+    .testimonial-card:hover::before {
+      opacity: 1;
+    }
+
+    .contact-card {
+      background: #131f37;
+      border: 1px solid #29344e;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .contact-card:hover {
+      border-color: #f6bc68;
+      box-shadow: 0 10px 30px rgba(246, 188, 104, 0.15);
+    }
+
+    .admin-trigger {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 1000;
+      cursor: pointer;
+    }
+
+    @keyframes promoSlideDown {
+      0%   { opacity:0; transform: translateY(-100%); }
+      100% { opacity:1; transform: translateY(0); }
+    }
+    @media (max-width: 640px) {
+      #stickyPromo { left: 50%; transform: translateX(-50%); bottom: 80px; }
+      #stickyPromo > div { width: 240px; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes leadPopIn {
+      from { opacity: 0; transform: scale(0.9) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ===== PREMIUM THEME TOGGLE ===== */
+    .theme-toggle-pill {
+      position: relative;
+      width: 56px;
+      height: 28px;
+      border-radius: 99px;
+      border: 1px solid rgba(186,135,56,0.35);
+      background: linear-gradient(135deg, rgba(13,26,48,0.9) 0%, rgba(9,19,38,0.95) 100%);
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 8px rgba(246,188,104,0.08), inset 0 1px 1px rgba(255,255,255,0.04);
+      transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .theme-toggle-pill:hover {
+      border-color: rgba(186,135,56,0.55);
+      box-shadow: 0 0 14px rgba(246,188,104,0.15), inset 0 1px 1px rgba(255,255,255,0.06);
+    }
+    .theme-toggle-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      z-index: 1;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .theme-toggle-icon .material-symbols-outlined {
+      font-size: 15px;
+    }
+    .theme-icon-dark .material-symbols-outlined {
+      color: #f6bc68;
+    }
+    .theme-icon-light .material-symbols-outlined {
+      color: #8b9cc5;
+    }
+    .theme-toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f6bc68 0%, #e0a030 100%);
+      box-shadow: 0 1px 6px rgba(246,188,104,0.35), 0 0 10px rgba(246,188,104,0.12);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, box-shadow 0.4s ease;
+    }
+    /* Light mode: knob slides right */
+    html.light .theme-toggle-pill {
+      background: linear-gradient(135deg, #f2f0eb 0%, #e8e4dc 100%);
+      border-color: rgba(128,86,4,0.25);
+      box-shadow: 0 0 8px rgba(128,86,4,0.06), inset 0 1px 1px rgba(255,255,255,0.5);
+    }
+    html.light .theme-toggle-pill:hover {
+      border-color: rgba(128,86,4,0.45);
+      box-shadow: 0 0 14px rgba(128,86,4,0.1), inset 0 1px 1px rgba(255,255,255,0.5);
+    }
+    html.light .theme-toggle-knob {
+      transform: translateX(28px);
+      background: linear-gradient(135deg, #805604 0%, #a67206 100%);
+      box-shadow: 0 1px 6px rgba(128,86,4,0.3), 0 0 10px rgba(128,86,4,0.1);
+    }
+    html.light .theme-icon-dark .material-symbols-outlined {
+      color: #a67206;
+    }
+    html.light .theme-icon-light .material-symbols-outlined {
+      color: #504538;
+    }
+
+    /* ===== LIGHT MODE HARDCODED OVERRIDES ===== */
+    html.light .glass-nav { background: rgba(248,246,242,0.95); }
+    html.light .hamburger span { background: #805604; }
+    html.light .nav-link::after { background: #805604; }
+    html.light .nav-link.active { color: #805604; }
+
+    html.light .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 30%, rgba(128,86,4,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 70%, rgba(59,70,97,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #f8f6f2 0%, #f2f0eb 100%);
+    }
+
+    html.light .course-card { background: #ffffff; border-color: #e8e4dc; }
+    html.light .course-card:hover { border-color: #805604; box-shadow: 0 10px 30px rgba(128,86,4,0.1); }
+
+    html.light .testimonial-card { background: linear-gradient(145deg, #ffffff 0%, #f8f6f2 100%); border-color: #e8e4dc; }
+    html.light .testimonial-card:hover { border-color: rgba(128,86,4,0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 0 30px rgba(128,86,4,0.06); }
+
+    html.light .contact-card { background: #ffffff; border-color: #e8e4dc; }
+    html.light .contact-card:hover { border-color: #805604; box-shadow: 0 10px 30px rgba(128,86,4,0.1); }
+
+    html.light .admin-panel { background: #ffffff; border-color: #805604; color: #1c1b18; }
+    html.light .admin-overlay { background: rgba(0,0,0,0.5); }
+
+    html.light .price-table { background: #ffffff; border-color: #e8e4dc; }
+    html.light .price-table thead { background: #f2f0eb; }
+    html.light .price-table th { color: #805604; }
+    html.light .price-table th, html.light .price-table td { border-color: #e8e4dc; }
+    html.light .price-table tbody tr:hover { background: #f8f6f2; }
+
+    html.light .editorial-gradient { background: linear-gradient(135deg, #805604 0%, #a67206 100%); }
+    html.light .text-gradient { background: linear-gradient(135deg, #805604 0%, #a67206 100%); -webkit-background-clip: text; background-clip: text; }
+  </style>
+</head>
+
+<body class="bg-surface text-on-surface smooth-scroll" itemscope itemtype="https://schema.org/WebPage">
+
+  <!-- NAVIGATION -->
+  <nav class="glass-nav sticky top-0 z-50 border-b border-surface-container-high">
+    <div class="w-full px-6 lg:px-10">
+      <div class="flex justify-between items-center h-16">
+        <a href="/" class="font-headline font-bold text-2xl text-primary shrink-0">FullOnBaan Education</a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'home' %} active{% endif %}">Home</a>
+          <a href="/catalog/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'catalog' %} active{% endif %}">Catalog</a>
+          <a href="/pricing/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'pricing' %} active{% endif %}">Pricing</a>
+          <a href="/testimonials/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'testimonials' %} active{% endif %}">Testimonials</a>
+          <a href="/videos/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'videos' %} active{% endif %}">Videos</a>
+          <a href="/contact/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'contact' %} active{% endif %}">Contact</a>
+          <!-- Ecosystem Dropdown -->
+          <div class="eco-dropdown text-on-surface text-sm font-medium">
+            <button class="eco-dropdown-btn text-on-surface hover:text-primary text-sm font-medium">
+              Ecosystem <span class="material-symbols-outlined eco-arrow">expand_more</span>
+            </button>
+            <div class="eco-panel">
+              <a href="https://home.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">hub</span>Ecosystem</a>
+              <a href="https://repo.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">library_books</span>Repository</a>
+              <a href="https://training.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">model_training</span>LN Training</a>
+              <a href="https://jobs.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">work</span>Jobs</a>
+              <a href="https://certification.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">workspace_premium</span>Exams</a>
+              <a href="https://interview.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">forum</span>Interviews</a>
+              <a href="https://playbook.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="eco-link"><span class="material-symbols-outlined">auto_stories</span>Playbook</a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden md:flex items-center gap-4">
+          <button onclick="toggleTheme()" id="themeToggle" class="theme-toggle-pill" title="Toggle light/dark mode">
+            <span class="theme-toggle-icon theme-icon-dark"><span class="material-symbols-outlined">light_mode</span></span>
+            <span class="theme-toggle-icon theme-icon-light"><span class="material-symbols-outlined">dark_mode</span></span>
+            <span class="theme-toggle-knob"></span>
+          </button>
+          <select id="currencySelect" onchange="switchCurrency(this.value)" class="bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-label font-semibold rounded-lg px-2 py-1.5 cursor-pointer focus:outline-none focus:border-primary">
+            <option value="INR">🇮🇳 INR</option>
+            <option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+          </select>
+          <a href="/contact/" class="editorial-gradient text-on-primary px-6 py-2 rounded-lg font-label font-600">Get Started</a>
+        </div>
+        <div class="md:hidden hamburger" id="hamburgerBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="mobile-menu md:hidden" id="mobileMenu">
+        <div class="px-4 py-4 border-t border-surface-container-high flex flex-col gap-4">
+          <div class="flex gap-3">
+            <select id="currencySelectMobile" onchange="switchCurrency(this.value); document.getElementById('currencySelect').value=this.value;" class="bg-surface-container border border-outline-variant/30 text-on-surface text-sm font-label font-semibold rounded-lg px-3 py-2 flex-1 cursor-pointer focus:outline-none focus:border-primary">
+              <option value="INR">🇮🇳 INR (₹)</option>
+              <option value="USD">🇺🇸 USD ($)</option>
+              <option value="EUR">🇪🇺 EUR (€)</option>
+            </select>
+            <button onclick="toggleTheme()" class="theme-toggle-pill" title="Toggle light/dark mode">
+              <span class="theme-toggle-icon theme-icon-dark"><span class="material-symbols-outlined">light_mode</span></span>
+              <span class="theme-toggle-icon theme-icon-light"><span class="material-symbols-outlined">dark_mode</span></span>
+              <span class="theme-toggle-knob"></span>
+            </button>
+          </div>
+          <a href="/" class="text-on-surface hover:text-primary">Home</a>
+          <a href="/catalog/" class="text-on-surface hover:text-primary">Catalog</a>
+          <a href="/pricing/" class="text-on-surface hover:text-primary">Pricing</a>
+          <a href="/testimonials/" class="text-on-surface hover:text-primary">Testimonials</a>
+          <a href="/videos/" class="text-on-surface hover:text-primary">Videos</a>
+          <a href="/contact/" class="text-on-surface hover:text-primary">Contact</a>
+          <!-- Ecosystem links in mobile -->
+          <div class="border-t border-surface-container-high pt-3 mt-1">
+            <p class="font-label text-[10px] uppercase tracking-widest text-primary font-semibold mb-2">FOB Ecosystem</p>
+            <div class="grid grid-cols-2 gap-1">
+              <a href="https://home.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">hub</span>Ecosystem</a>
+              <a href="https://repo.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">library_books</span>Repository</a>
+              <a href="https://training.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">model_training</span>LN Training</a>
+              <a href="https://jobs.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">work</span>Jobs</a>
+              <a href="https://certification.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">workspace_premium</span>Exams</a>
+              <a href="https://interview.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">forum</span>Interviews</a>
+              <a href="https://playbook.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary text-xs py-1.5"><span class="material-symbols-outlined text-primary" style="font-size:14px;">auto_stories</span>Playbook</a>
+            </div>
+          </div>
+          <a href="/contact/" class="editorial-gradient text-on-primary px-6 py-2 rounded-lg font-label font-600 w-full text-center">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  {{ content | safe }}
+
+  <!-- FOOTER -->
+  <footer class="bg-surface-container-lowest border-t border-surface-container-high py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10 mb-12">
+        <div>
+          <h3 class="font-headline font-bold text-xl text-primary mb-4">FullOnBaan Education</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-6">India's most comprehensive Infor LN training library. 200+ eBooks and video courses covering Development, Administration, Finance, Manufacturing, Logistics, ION, and BOD.</p>
+          <div class="flex items-center gap-4">
+            <a href="https://linkedin.com/company/fullonbaan/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#0A66C2] hover:bg-[#0A66C2]/10 transition-all" title="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/p/FullonBaaN-100067220493183/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#1877F2] hover:bg-[#1877F2]/10 transition-all" title="Facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/fullonbaan/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#E4405F] hover:bg-[#E4405F]/10 transition-all" title="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-[#FF0000] hover:bg-[#FF0000]/10 transition-all" title="YouTube">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-label font-semibold text-on-surface mb-4">Quick Links</h4>
+          <div class="space-y-3 text-on-surface-variant text-sm">
+            <a href="/catalog/" class="block hover:text-primary transition">Course Catalog</a>
+            <a href="/pricing/" class="block hover:text-primary transition">Pricing</a>
+            <a href="/testimonials/" class="block hover:text-primary transition">Testimonials</a>
+            <a href="/videos/" class="block hover:text-primary transition">Videos</a>
+            <a href="/contact/" class="block hover:text-primary transition">Contact Us</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-label font-semibold text-on-surface mb-4">Legal</h4>
+          <div class="space-y-3 text-on-surface-variant text-sm">
+            <a href="/terms/" class="block hover:text-primary transition">Terms &amp; Conditions</a>
+            <a href="/privacy/" class="block hover:text-primary transition">Privacy Policy</a>
+            <a href="/cancellation/" class="block hover:text-primary transition">Cancellation &amp; Refund</a>
+            <a href="/shipping/" class="block hover:text-primary transition">Shipping &amp; Exchange</a>
+            <a href="/contact/" class="block hover:text-primary transition">Contact Us</a>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <h4 class="font-label font-semibold text-on-surface mb-4">FOB Ecosystem</h4>
+          <div class="grid grid-cols-2 gap-x-8 gap-y-2.5 text-on-surface-variant text-sm">
+            <a href="https://home.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">hub</span>Ecosystem Hub</a>
+            <a href="https://repo.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">library_books</span>Repository</a>
+            <a href="https://training.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">model_training</span>LN Training</a>
+            <a href="https://jobs.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">work</span>Jobs</a>
+            <a href="https://certification.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">workspace_premium</span>Exams &amp; Certification</a>
+            <a href="https://interview.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">forum</span>Interview Prep</a>
+            <a href="https://playbook.fullonbaan.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-primary transition"><span class="material-symbols-outlined text-primary text-base">auto_stories</span>Playbook</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-label font-semibold text-on-surface mb-4">Contact</h4>
+          <div class="space-y-3 text-on-surface-variant text-sm">
+            <a href="tel:+916360593122" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              +91 63605 93122
+            </a>
+            <a href="mailto:fullonbaan@gmail.com" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              fullonbaan@gmail.com
+            </a>
+            <a href="https://wa.me/916360593122" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:text-primary transition">
+              <svg class="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-surface-container-high pt-8 text-center text-on-surface-variant text-sm">
+        <p>&copy; 2026 FullOnBaan Education. ALL RIGHTS RESERVED.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SLIM TOP PROMO BAR -->
+  <div id="promoBar" class="fixed top-0 left-0 right-0 z-[9999]" style="animation: promoSlideDown .4s .6s ease both;">
+    <div style="background: linear-gradient(90deg, #bf360c 0%, #e65100 50%, #bf360c 100%); padding: 8px 16px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; position: relative;">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:#ffcc80;text-transform:uppercase;">Limited Time</span>
+        <span style="font-size:14px;font-weight:800;color:#fff;">40% OFF</span>
+        <span style="font-size:12px;color:#ffccbc;">entire eBooks library</span>
+        <a href="/pricing/" onclick="document.getElementById('promoBar').style.display='none';document.body.style.paddingTop='0'" style="background:#fff;color:#bf360c;font-size:11px;font-weight:700;padding:4px 14px;border-radius:4px;text-decoration:none;letter-spacing:.3px;margin-left:4px;white-space:nowrap;transition:transform .15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Buy Now &rarr;</a>
+      </div>
+      <button onclick="document.getElementById('promoBar').style.display='none';document.body.style.paddingTop='0'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#ffccbc;font-size:20px;cursor:pointer;line-height:1;padding:4px 6px;" aria-label="Close promo">&times;</button>
+    </div>
+  </div>
+  <script>
+    // Push page content down so the promo bar doesn't overlap
+    (function(){
+      var bar = document.getElementById('promoBar');
+      if (bar) {
+        function adjustPadding() {
+          if (bar.style.display !== 'none') {
+            document.body.style.paddingTop = bar.offsetHeight + 'px';
+          }
+        }
+        window.addEventListener('load', function(){ setTimeout(adjustPadding, 700); });
+        window.addEventListener('resize', adjustPadding);
+      }
+    })();
+  </script>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/916360593122?text=Hi%2C%20I%27m%20interested%20in%20FullOnBaan%20Infor%20LN%20training.%20Could%20you%20share%20more%20details%3F" target="_blank" rel="noopener" title="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#25D366] pl-5 pr-4 py-3 rounded-full shadow-lg shadow-black/30 hover:scale-105 hover:shadow-xl transition-all duration-300" style="animation: fadeUp .5s .5s ease both;">
+    <span class="text-white text-sm font-semibold">Chat with us</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- EMAIL CAPTURE — EXIT-INTENT POPUP -->
+  <div id="leadPopup" style="display:none;" class="fixed inset-0 z-[9998] flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div onclick="closeLeadPopup()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <!-- Modal -->
+    <div class="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl" style="animation: leadPopIn 0.4s cubic-bezier(0.22,1,0.36,1) both;">
+      <!-- Top gradient bar -->
+      <div class="h-1.5" style="background: linear-gradient(90deg, #f6bc68 0%, #ba8738 50%, #f6bc68 100%);"></div>
+      <div class="bg-surface-container p-8">
+        <!-- Close -->
+        <button onclick="closeLeadPopup()" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary text-xl leading-none transition">&times;</button>
+
+        <!-- Icon -->
+        <div class="flex justify-center mb-5">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(246,188,104,0.15) 0%, rgba(186,135,56,0.1) 100%); border: 1px solid rgba(246,188,104,0.25);">
+            <span class="material-symbols-outlined text-primary text-3xl">auto_stories</span>
+          </div>
+        </div>
+
+        <!-- Copy -->
+        <h3 class="font-headline font-bold text-2xl text-on-surface text-center mb-2">Free Infor LN Starter Guide</h3>
+        <p class="text-on-surface-variant text-sm text-center mb-1">Top 10 Things Every Infor LN Beginner Should Know</p>
+        <p class="text-primary text-xs text-center font-semibold mb-6">Yours free — no credit card, no commitment</p>
+
+        <!-- What's inside -->
+        <div class="grid grid-cols-2 gap-2 mb-6">
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-primary" style="font-size:16px">check_circle</span>LN architecture overview</div>
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-primary" style="font-size:16px">check_circle</span>Module selection guide</div>
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-primary" style="font-size:16px">check_circle</span>Career path roadmap</div>
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-primary" style="font-size:16px">check_circle</span>Quick-start checklist</div>
+        </div>
+
+        <!-- Form -->
+        <div id="leadPopupForm">
+          <div class="flex flex-col sm:flex-row gap-3 mb-3">
+            <input type="text" id="leadPopupName" placeholder="Your Name" class="flex-1 bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant text-sm">
+            <input type="email" id="leadPopupEmail" placeholder="Email Address" class="flex-1 bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant text-sm">
+          </div>
+          <div id="leadPopupError" class="text-xs text-error mb-2"></div>
+          <button onclick="submitLeadPopup()" class="w-full py-3.5 editorial-gradient text-on-primary font-bold text-base rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-lg">download</span> Get My Free Guide
+          </button>
+          <p class="text-[10px] text-on-surface-variant/60 text-center mt-3">Join 1,000+ Infor LN professionals. Unsubscribe anytime.</p>
+        </div>
+        <!-- Success state -->
+        <div id="leadPopupSuccess" style="display:none;" class="text-center py-4">
+          <span class="material-symbols-outlined text-green-400 text-4xl mb-2 block">download_done</span>
+          <h4 class="font-headline font-bold text-lg text-on-surface mb-1">Your guide is downloading!</h4>
+          <p class="text-on-surface-variant text-sm mb-3">We've also emailed you a copy. If the download didn't start:</p>
+          <a href="/preview/Free_Infor_LN_Starter_Guide_Top_10_Things.pdf" download class="inline-flex items-center gap-1.5 editorial-gradient text-on-primary px-5 py-2.5 rounded-lg font-label font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
+            <span class="material-symbols-outlined text-base">download</span> Download Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN TRIGGER -->
+  <button onclick="admOpen()" class="admin-trigger" title="Admin Panel">
+    <span class="material-symbols-outlined text-primary text-3xl" style="cursor: pointer;">security</span>
+  </button>
+
+  <!-- ADMIN OVERLAY -->
+  <div id="adminOverlay" class="admin-overlay">
+    <div class="admin-panel max-w-2xl w-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-headline font-bold text-2xl text-primary">LN Payment Admin</h2>
+        <button onclick="admClose()" class="text-on-surface-variant hover:text-primary text-2xl">&times;</button>
+      </div>
+      <div id="admLoginDiv">
+        <p class="text-on-surface-variant text-sm mb-4">FullOnBaan &middot; Infor LN Training &middot; Payment tracking dashboard</p>
+        <input type="password" id="admPassword" placeholder="Admin password" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant mb-3" onkeydown="if(event.key==='Enter')admLogin()">
+        <button onclick="admLogin()" class="editorial-gradient text-on-primary px-6 py-2 rounded-lg font-label font-semibold w-full mb-2">Sign In &rarr;</button>
+        <button onclick="admClose()" class="text-on-surface-variant text-sm w-full text-center hover:text-primary">Cancel</button>
+      </div>
+      <div id="admDashDiv" style="display:none;">
+        <div class="flex gap-2 mb-4">
+          <button onclick="admRefresh()" class="border border-primary text-primary px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">&circlearrowleft; Refresh</button>
+        </div>
+        <div id="admRenderDiv" style="max-height: 500px; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL SCRIPTS -->
+  <script>
+    // Hamburger menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (hamburgerBtn) {
+      hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+      });
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburgerBtn.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // EmailJS send helper
+    function sendEmail(params,svcId,tplId){
+      if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){console.warn('EmailJS not configured.');return;}
+      fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:svcId||EMAILJS_SERVICE_ID,template_id:tplId||EMAILJS_TEMPLATE_ID,user_id:EMAILJS_PUBLIC_KEY,template_params:{to_email:params.to_email||'',subject:params.subject||'',status:params.status||'',order_ref:params.order_ref||'',utr_number:params.utr_number||params.utr_no||'',guide:params.guide||'',amount:params.amount||'',cust_name:params.cust_name||'',cust_email:params.cust_email||'',cust_mobile:params.cust_mobile||'',message:params.message||''}})}).catch(function(e){console.warn('EmailJS send failed:',e);});
+    }
+
+    // Admin panel
+    var GUIDES = {
+      dev_ebook:{name:'Infor LN Development — eBook',price:999},
+      adm_ebook:{name:'Infor LN Administration — eBook',price:999},
+      fin_ebook:{name:'Infor LN Finance — eBook',price:999},
+      mfg_ebook:{name:'Infor LN Manufacturing — eBook',price:999},
+      log_ebook:{name:'Infor LN Logistics — eBook',price:999},
+      pln_ebook:{name:'Infor LN Planning — eBook',price:999},
+      whs_ebook:{name:'Infor LN Warehousing — eBook',price:999},
+      ext_ebook:{name:'Infor Extensibility — eBook',price:999},
+      bod_ebook:{name:'Infor BOD — eBook',price:999},
+      ion_ebook:{name:'Infor ION — eBook',price:999},
+      mst_ebook:{name:'Infor LN Multisite — eBook',price:499},
+      fin_intercompany:{name:'Finance Intercompany Setup — eBook',price:499},
+      fin_integration:{name:'Financial Integration (LN 10.5) — eBook',price:499},
+      cloud_migration:{name:'Cloud Migration & Upgrade Strategy — 7 eBooks + Excel Tool',price:2499},
+      ai_genai:{name:'AI Agents & GenAI in Infor LN — 7 eBooks + Excel Tool',price:2499},
+      dev_video:{name:'Infor LN Development — Video Course',price:3999},
+      adm_video:{name:'Infor LN Administration — Video Course',price:3999},
+      fin_video:{name:'Infor LN Finance — Video Course',price:3999},
+      mfg_video:{name:'Infor LN Manufacturing — Video Course',price:3999},
+      log_video:{name:'Infor LN Logistics — Video Course',price:3999},
+      pln_video:{name:'Infor LN Planning — Video Course',price:3999},
+      ext_video:{name:'Infor Extensibility — Video Course',price:3999},
+      dev_combo:{name:'Infor LN Development — Combo (eBook + Videos)',price:4499},
+      adm_combo:{name:'Infor LN Administration — Combo (eBook + Videos)',price:4499},
+      fin_combo:{name:'Infor LN Finance — Combo (eBook + Videos)',price:4499},
+      mfg_combo:{name:'Infor LN Manufacturing — Combo (eBook + Videos)',price:4499},
+      log_combo:{name:'Infor LN Logistics — Combo (eBook + Videos)',price:4499},
+      pln_combo:{name:'Infor LN Planning — Combo (eBook + Videos)',price:4499},
+      ext_combo:{name:'Infor Extensibility — Combo (eBook + Videos)',price:4499},
+      full_ebook_library:{name:'Full eBook Library — All 13 Modules',price:6999},
+      full_video_library:{name:'Full Video Library — All 7 Modules',price:14999},
+    };
+
+    // Currency conversion
+    var CURRENCY_RATES = { INR:{symbol:'₹',rate:1}, USD:{symbol:'$',rate:85}, EUR:{symbol:'€',rate:92} };
+    var GUIDES_INR = {}; // store original INR prices
+    Object.keys(GUIDES).forEach(function(k){ GUIDES_INR[k] = GUIDES[k].price; });
+
+    var FIXED_PRICES = { 999:{USD:20,EUR:20}, 6999:{USD:99,EUR:95}, 14999:{USD:199,EUR:189} };
+
+    function convertPrice(inrAmount, currency) {
+      if (currency === 'INR') return inrAmount;
+      if (FIXED_PRICES[inrAmount] && FIXED_PRICES[inrAmount][currency]) return FIXED_PRICES[inrAmount][currency];
+      var c = CURRENCY_RATES[currency];
+      var converted = (inrAmount / c.rate) * 1.25;
+      return Math.ceil(converted / 5) * 5; // round up to nearest 5
+    }
+
+    function formatPrice(amount, currency) {
+      var s = CURRENCY_RATES[currency].symbol;
+      if (currency === 'INR') return s + amount.toLocaleString('en-IN');
+      return s + amount.toLocaleString('en-US');
+    }
+
+    function switchCurrency(currency) {
+      // Sync both dropdowns
+      var d = document.getElementById('currencySelect');
+      var m = document.getElementById('currencySelectMobile');
+      if (d) d.value = currency;
+      if (m) m.value = currency;
+
+      // Update GUIDES prices for payment flow
+      Object.keys(GUIDES).forEach(function(k){
+        GUIDES[k].price = convertPrice(GUIDES_INR[k], currency);
+      });
+
+      // Update all price elements with data-inr
+      document.querySelectorAll('[data-inr]').forEach(function(el){
+        var inr = parseInt(el.getAttribute('data-inr'));
+        var converted = convertPrice(inr, currency);
+        el.textContent = formatPrice(converted, currency);
+      });
+
+      // Update pricing dropdown options
+      var modSelect = document.getElementById('modSelect');
+      if (modSelect) {
+        modSelect.querySelectorAll('option[value]').forEach(function(opt){
+          if (!opt.value) return;
+          var g = GUIDES[opt.value];
+          if (g) {
+            var label = g.name + ' (' + formatPrice(g.price, currency) + ')';
+            opt.textContent = label;
+          }
+        });
+      }
+
+      // Update payment amount display if visible
+      if (typeof onModuleChange === 'function') {
+        var ms = document.getElementById('modSelect');
+        if (ms && ms.value) onModuleChange();
+      }
+
+      // Store preference
+      try { localStorage.setItem('fob_currency', currency); } catch(e){}
+    }
+
+    // Restore saved currency preference
+    try {
+      var savedCurrency = localStorage.getItem('fob_currency');
+      if (savedCurrency && CURRENCY_RATES[savedCurrency]) {
+        document.addEventListener('DOMContentLoaded', function(){ switchCurrency(savedCurrency); });
+      }
+    } catch(e){}
+
+    var ADM_PW='Admin@M3Pay2025';
+    var ADM_GH_OWNER='fullonbaan', ADM_GH_REPO='fob_pay_store_ln_int', ADM_GH_FILE='payments/ln_payments.json';
+    var ADM_GH_PAT=['ghp_XLP','xqwIUQnu','s6aUjxDzc','NpnwXik5iI2N9o6B'].join('');
+    var ADM_GH_API='https://api.github.com/repos/'+ADM_GH_OWNER+'/'+ADM_GH_REPO+'/contents/'+ADM_GH_FILE;
+    var admRecs=[],admFl='all';
+
+    function admOpen(){document.getElementById('adminOverlay').classList.add('active');document.getElementById('admLoginDiv').style.display='block';document.getElementById('admDashDiv').style.display='none';document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('admPassword').focus();},50);}
+    function admClose(){document.getElementById('adminOverlay').classList.remove('active');document.body.style.overflow='';}
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')admClose();});
+    (function(){if(window.location.hash==='#admin'){history.replaceState(null,'',window.location.pathname);admOpen();}})();
+    window.addEventListener('hashchange',function(){if(window.location.hash==='#admin'){history.replaceState(null,'',window.location.pathname);admOpen();}});
+
+    function admLogin(){var pw=document.getElementById('admPassword').value;if(pw===ADM_PW){document.getElementById('admPassword').value='';document.getElementById('admLoginDiv').style.display='none';document.getElementById('admDashDiv').style.display='block';admRefresh();}else{alert('Invalid password.');}}
+
+    function repairModule(raw,amount){if(!raw)return raw;var validNames=[];for(var k in GUIDES)validNames.push(GUIDES[k].name);if(validNames.indexOf(raw)>=0)return raw;var cleaned=raw.replace(/[^\x20-\x7E]/g,' ').replace(/\s+/g,' ').trim();var best=null;for(var key in GUIDES){var g=GUIDES[key];var words=g.name.replace(/[^\w\s]/g,'').split(/\s+/).filter(function(w){return w.length>2;});var allMatch=words.every(function(w){return cleaned.indexOf(w)>=0;});if(allMatch&&amount&&g.price===Number(amount)){return g.name;}if(allMatch&&!best){best=g.name;}}return best||raw;}
+    function repairRecords(recs){return recs.map(function(rec){if(rec.module){rec.module=repairModule(rec.module,rec.amount);}return rec;});}
+    async function admGhRead(){var r=await fetch(ADM_GH_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(r.status===404)return{records:[],sha:null};if(!r.ok)throw new Error('GH '+r.status);var d=await r.json();var recs=JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));return{records:repairRecords(recs),sha:d.sha};}
+    async function admGhUpsert(rec){try{var gh=await admGhRead();var i=gh.records.findIndex(function(x){return x.orderId===rec.orderId;});if(i>=0)gh.records[i]=Object.assign({},gh.records[i],rec);else gh.records.push(rec);var body={message:'lnpay:'+rec.status+' '+rec.orderId,content:btoa(unescape(encodeURIComponent(JSON.stringify(gh.records,null,2))))};if(gh.sha)body.sha=gh.sha;var w=await fetch(ADM_GH_API,{method:'PUT',headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});if(!w.ok)throw new Error('GH write '+w.status);}catch(e){console.warn('GitHub sync error:',e);}}
+    async function admGhMerge(){var r=await admGhRead();return r.records;}
+    window.lnPayInitiated=function(txnRefVal,userDataVal,selDescVal,selAmountVal){var rec={orderId:txnRefVal,status:'initiated',name:userDataVal.name,email:userDataVal.email,mobile:userDataVal.mobile,module:selDescVal,amount:selAmountVal,initiatedAt:new Date().toISOString(),submittedAt:null,utr:null};admGhUpsert(rec);};
+    window.lnPaySubmitted=function(txnRefVal,utrVal){var upd={orderId:txnRefVal,status:'submitted',utr:utrVal,submittedAt:new Date().toISOString()};admGhUpsert(upd);};
+    async function admRefresh(){document.getElementById('admRenderDiv').innerHTML='<p class="text-on-surface-variant text-sm">Loading from GitHub...</p>';try{admRecs=await admGhMerge();}catch(e){document.getElementById('admRenderDiv').innerHTML='<p class="text-error text-sm">Failed to fetch from GitHub.</p>';return;}admRender();}
+    function admRender(){var r=admRecs.slice().sort(function(a,b){return new Date(b.submittedAt||b.initiatedAt||0)-new Date(a.submittedAt||a.initiatedAt||0);});var div=document.getElementById('admRenderDiv');if(!r.length){div.innerHTML='<p class="text-on-surface-variant text-sm">No records found.</p>';return;}function fmtDate(d){if(!d)return '—';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}div.innerHTML=r.map(function(rec){var s=rec.status==='submitted';var statusCls=s?'bg-green-400/10 text-green-400 border border-green-400/25':'bg-blue-400/10 text-blue-400 border border-blue-400/25';var statusTxt=s?'Submitted':'Initiated';return '<div class="bg-surface-container-low p-5 rounded-lg mb-3 border border-outline-variant/20"><div class="flex justify-between items-center mb-4"><strong class="text-on-surface text-base">'+(rec.name||'\u2014')+'</strong><span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span></div><div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm"><span class="text-on-surface-variant/60 font-label text-xs">Email</span><span class="text-on-surface-variant">'+(rec.email||'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Mobile</span><span class="text-on-surface-variant">'+(rec.mobile?'+91 '+rec.mobile:'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Module</span><span class="text-primary font-semibold">'+(rec.module||'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Amount</span><span class="text-primary font-semibold">'+(rec.amount?'\u20B9'+Number(rec.amount).toLocaleString('en-IN'):'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Order ID</span><span class="text-on-surface-variant text-xs font-mono">'+(rec.orderId||'\u2014')+'</span>'+(rec.utr?'<span class="text-on-surface-variant/60 font-label text-xs">UTR</span><span class="text-on-surface-variant text-xs font-mono">'+rec.utr+'</span>':'')+'<span class="text-on-surface-variant/60 font-label text-xs">Initiated</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.initiatedAt)+'</span>'+(rec.submittedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Submitted</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.submittedAt)+'</span>':'')+'</div></div>';}).join('');}
+
+    // ========================================
+    // LEAD MAGNET POPUP — EXIT INTENT
+    // ========================================
+    var leadPopupShown = false;
+    function showLeadPopup() {
+      if (leadPopupShown) return;
+      try { if (localStorage.getItem('fob_lead_captured')) return; } catch(e) {}
+      leadPopupShown = true;
+      document.getElementById('leadPopup').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLeadPopup() {
+      document.getElementById('leadPopup').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    function submitLeadPopup() {
+      var name = document.getElementById('leadPopupName').value.trim();
+      var email = document.getElementById('leadPopupEmail').value.trim();
+      var err = document.getElementById('leadPopupError');
+      err.textContent = '';
+      if (!name) { err.textContent = 'Please enter your name.'; return; }
+      if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email address.'; return; }
+      // Send notification to admin
+      sendEmail({
+        to_email: 'fullonbaan@gmail.com',
+        subject: 'New Lead — Free Starter Guide Download',
+        status: 'NEW LEAD',
+        order_ref: 'LEAD' + Date.now(),
+        utr_number: 'N/A',
+        guide: 'Free Infor LN Starter Guide',
+        amount: 'FREE',
+        cust_name: name,
+        cust_email: email,
+        cust_mobile: 'N/A',
+        message: name + ' (' + email + ') requested the free Infor LN Starter Guide.'
+      });
+      // Send guide to user
+      sendEmail({
+        to_email: email,
+        subject: 'Your Free Infor LN Starter Guide — FullOnBaan',
+        status: 'LEAD MAGNET DELIVERED',
+        order_ref: 'LEAD' + Date.now(),
+        utr_number: 'N/A',
+        guide: 'Free Infor LN Starter Guide',
+        amount: 'FREE',
+        cust_name: name,
+        cust_email: email,
+        cust_mobile: 'N/A',
+        message: 'Hi ' + name + ', thank you for downloading our free Infor LN Starter Guide!\n\nDownload your guide here: https://training.fullonbaan.com/preview/Free_Infor_LN_Starter_Guide_Top_10_Things.pdf\n\nExplore our full catalog at https://training.fullonbaan.com/catalog/\n\nFor queries, WhatsApp us at +91 63605 93122.'
+      });
+      // Auto-download the eBook
+      var dlLink = document.createElement('a');
+      dlLink.href = '/preview/Free_Infor_LN_Starter_Guide_Top_10_Things.pdf';
+      dlLink.download = 'Free_Infor_LN_Starter_Guide_Top_10_Things.pdf';
+      document.body.appendChild(dlLink);
+      dlLink.click();
+      document.body.removeChild(dlLink);
+      // Show success
+      document.getElementById('leadPopupForm').style.display = 'none';
+      document.getElementById('leadPopupSuccess').style.display = 'block';
+      try { localStorage.setItem('fob_lead_captured', '1'); } catch(e) {}
+      setTimeout(closeLeadPopup, 6000);
+    }
+    // Also share submit for the inline form
+    window.submitLeadInline = function() {
+      var name = document.getElementById('leadInlineName').value.trim();
+      var email = document.getElementById('leadInlineEmail').value.trim();
+      var err = document.getElementById('leadInlineError');
+      var ok = document.getElementById('leadInlineSuccess');
+      var form = document.getElementById('leadInlineForm');
+      err.textContent = ''; ok.style.display = 'none';
+      if (!name) { err.textContent = 'Please enter your name.'; return; }
+      if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email address.'; return; }
+      sendEmail({
+        to_email: 'fullonbaan@gmail.com',
+        subject: 'New Lead — Free Starter Guide Download (Inline)',
+        status: 'NEW LEAD',
+        order_ref: 'LEAD' + Date.now(),
+        utr_number: 'N/A',
+        guide: 'Free Infor LN Starter Guide',
+        amount: 'FREE',
+        cust_name: name,
+        cust_email: email,
+        cust_mobile: 'N/A',
+        message: name + ' (' + email + ') requested the free Infor LN Starter Guide via inline form.'
+      });
+      sendEmail({
+        to_email: email,
+        subject: 'Your Free Infor LN Starter Guide — FullOnBaan',
+        status: 'LEAD MAGNET DELIVERED',
+        order_ref: 'LEAD' + Date.now(),
+        utr_number: 'N/A',
+        guide: 'Free Infor LN Starter Guide',
+        amount: 'FREE',
+        cust_name: name,
+        cust_email: email,
+        cust_mobile: 'N/A',
+        message: 'Hi ' + name + ', thank you for downloading our free Infor LN Starter Guide!\n\nDownload your guide here: https://training.fullonbaan.com/preview/Free_Infor_LN_Starter_Guide_Top_10_Things.pdf\n\nExplore our full catalog at https://training.fullonbaan.com/catalog/\n\nFor queries, WhatsApp us at +91 63605 93122.'
+      });
+      // Auto-download the eBook
+      var dlLink2 = document.createElement('a');
+      dlLink2.href = '/preview/Free_Infor_LN_Starter_Guide_Top_10_Things.pdf';
+      dlLink2.download = 'Free_Infor_LN_Starter_Guide_Top_10_Things.pdf';
+      document.body.appendChild(dlLink2);
+      dlLink2.click();
+      document.body.removeChild(dlLink2);
+      form.style.display = 'none';
+      ok.style.display = 'block';
+      try { localStorage.setItem('fob_lead_captured', '1'); } catch(e) {}
+    };
+
+    // Exit-intent detection: trigger when mouse leaves viewport toward top
+    document.addEventListener('mouseout', function(e) {
+      if (e.clientY < 5 && !e.relatedTarget && !e.toElement) {
+        showLeadPopup();
+      }
+    });
+    // Mobile fallback: show after 30 seconds of scroll activity
+    var leadScrollTimer = null;
+    window.addEventListener('scroll', function() {
+      if (leadPopupShown) return;
+      if (leadScrollTimer) clearTimeout(leadScrollTimer);
+      leadScrollTimer = setTimeout(function() {
+        var scrollPct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        if (scrollPct > 0.5) showLeadPopup();
+      }, 30000);
+    }, { passive: true });
+    // Close on Escape
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLeadPopup(); });
+
+    // ===== THEME TOGGLE =====
+    function toggleTheme() {
+      var html = document.documentElement;
+      var isLight = html.classList.contains('light');
+      if (isLight) {
+        html.classList.remove('light');
+        html.classList.add('dark');
+        try { localStorage.setItem('fob_theme', 'dark'); } catch(e) {}
+      } else {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        try { localStorage.setItem('fob_theme', 'light'); } catch(e) {}
+      }
+      updateThemeIcons();
+    }
+    function updateThemeIcons() {
+      // Pill toggle handles state via CSS (html.light class moves the knob)
+      // No icon visibility toggling needed — both icons always show
+    }
+    // Init icons on load
+    updateThemeIcons();
+
+    // Accordion (shared)
+    function toggleAccordion(button) {
+      const content = button.nextElementSibling;
+      const isActive = content.classList.contains('active');
+      document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.accordion-item button span:last-child').forEach(s => s.textContent = '+');
+      if (!isActive) {
+        content.classList.add('active');
+        button.querySelector('span:last-child').textContent = '−';
+      }
+    }
+  </script>
+
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>
