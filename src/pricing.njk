@@ -671,7 +671,7 @@ pageId: "pricing"
               <span class="text-sm text-on-surface-variant" id="amountDesc"></span>
               <div class="flex items-baseline gap-2">
                 <span class="font-headline font-bold text-primary text-lg" id="amountVal"></span>
-                <span class="text-[10px] text-on-surface-variant/60 font-label">(excl. GST)</span>
+                <span id="gstExclLabel" class="text-[10px] text-on-surface-variant/60 font-label">(excl. GST)</span>
               </div>
             </div>
             <!-- GST Breakdown -->
@@ -708,7 +708,48 @@ pageId: "pricing"
             <div class="space-y-3 mb-4">
               <input type="text" id="userName" placeholder="Full Name" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
               <input type="email" id="userEmail" placeholder="Email Address" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
-              <input type="tel" id="userMobile" placeholder="Mobile (10 digits)" class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant">
+              <!-- Mobile with country code dropdown -->
+              <div class="flex rounded-lg border border-outline-variant/30 bg-surface-container-low overflow-hidden focus-within:border-primary transition-colors">
+                <label class="text-[9px] font-label uppercase tracking-widest text-primary sr-only" for="userMobileCode">Country Code</label>
+                <select id="userMobileCode" class="bg-surface-container-low text-on-surface text-sm font-semibold pl-2 pr-1 py-3 border-r border-outline-variant/30 focus:outline-none cursor-pointer appearance-none" style="min-width:108px;max-width:120px;">
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+31">🇳🇱 +31</option>
+                  <option value="+32">🇧🇪 +32</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+41">🇨🇭 +41</option>
+                  <option value="+46">🇸🇪 +46</option>
+                  <option value="+48">🇵🇱 +48</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+27">🇿🇦 +27</option>
+                  <option value="+20">🇪🇬 +20</option>
+                  <option value="+234">🇳🇬 +234</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+90">🇹🇷 +90</option>
+                  <option value="+92">🇵🇰 +92</option>
+                  <option value="+94">🇱🇰 +94</option>
+                  <option value="+966">🇸🇦 +966</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+974">🇶🇦 +974</option>
+                  <option value="+965">🇰🇼 +965</option>
+                  <option value="+973">🇧🇭 +973</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+1-CA">🇨🇦 +1</option>
+                </select>
+                <input type="tel" id="userMobile" placeholder="XXXXX XXXXX" class="flex-1 p-3 bg-transparent text-on-surface text-sm placeholder-on-surface-variant focus:outline-none min-w-0">
+              </div>
             </div>
             <div id="fieldError" class="text-sm text-error mb-3"></div>
             <button onclick="goToStep3()" id="rzpPayBtn" class="w-full py-3 editorial-gradient text-on-primary font-bold rounded-lg">
@@ -968,8 +1009,6 @@ pageId: "pricing"
   /* ── Invoice helpers ─────────────────────────────────────────────────── */
   var pendingInvNo   = null;
   var currentInvData = null;
-  // Restore last invoice from localStorage (survives page refresh)
-  try{var _saved=localStorage.getItem('fob_last_inv');if(_saved)currentInvData=JSON.parse(_saved);}catch(e){}
 
   /* ── GitHub config ───────────────────────────────────────────────────── */
   var ADM_GH_OWNER   = 'fullonbaan';
@@ -999,7 +1038,7 @@ pageId: "pricing"
   }
 
   /* ── GitHub payment record storage ──────────────────────────────────── */
-  async function ghRead(){var r=await fetch(ADM_GH_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(r.status===404)return{records:[],sha:null};if(!r.ok)throw new Error('GH '+r.status);var d=await r.json();var blobSha=d.sha;var rawContent=d.content?d.content.replace(/\n/g,''):'';if(!rawContent){var br=await fetch('https://api.github.com/repos/'+ADM_GH_OWNER+'/'+ADM_GH_REPO+'/git/blobs/'+blobSha,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(!br.ok)throw new Error('GH blob '+br.status);var bd=await br.json();rawContent=bd.content?bd.content.replace(/\n/g,''):'';}if(!rawContent)return{records:[],sha:blobSha};return{records:JSON.parse(atob(rawContent)),sha:blobSha};}
+  async function ghRead(){var r=await fetch(ADM_GH_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(r.status===404)return{records:[],sha:null};if(!r.ok)throw new Error('GH '+r.status);var d=await r.json();return{records:JSON.parse(atob(d.content.replace(/\n/g,''))),sha:d.sha};}
   async function ghUpsert(rec){try{var gh=await ghRead();var i=gh.records.findIndex(function(x){return x.orderId===rec.orderId;});if(i>=0)gh.records[i]=Object.assign({},gh.records[i],rec);else gh.records.push(rec);var body={message:'trpay:'+rec.status+' '+rec.orderId,content:btoa(unescape(encodeURIComponent(JSON.stringify(gh.records,null,2))))};if(gh.sha)body.sha=gh.sha;await fetch(ADM_GH_API,{method:'PUT',headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});localStorage.setItem('training_payments',JSON.stringify(gh.records));}catch(e){console.warn('GH upsert failed:',e);}}
 
   /* ── Called when Razorpay opens (record initiated state) ─────────────── */
@@ -1127,9 +1166,37 @@ pageId: "pricing"
   // ======================
   // PAYMENT STATE
   // ======================
-  var selAmount=0, selDesc='', selKey='', selGD={base:0,gst:0,total:0};
+  var selAmount=0, selDesc='', selKey='', selGD={base:0,gst:0,total:0}, selCurr='INR';
   var userData={name:'',email:'',mobile:''};
   var txnRef='', successFired=false, failureFired=false;
+
+  // Sync GUIDES_INR with full product list (pricing page may extend base.njk GUIDES)
+  if (typeof GUIDES_INR !== 'undefined') {
+    Object.keys(GUIDES).forEach(function(k){ if(!GUIDES_INR[k]) GUIDES_INR[k] = GUIDES[k].price; });
+  }
+
+  /* ── Currency helpers (pricing page) ─────────────────────────────────── */
+  function getActiveCurrency() {
+    var el = document.getElementById('currencySelect');
+    return (el && el.value) ? el.value : 'INR';
+  }
+  function getCurrSymbol(curr) {
+    if (typeof CURRENCY_RATES !== 'undefined' && CURRENCY_RATES[curr]) return CURRENCY_RATES[curr].symbol;
+    return '₹';
+  }
+  function formatAmt(amount, curr) {
+    var sym = getCurrSymbol(curr);
+    if (curr === 'INR') return sym + Number(amount).toLocaleString('en-IN', {minimumFractionDigits:2});
+    return sym + Number(amount).toLocaleString('en-US', {minimumFractionDigits:2});
+  }
+  // For INR: apply 18% GST. For international currencies: no GST (flat price).
+  function calcPaymentDetails(basePrice, currency) {
+    if (currency === 'INR') {
+      var gd = calcGSTFromBase(basePrice);
+      return { base: gd.base, gst: gd.gst, total: gd.total, hasGST: true };
+    }
+    return { base: basePrice, gst: 0, total: basePrice, hasGST: false };
+  }
 
   function showStep(id){['step1','step2','step3','step4','step5'].forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=(s===id)?'block':'none';});}
   function hideAmount(){document.getElementById('amountRow').classList.remove('visible');document.getElementById('proceedBtn').classList.remove('visible');var gb=document.getElementById('gstBreakdown');if(gb)gb.style.display='none';}
@@ -1150,16 +1217,25 @@ pageId: "pricing"
     hideAmount();
     if(!selKey)return;
     var g=GUIDES[selKey];if(!g)return;
+    selCurr=getActiveCurrency();
     selAmount=g.price; selDesc=g.name;
-    selGD=calcGSTFromBase(selAmount);
-    // Show base price
+    selGD=calcPaymentDetails(selAmount, selCurr);
+    // Show base price with correct currency symbol
     document.getElementById('amountDesc').textContent=selDesc;
-    document.getElementById('amountVal').textContent='\u20b9'+selAmount.toLocaleString('en-IN');
-    // Show GST breakdown
-    document.getElementById('gstBase').textContent='\u20b9'+selGD.base.toLocaleString('en-IN',{minimumFractionDigits:2});
-    document.getElementById('gstAmt').textContent='\u20b9'+selGD.gst.toLocaleString('en-IN',{minimumFractionDigits:2});
-    document.getElementById('gstTotal').textContent='\u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2});
-    var gb=document.getElementById('gstBreakdown');if(gb)gb.style.display='block';
+    document.getElementById('amountVal').textContent=getCurrSymbol(selCurr)+Number(selAmount).toLocaleString(selCurr==='INR'?'en-IN':'en-US');
+    // Show/hide GST breakdown and "(excl. GST)" label
+    var gb=document.getElementById('gstBreakdown');
+    var gstLbl=document.getElementById('gstExclLabel');
+    if(selCurr==='INR'){
+      document.getElementById('gstBase').textContent=formatAmt(selGD.base, selCurr);
+      document.getElementById('gstAmt').textContent=formatAmt(selGD.gst, selCurr);
+      document.getElementById('gstTotal').textContent=formatAmt(selGD.total, selCurr);
+      if(gb)gb.style.display='block';
+      if(gstLbl)gstLbl.style.display='';
+    }else{
+      if(gb)gb.style.display='none';
+      if(gstLbl)gstLbl.style.display='none';
+    }
     document.getElementById('amountRow').classList.add('visible');
     document.getElementById('proceedBtn').classList.add('visible');
   };
@@ -1167,14 +1243,26 @@ pageId: "pricing"
   window.goToStep2=function(){
     if(!selAmount){alert('Please select a module first.');return;}
     var gd=selGD;
-    document.getElementById('step2Summary').innerHTML=
-      '<strong>'+selDesc+'</strong><br>'+
-      '<span style="color:rgba(212,196,178,0.7);font-size:12px;">Base \u20b9'+gd.base.toLocaleString('en-IN',{minimumFractionDigits:2})+
-      ' &nbsp;+&nbsp; GST 18% \u20b9'+gd.gst.toLocaleString('en-IN',{minimumFractionDigits:2})+
-      ' &nbsp;= <strong style="color:#f6bc68;">\u20b9'+gd.total.toLocaleString('en-IN',{minimumFractionDigits:2})+'</strong></span>';
-    document.getElementById('rzpAmtDisplay').textContent='\u20b9'+gd.total.toLocaleString('en-IN',{minimumFractionDigits:2});
+    var activeCurr=selCurr||getActiveCurrency();
+    var summaryHtml='<strong>'+selDesc+'</strong><br>';
+    if(activeCurr==='INR'){
+      summaryHtml+='<span style="color:rgba(212,196,178,0.7);font-size:12px;">Base '+formatAmt(gd.base,activeCurr)+
+        ' &nbsp;+&nbsp; GST 18% '+formatAmt(gd.gst,activeCurr)+
+        ' &nbsp;= <strong style="color:#f6bc68;">'+formatAmt(gd.total,activeCurr)+'</strong></span>';
+    }else{
+      summaryHtml+='<span style="color:rgba(212,196,178,0.7);font-size:12px;"><strong style="color:#f6bc68;">'+formatAmt(gd.total,activeCurr)+'</strong> (no GST for international orders)</span>';
+    }
+    document.getElementById('step2Summary').innerHTML=summaryHtml;
+    // Update pay button text with correct currency and GST note
+    var payBtnLabel=activeCurr==='INR'
+      ? formatAmt(gd.total,activeCurr)+' (incl. 18% GST)'
+      : formatAmt(gd.total,activeCurr);
+    var rzpPayBtn=document.getElementById('rzpPayBtn');
+    if(rzpPayBtn){
+      rzpPayBtn.innerHTML='Pay <span id="rzpAmtDisplay">'+payBtnLabel+'</span> \u2192';
+    }
     showStep('step2');
-    if(typeof gtag!=='undefined'){gtag('event','add_to_cart',{value:gd.total,currency:'INR',items:[{item_name:selDesc,price:gd.total,quantity:1}]});}
+    if(typeof gtag!=='undefined'){gtag('event','add_to_cart',{value:gd.total,currency:activeCurr,items:[{item_name:selDesc,price:gd.total,quantity:1}]});}
   };
 
   window.goToStep1=function(){showStep('step1');};
@@ -1183,13 +1271,18 @@ pageId: "pricing"
   window.goToStep3=function(){
     var name=document.getElementById('userName').value.trim(),
         email=document.getElementById('userEmail').value.trim(),
-        mobile=document.getElementById('userMobile').value.trim(),
+        mobileRaw=document.getElementById('userMobile').value.replace(/[\s\-().]/g,'').trim(),
+        mobileCodeRaw=document.getElementById('userMobileCode').value,
         err=document.getElementById('fieldError');
+    // Normalise Canada entry (stored as +1-CA to disambiguate from USA in UI)
+    var mobileCode=mobileCodeRaw==='1-CA'?'+1':mobileCodeRaw;
+    var mobile=mobileRaw.replace(/\D/g,'');
     if(!name){err.textContent='Please enter your full name.';return;}
     if(!email||!email.includes('@')){err.textContent='Please enter a valid email address.';return;}
-    if(!mobile||mobile.length<10){err.textContent='Please enter a valid 10-digit mobile number.';return;}
+    var minLen=mobileCode==='+91'?10:7;
+    if(!mobile||mobile.length<minLen){err.textContent='Please enter a valid mobile number ('+(mobileCode==='+91'?'10 digits':'min 7 digits')+').';return;}
     err.textContent='';
-    userData={name:name,email:email,mobile:mobile};
+    userData={name:name,email:email,mobile:mobile,mobileCode:mobileCode,mobileDisplay:mobileCode+' '+mobile};
     txnRef='FOBT'+Date.now();
     successFired=false; failureFired=false;
 
@@ -1200,22 +1293,23 @@ pageId: "pricing"
     });
 
     // Google Ads: begin_checkout
-    if(typeof gtag!=='undefined'){gtag('event','begin_checkout',{value:selGD.total,currency:'INR',items:[{item_name:selDesc,price:selGD.total,quantity:1}]});}
+    var activeCurr=selCurr||getActiveCurrency();
+    if(typeof gtag!=='undefined'){gtag('event','begin_checkout',{value:selGD.total,currency:activeCurr,items:[{item_name:selDesc,price:selGD.total,quantity:1}]});}
 
     var rzpOptions={
       key: RZP_KEY_ID,
-      amount: Math.round(selGD.total * 100),   // paise (total incl. GST)
-      currency: 'INR',
+      amount: Math.round(selGD.total * 100),   // smallest unit: paise for INR, cents for USD/EUR
+      currency: activeCurr,                     // ← correct currency flows to Razorpay
       name: 'FullOnBaan',
       description: selDesc,
       image: 'https://training.fullonbaan.com/og-image.png',
-      prefill: {name:name, email:email, contact:mobile?'+91'+mobile:''},
-      notes: {order_ref:txnRef, module:selDesc, gst_amt:selGD.gst},
+      prefill: {name:name, email:email, contact:mobile?(mobileCode+mobile):email},
+      notes: {order_ref:txnRef, module:selDesc, currency:activeCurr, gst_amt:selGD.gst},
       theme: {color:'#A8782A'},
       handler: function(response){
         var payId=response.razorpay_payment_id;
         // Google Ads: conversion
-        if(typeof gtag!=='undefined'){gtag('event','conversion',{send_to:'AW-18000254476/-yvYCLiW240cEIysmIdD',value:selGD.total,currency:'INR',transaction_id:txnRef});}
+        if(typeof gtag!=='undefined'){gtag('event','conversion',{send_to:'AW-18000254476/-yvYCLiW240cEIysmIdD',value:selGD.total,currency:activeCurr,transaction_id:txnRef});}
         onPaymentSuccess(payId);
       },
       modal:{
@@ -1245,7 +1339,6 @@ pageId: "pricing"
     var dueDate=fmt(new Date(today.getTime()+15*24*60*60*1000));
 
     currentInvData={invNo:invNo,invDate:invDate,dueDate:dueDate,name:userData.name,email:userData.email,mobile:userData.mobile||'',module:selDesc,baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,paymentId:payId,orderRef:txnRef};
-    try{localStorage.setItem('fob_last_inv',JSON.stringify(currentInvData));}catch(e){}
 
     // Update GitHub record
     payConfirmed(txnRef, payId, invNo);
@@ -1253,22 +1346,24 @@ pageId: "pricing"
     // Populate success screen
     document.getElementById('tyEmail').textContent=userData.email;
     document.getElementById('tyDeliveryEmail').textContent=userData.email;
+    var paidCurr=selCurr||'INR';
+    var amtDetail=paidCurr==='INR'
+      ? '<br><strong>Base Amount:</strong> '+formatAmt(selGD.base,paidCurr)+' &nbsp;+&nbsp; <strong>IGST 18%:</strong> '+formatAmt(selGD.gst,paidCurr)+'<br><strong>Total Paid:</strong> '+formatAmt(selGD.total,paidCurr)
+      : '<br><strong>Total Paid:</strong> '+formatAmt(selGD.total,paidCurr);
     document.getElementById('tyOrderBox').innerHTML=
       '<strong>Invoice No:</strong> '+invNo+
       '<br><strong>Order Ref:</strong> '+txnRef+
       '<br><strong>Payment ID:</strong> '+payId+
       '<br><strong>Module:</strong> '+selDesc+
-      '<br><strong>Base Amount:</strong> \u20b9'+selGD.base.toLocaleString('en-IN',{minimumFractionDigits:2})+
-      ' &nbsp;+&nbsp; <strong>IGST 18%:</strong> \u20b9'+selGD.gst.toLocaleString('en-IN',{minimumFractionDigits:2})+
-      '<br><strong>Total Paid:</strong> \u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2})+
+      amtDetail+
       '<br><strong>Name:</strong> '+userData.name+
       '<br><strong>Email:</strong> '+userData.email;
     showStep('step4');
 
     // ONE email to admin
-    sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT CONFIRMED \u2014 RAZORPAY',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Invoice No: '+invNo+'. Razorpay Payment ID: '+payId},'service_2qtgzr5','FOB_Razorpay_Success');
+    sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT CONFIRMED \u2014 RAZORPAY',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Invoice No: '+invNo+'. Razorpay Payment ID: '+payId},'service_2qtgzr5','FOB_Razorpay_Success');
     // ONE email to customer
-    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. GST Invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: fullonbaan@gmail.com'},'service_2qtgzr5','FOB_Razorpay_Success');
+    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. GST Invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: fullonbaan@gmail.com'},'service_2qtgzr5','FOB_Razorpay_Success');
   };
 
   /* ── Payment Failure ─────────────────────────────────────────────────── */
@@ -1277,15 +1372,16 @@ pageId: "pricing"
     payFailed(txnRef);
     var errMsg=errObj?(' Reason: '+(errObj.description||errObj.reason||'Unknown')):'';
     document.getElementById('failContact').textContent=userData.email+(userData.mobile?' / +91 '+userData.mobile:'');
+    var failCurr=selCurr||'INR';
     document.getElementById('failOrderBox').innerHTML=
       '<strong>Module:</strong> '+selDesc+
-      '<br><strong>Amount:</strong> \u20b9'+selGD.total.toLocaleString('en-IN',{minimumFractionDigits:2})+' (incl. GST)'+
+      '<br><strong>Amount:</strong> '+formatAmt(selGD.total,failCurr)+(failCurr==='INR'?' (incl. GST)':'')+
       '<br><strong>Order Ref:</strong> '+txnRef+
       '<br><strong>Name:</strong> '+userData.name+
       '<br><strong>Email:</strong> '+userData.email;
     showStep('step5');
     // ONE email to admin only on failure
-    sendEmail({to_email:'fullonbaan@gmail.com',subject:'Payment Failed \u2014 '+selDesc,status:'PAYMENT FAILED',order_ref:txnRef||'N/A',guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:'+91 '+userData.mobile,message:'Razorpay payment failed.'+errMsg+' Order Ref: '+txnRef},'service_2qtgzr5','FOB_Razorpay_Failure');
+    sendEmail({to_email:'fullonbaan@gmail.com',subject:'Payment Failed \u2014 '+selDesc,status:'PAYMENT FAILED',order_ref:txnRef||'N/A',guide:selDesc,amount:'Rs.'+selGD.total.toFixed(2),cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Razorpay payment failed.'+errMsg+' Order Ref: '+txnRef},'service_2qtgzr5','FOB_Razorpay_Failure');
   };
 
   window.retryPayment=function(){successFired=false;failureFired=false;showStep('step2');};
@@ -1365,11 +1461,7 @@ pageId: "pricing"
 
   window.downloadInvoice=function(invData){
     var d=invData||currentInvData;
-    if(!d){
-      // Try restoring from localStorage one more time
-      try{var _s=localStorage.getItem('fob_last_inv');if(_s){d=JSON.parse(_s);currentInvData=d;}}catch(e){}
-    }
-    if(!d){alert('Invoice not available.\n\nPlease contact us:\nEmail: fullonbaan@gmail.com\nWhatsApp: +91 63605 93122\n\nWe will send your GST invoice within minutes.');return;}
+    if(!d){alert('Invoice not available. Please contact support.');return;}
     try{var doc=generateGSTInvoice(d);doc.save('Invoice-'+d.invNo+'.pdf');}
     catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
   };
