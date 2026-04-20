@@ -858,7 +858,7 @@
     var GUIDES_INR = {}; // store original INR prices
     Object.keys(GUIDES).forEach(function(k){ GUIDES_INR[k] = GUIDES[k].price; });
 
-    var FIXED_PRICES = { 499:{USD:10,EUR:9}, 999:{USD:20,EUR:20}, 1999:{USD:30,EUR:28}, 2499:{USD:40,EUR:37}, 3999:{USD:59,EUR:55}, 4499:{USD:65,EUR:60}, 6999:{USD:99,EUR:95}, 14999:{USD:199,EUR:189} };
+    var FIXED_PRICES = { 499:{USD:10,EUR:9}, 999:{USD:20,EUR:20}, 1999:{USD:30,EUR:28}, 2499:{USD:40,EUR:37}, 3999:{USD:59,EUR:55}, 4499:{USD:65,EUR:60}, 4488:{USD:39,EUR:36}, 6999:{USD:99,EUR:95}, 11487:{USD:159,EUR:149}, 12994:{USD:160,EUR:149}, 14999:{USD:199,EUR:189}, 27993:{USD:359,EUR:339} };
 
     function convertPrice(inrAmount, currency) {
       if (currency === 'INR') return inrAmount;
@@ -892,6 +892,13 @@
         var converted = convertPrice(inr, currency);
         el.textContent = formatPrice(converted, currency);
       });
+
+      // Update Compare Plans footer note
+      var cpNote = document.getElementById('comparePricingNote');
+      if (cpNote) {
+        var sym = CURRENCY_RATES[currency].symbol;
+        cpNote.innerHTML = 'All prices in ' + currency + ' (' + sym + ') &nbsp;&middot;&nbsp; No hidden fees &nbsp;&middot;&nbsp; Instant digital delivery';
+      }
 
       // Update pricing dropdown options
       var modSelect = document.getElementById('modSelect');
