@@ -569,11 +569,11 @@ pageId: "pricing"
           <thead>
             <tr style="background:linear-gradient(160deg,#0d1a30,#091326);">
               <th class="text-left p-4 font-label text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/20 min-w-[160px]">Feature</th>
-              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-on-surface block">eBook</span><span class="text-primary text-base">₹999</span></th>
-              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Video</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹3,999</span></th>
-              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-primary block">Combo</span><span class="text-primary">₹4,499</span></th>
-              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(246,188,104,0.04);"><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full eBook Lib</span><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹6,999</span></th>
-              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(129,140,248,0.04);"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full Video Lib</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹14,999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-on-surface block">eBook</span><span class="text-primary text-base" data-inr="999">₹999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Video</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="3999">₹3,999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[110px]"><span class="text-primary block">Combo</span><span class="text-primary" data-inr="4499">₹4,499</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(246,188,104,0.04);"><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full eBook Lib</span><span style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="6999">₹6,999</span></th>
+              <th class="p-4 font-headline font-bold text-center border-b border-outline-variant/20 min-w-[130px]" style="background:rgba(129,140,248,0.04);"><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="block">Full Video Lib</span><span style="background:linear-gradient(135deg,#818cf8,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="14999">₹14,999</span></th>
             </tr>
           </thead>
           <tbody>
@@ -586,16 +586,15 @@ pageId: "pricing"
               { label: "7-Day Guarantee", vals: ["—","✓","✓","✓","✓"] },
               { label: "Certificate Exam", vals: ["✓","✓","✓","✓","✓"] },
               { label: "Modules Covered", vals: ["1 module","1 module","1 module","All 13","All 7"] },
-              { label: "You Save", vals: ["—","—","₹499","₹4,488","₹12,994"] }
+              { label: "Modules Covered", vals: ["1 module","1 module","1 module","All 13","All 7"] }
             ] %}
             {% for row in rows %}
-            <tr style="{% if loop.index % 2 == 0 %}background:rgba(246,188,104,0.02);{% endif %}{% if row.label == 'You Save' %}background:rgba(74,222,128,0.04);{% endif %}" class="border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors">
+            <tr style="{% if loop.index % 2 == 0 %}background:rgba(246,188,104,0.02);{% endif %}" class="border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors">
               <td class="p-4 font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ row.label }}</td>
               {% for val in row.vals %}
               <td class="p-4 text-center font-label text-sm font-semibold
                 {%- if val == '✓' %} text-green-400
                 {%- elif val == '—' %} text-on-surface-variant/30
-                {%- elif row.label == 'You Save' and val != '—' %} text-green-400
                 {%- else %} text-on-surface
                 {%- endif %}
                 {%- if loop.index == 4 %} " style="background:rgba(246,188,104,0.03);"
@@ -605,10 +604,19 @@ pageId: "pricing"
               {% endfor %}
             </tr>
             {% endfor %}
+            {# You Save row — uses data-inr so switchCurrency() updates it automatically #}
+            <tr style="background:rgba(74,222,128,0.04);" class="border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors">
+              <td class="p-4 font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant">You Save</td>
+              <td class="p-4 text-center font-label text-sm font-semibold text-on-surface-variant/30">—</td>
+              <td class="p-4 text-center font-label text-sm font-semibold text-on-surface-variant/30">—</td>
+              <td class="p-4 text-center font-label text-sm font-semibold text-green-400"><span data-inr="499">₹499</span></td>
+              <td class="p-4 text-center font-label text-sm font-semibold text-green-400" style="background:rgba(246,188,104,0.03);"><span data-inr="4488">₹4,488</span></td>
+              <td class="p-4 text-center font-label text-sm font-semibold text-green-400" style="background:rgba(129,140,248,0.03);"><span data-inr="12994">₹12,994</span></td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <p class="text-center text-xs text-on-surface-variant mt-3">All prices in INR (₹) &nbsp;·&nbsp; No hidden fees &nbsp;·&nbsp; Instant digital delivery</p>
+      <p class="text-center text-xs text-on-surface-variant mt-3" id="comparePricingNote">All prices in INR (₹) &nbsp;·&nbsp; No hidden fees &nbsp;·&nbsp; Instant digital delivery</p>
     </div>
 
     <!-- PURCHASE BUTTON & PAYMENT FLOW -->
