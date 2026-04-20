@@ -849,8 +849,8 @@
       pln_combo:{name:'Infor LN Planning — Combo (eBook + Videos)',price:4499},
       whs_combo:{name:'Infor LN Warehousing — Combo (eBook + Videos)',price:4499},
       ext_combo:{name:'Infor Extensibility — Combo (eBook + Videos)',price:4499},
-      full_ebook_library:{name:'Full eBook Library — All 13 Modules',price:6999},
-      full_video_library:{name:'Full Video Library — All 7 Modules',price:14999},
+      full_ebook_library:{name:'Full eBook Library — All 13 Modules',price:7999},
+      full_video_library:{name:'Full Video Library — All 8 Modules',price:19199},
     };
 
     // Currency conversion
@@ -858,7 +858,7 @@
     var GUIDES_INR = {}; // store original INR prices
     Object.keys(GUIDES).forEach(function(k){ GUIDES_INR[k] = GUIDES[k].price; });
 
-    var FIXED_PRICES = { 499:{USD:10,EUR:9}, 999:{USD:20,EUR:20}, 1999:{USD:30,EUR:28}, 2499:{USD:40,EUR:37}, 3999:{USD:59,EUR:55}, 4499:{USD:65,EUR:60}, 4488:{USD:39,EUR:36}, 6999:{USD:99,EUR:95}, 11487:{USD:159,EUR:149}, 12994:{USD:160,EUR:149}, 14999:{USD:199,EUR:189}, 27993:{USD:359,EUR:339} };
+    var FIXED_PRICES = { 499:{USD:10,EUR:9}, 999:{USD:20,EUR:20}, 1999:{USD:30,EUR:28}, 2499:{USD:40,EUR:37}, 3488:{USD:45,EUR:40}, 3999:{USD:59,EUR:55}, 4499:{USD:65,EUR:60}, 4488:{USD:39,EUR:36}, 6999:{USD:99,EUR:95}, 7999:{USD:109,EUR:99}, 11487:{USD:159,EUR:149}, 12793:{USD:165,EUR:149}, 12994:{USD:160,EUR:149}, 14999:{USD:199,EUR:189}, 19199:{USD:249,EUR:229}, 27993:{USD:359,EUR:339}, 31992:{USD:419,EUR:389} };
 
     function convertPrice(inrAmount, currency) {
       if (currency === 'INR') return inrAmount;
