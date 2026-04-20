@@ -968,6 +968,8 @@ pageId: "pricing"
   /* ── Invoice helpers ─────────────────────────────────────────────────── */
   var pendingInvNo   = null;
   var currentInvData = null;
+  // Restore last invoice from localStorage (survives page refresh)
+  try{var _saved=localStorage.getItem('fob_last_inv');if(_saved)currentInvData=JSON.parse(_saved);}catch(e){}
 
   /* ── GitHub config ───────────────────────────────────────────────────── */
   var ADM_GH_OWNER   = 'fullonbaan';
@@ -1243,6 +1245,7 @@ pageId: "pricing"
     var dueDate=fmt(new Date(today.getTime()+15*24*60*60*1000));
 
     currentInvData={invNo:invNo,invDate:invDate,dueDate:dueDate,name:userData.name,email:userData.email,mobile:userData.mobile||'',module:selDesc,baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,paymentId:payId,orderRef:txnRef};
+    try{localStorage.setItem('fob_last_inv',JSON.stringify(currentInvData));}catch(e){}
 
     // Update GitHub record
     payConfirmed(txnRef, payId, invNo);
@@ -1362,7 +1365,11 @@ pageId: "pricing"
 
   window.downloadInvoice=function(invData){
     var d=invData||currentInvData;
-    if(!d){alert('Invoice not available. Please contact support.');return;}
+    if(!d){
+      // Try restoring from localStorage one more time
+      try{var _s=localStorage.getItem('fob_last_inv');if(_s){d=JSON.parse(_s);currentInvData=d;}}catch(e){}
+    }
+    if(!d){alert('Invoice not available.\n\nPlease contact us:\nEmail: fullonbaan@gmail.com\nWhatsApp: +91 63605 93122\n\nWe will send your GST invoice within minutes.');return;}
     try{var doc=generateGSTInvoice(d);doc.save('Invoice-'+d.invNo+'.pdf');}
     catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
   };
