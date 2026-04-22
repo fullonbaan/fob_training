@@ -1017,9 +1017,18 @@ pageId: "pricing"
   var ADM_API = '/api/payments';
   var ADM_PW  = 'Admin@M3Pay2025';
 
-  /* ── Invoice number — timestamp-based (unique, no GitHub round-trip) ── */
+  /* ── Invoice number — sequential via /api/invoice-counter ──────────── */
   async function genInvoiceNoGH() {
-    return 'FOBT' + Date.now();
+    try {
+      var r = await fetch('/api/invoice-counter');
+      if (r.ok) {
+        var d = await r.json();
+        return d.invoiceNo;
+      }
+    } catch(e) {
+      console.warn('Invoice counter API error — using timestamp fallback:', e);
+    }
+    return 'FOBT' + Date.now(); // fallback only if API is down
   }
 
   /* ── Payment record storage via proxy ───────────────────────────────── */
