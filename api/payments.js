@@ -1,14 +1,11 @@
 // api/payments.js — Secure GitHub proxy for LN Payment records
-// The GITHUB_PAT environment variable is set in Vercel dashboard (never in code).
+// GITHUB_PAT must be set as a Vercel environment variable.
 
 const https = require('https');
 
 const GH_OWNER = 'fullonbaan';
 const GH_REPO  = 'fob_pay_store_ln_int';
 const GH_FILE  = 'payments/ln_payments.json';
-const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
-
-// ── helpers ──────────────────────────────────────────────────────────────────
 
 function ghRequest(method, bodyObj) {
   return new Promise((resolve, reject) => {
@@ -21,7 +18,7 @@ function ghRequest(method, bodyObj) {
       path: `/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,
       method,
       headers: {
-        'Authorization': `token ${pat}`,
+        'Authorization': `token ${pat.trim()}`,
         'Accept':        'application/vnd.github.v3+json',
         'User-Agent':    'fob-payments-proxy/1.0',
         'Content-Type':  'application/json',
@@ -30,9 +27,12 @@ function ghRequest(method, bodyObj) {
     };
 
     const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => { data += chunk; });
-      res.on('end',  ()    => resolve({ status: res.statusCode, body: data }));
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const body = Buffer.concat(chunks).toString('utf8');
+        resolve({ status: res.statusCode, body });
+      });
     });
 
     req.on('error', reject);
@@ -41,10 +41,7 @@ function ghRequest(method, bodyObj) {
   });
 }
 
-// ── handler ───────────────────────────────────────────────────────────────────
-
 module.exports = async function handler(req, res) {
-  // CORS — only allow your own domain in production; '*' is fine for same-origin Vercel
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -52,25 +49,50 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    // ── GET: read payment records ──────────────────────────────────────────
+    // ── GET: read payment records ─────────────────────────────────────────
     if (req.method === 'GET') {
       const result = await ghRequest('GET');
 
+      // File not created yet — return empty list
       if (result.status === 404) {
         return res.status(200).json({ records: [], sha: null });
       }
+
       if (result.status !== 200) {
-        return res.status(502).json({ error: `GitHub returned ${result.status}` });
+        console.error('GitHub GET error', result.status, result.body.slice(0, 200));
+        return res.status(502).json({ error: `GitHub returned ${result.status}: ${result.body.slice(0, 100)}` });
       }
 
-      const data    = JSON.parse(result.body);
-      const records = JSON.parse(
-        Buffer.from(data.content.replace(/\n/g, ''), 'base64').toString('utf8')
-      );
-      return res.status(200).json({ records, sha: data.sha });
+      if (!result.body) {
+        return res.status(502).json({ error: 'GitHub returned empty response body' });
+      }
+
+      let ghData;
+      try {
+        ghData = JSON.parse(result.body);
+      } catch (e) {
+        console.error('JSON parse error on GitHub response:', result.body.slice(0, 200));
+        return res.status(502).json({ error: 'Invalid JSON from GitHub: ' + e.message });
+      }
+
+      if (!ghData.content) {
+        // File exists but is empty
+        return res.status(200).json({ records: [], sha: ghData.sha || null });
+      }
+
+      let records;
+      try {
+        const decoded = Buffer.from(ghData.content.replace(/\n/g, ''), 'base64').toString('utf8');
+        records = decoded.trim() ? JSON.parse(decoded) : [];
+      } catch (e) {
+        console.error('Base64/JSON decode error:', e.message);
+        return res.status(502).json({ error: 'Failed to decode payment records: ' + e.message });
+      }
+
+      return res.status(200).json({ records, sha: ghData.sha });
     }
 
-    // ── PUT: write / upsert a record ───────────────────────────────────────
+    // ── PUT: write / upsert a record ──────────────────────────────────────
     if (req.method === 'PUT') {
       const { records, sha, message } = req.body || {};
 
@@ -85,10 +107,17 @@ module.exports = async function handler(req, res) {
       const result = await ghRequest('PUT', body);
 
       if (result.status !== 200 && result.status !== 201) {
-        return res.status(502).json({ error: `GitHub write returned ${result.status}` });
+        console.error('GitHub PUT error', result.status, result.body.slice(0, 200));
+        return res.status(502).json({ error: `GitHub write returned ${result.status}: ${result.body.slice(0, 100)}` });
       }
 
-      const data = JSON.parse(result.body);
+      let data;
+      try {
+        data = JSON.parse(result.body);
+      } catch (e) {
+        return res.status(502).json({ error: 'Invalid JSON from GitHub write response' });
+      }
+
       return res.status(200).json({ sha: data.content.sha });
     }
 
