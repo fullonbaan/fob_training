@@ -61,6 +61,10 @@
     gtag('config', 'AW-18000254476');
   </script>
 
+  <!-- jsPDF + AutoTable for GST Invoice generation (admin panel + pricing page) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+
   <!-- Defer: EmailJS (only needed on pricing/contact pages) -->
   <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
@@ -934,6 +938,84 @@
     var ADM_PW='Admin@M3Pay2025';
     var ADM_API='/api/payments';
     var admRecs=[],admFl='all';
+    // Logo placeholder — pricing.njk overrides with actual base64 when loaded on that page
+    var FOB_LOGO_B64='';
+
+    /* ── Number-to-Words (Indian) ──────────────────────────────────────── */
+    function numToWords(n){var ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];var tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];function conv(x){if(x===0)return'';if(x<20)return ones[x]+' ';if(x<100)return tens[Math.floor(x/10)]+' '+(x%10?ones[x%10]+' ':'');if(x<1000)return ones[Math.floor(x/100)]+' Hundred '+(x%100?conv(x%100):'');if(x<100000)return conv(Math.floor(x/1000))+'Thousand '+(x%1000?conv(x%1000):'');if(x<10000000)return conv(Math.floor(x/100000))+'Lakh '+(x%100000?conv(x%100000):'');return conv(Math.floor(x/10000000))+'Crore '+(x%10000000?conv(x%10000000):'');}var r=Math.floor(n),p=Math.round((n-r)*100);var w='Indian Rupee '+conv(r).trim()+(p?' and '+conv(p).trim()+' Paise':'')+' Only';return w.replace(/\s+/g,' ');}
+
+    /* ── GST Invoice PDF builder ───────────────────────────────────────── */
+    function generateGSTInvoice(inv){
+      var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
+      var W=doc.internal.pageSize.getWidth();var H=doc.internal.pageSize.getHeight();
+      var NAVY=[10,32,68];var GOLD=[192,140,52];var GOLD2=[240,210,140];var WHITE=[255,255,255];var INK=[25,25,35];var GREY=[110,110,125];var LGREY=[245,245,248];var MGREY=[210,210,218];
+      var fmt2=function(v){return Number(v).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});};var PAD=32;
+      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,0,W,96,'F');
+      try{if(FOB_LOGO_B64)doc.addImage(FOB_LOGO_B64,'JPEG',PAD,14,70,52);}catch(e){}
+      doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
+      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+      doc.text('Invoice No: '+inv.invNo,W-PAD,60,{align:'right'});doc.text('Date: '+inv.invDate,W-PAD,74,{align:'right'});
+      doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,96,W,4,'F');
+      var r1Y=106,r1H=112,midX=W/2+10;
+      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(PAD,r1Y,midX-PAD-8,r1H,'F');
+      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(PAD,r1Y,midX-PAD-8,r1H,'S');
+      doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('FULLONBAAN CONSULTING SERVICE LLP',PAD+10,r1Y+16);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(INK[0],INK[1],INK[2]);
+      ['172, Shree, 1st Floor, 5th Main, 5th Cross','Mico Layout, BTM 2nd Stage','BANGALORE Karnataka 560076, India','TAN: BLRF03997A   |   PAN: AAFFF1528H','GSTIN: 29AAFFF1528H1ZH'].forEach(function(l,i){doc.text(l,PAD+10,r1Y+30+i*15);});
+      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(midX,r1Y,W-midX-PAD,r1H,'F');
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text('BALANCE DUE',W-PAD-8,r1Y+16,{align:'right'});
+      doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('Rs. '+fmt2(inv.totalAmt),W-PAD-8,r1Y+42,{align:'right'});
+      doc.setLineWidth(0.5);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.line(midX+10,r1Y+50,W-PAD-8,r1Y+50);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+      ['Invoice Date:','Terms:','Due Date:'].forEach(function(l,i){doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text(l,midX+12,r1Y+64+i*15);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text([inv.invDate,'Immediate',inv.dueDate||'—'][i],W-PAD-8,r1Y+64+i*15,{align:'right'});});
+      var r2Y=r1Y+r1H+10,r2H=88;
+      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.setLineWidth(0.6);doc.rect(PAD,r2Y,midX-PAD-8,r2H,'FD');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('BILL TO',PAD+10,r2Y+14);
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(inv.name,PAD+10,r2Y+30);
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(inv.email,PAD+10,r2Y+46);
+      if(inv.mobile)doc.text('+91 '+inv.mobile,PAD+10,r2Y+61);
+      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.rect(midX,r2Y,W-midX-PAD,r2H,'FD');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('SERVICE DETAILS',midX+12,r2Y+14);
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);
+      doc.text('SAC Code: 998431',midX+12,r2Y+30);doc.text('Tax Type: IGST @ 18%',midX+12,r2Y+46);
+      doc.text('Payment Ref: '+(inv.paymentId||'').slice(0,22),midX+12,r2Y+61);doc.text('Order Ref: '+(inv.orderRef||inv.orderId||''),midX+12,r2Y+76);
+      var tY=r2Y+r2H+12;
+      doc.autoTable({startY:tY,head:[['Sr.','Item & Description','Qty','Rate (INR)','Amount (INR)']],body:[['1',(inv.module||'Training Material')+'\n\nSAC: 998431','1',fmt2(inv.baseAmt),fmt2(inv.baseAmt)]],theme:'plain',headStyles:{fillColor:NAVY,textColor:WHITE,fontStyle:'bold',fontSize:9,halign:'center',cellPadding:9},bodyStyles:{fontSize:9,textColor:INK,cellPadding:{top:14,right:8,bottom:14,left:8}},columnStyles:{0:{cellWidth:44,halign:'center'},1:{cellWidth:'auto'},2:{cellWidth:40,halign:'center'},3:{cellWidth:95,halign:'right'},4:{cellWidth:95,halign:'right'}},margin:{left:PAD,right:PAD},alternateRowStyles:{fillColor:LGREY},tableLineColor:MGREY,tableLineWidth:0.5});
+      var fY=doc.lastAutoTable.finalY+14,totW=260,totX=W-PAD-totW;
+      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(totX,fY,totW,30,'F');
+      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Sub Total',totX+14,fY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.baseAmt),W-PAD-8,fY+19,{align:'right'});
+      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,fY+30,totW,30,'F');
+      doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST18 (18%)',totX+14,fY+49);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.gstAmt),W-PAD-8,fY+49,{align:'right'});
+      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(totX,fY+60,totW,38,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TOTAL',totX+14,fY+84);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text('INR '+fmt2(inv.totalAmt),W-PAD-8,fY+84,{align:'right'});
+      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(totX,fY,totW,98,'S');
+      var wY=fY+112;
+      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(PAD,wY,W-2*PAD,48,'FD');
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Amount in Words:',PAD+10,wY+16);
+      doc.setFont('helvetica','bolditalic');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);
+      doc.text(doc.splitTextToSize(numToWords(inv.totalAmt),W-2*PAD-130),PAD+120,wY+16);
+      var tcY=wY+62;
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Terms & Conditions',PAD,tcY+2);
+      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.6);doc.line(PAD,tcY+6,W-PAD,tcY+6);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);
+      doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   training.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
+      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,H-38,W,38,'F');
+      doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,H-42,W,4,'F');
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);
+      doc.text('training.fullonbaan.com   •   fullonbaan@gmail.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
+      return doc;
+    }
+
+    /* ── Admin: download GST Invoice for a record ──────────────────────── */
+    function admDlInvoice(orderId){
+      var rec=admRecs.find(function(x){return x.orderId===orderId;});
+      if(!rec){alert('Record not found.');return;}
+      if(!rec.invoiceNo){alert('Invoice data unavailable for this record.');return;}
+      try{
+        var inv={invNo:rec.invoiceNo,invDate:rec.invDate||'—',dueDate:rec.dueDate||'—',name:rec.name||'—',email:rec.email||'—',mobile:rec.mobile||'',module:rec.module||'Training Material',baseAmt:Number(rec.baseAmt)||0,gstAmt:Number(rec.gstAmt)||0,totalAmt:Number(rec.totalAmt||rec.amount)||0,paymentId:rec.paymentId||'—',orderRef:rec.orderId};
+        var doc=generateGSTInvoice(inv);doc.save('Invoice-'+inv.invNo+'.pdf');
+      }catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
+    }
 
     function admOpen(){document.getElementById('adminOverlay').classList.add('active');document.getElementById('admLoginDiv').style.display='block';document.getElementById('admDashDiv').style.display='none';document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('admPassword').focus();},50);}
     function admClose(){document.getElementById('adminOverlay').classList.remove('active');document.body.style.overflow='';}
@@ -951,7 +1033,43 @@
     window.lnPayInitiated=function(txnRefVal,userDataVal,selDescVal,selAmountVal){var rec={orderId:txnRefVal,status:'initiated',name:userDataVal.name,email:userDataVal.email,mobile:userDataVal.mobile,module:selDescVal,amount:selAmountVal,initiatedAt:new Date().toISOString(),submittedAt:null,utr:null};admGhUpsert(rec);};
     window.lnPaySubmitted=function(txnRefVal,utrVal){var upd={orderId:txnRefVal,status:'submitted',utr:utrVal,submittedAt:new Date().toISOString()};admGhUpsert(upd);};
     async function admRefresh(){document.getElementById('admRenderDiv').innerHTML='<p class="text-on-surface-variant text-sm">Loading from GitHub...</p>';try{admRecs=await admGhMerge();}catch(e){document.getElementById('admRenderDiv').innerHTML='<p class="text-error text-sm">Failed to fetch from GitHub.</p>';return;}admRender();}
-    function admRender(){var r=admRecs.slice().sort(function(a,b){return new Date(b.submittedAt||b.initiatedAt||0)-new Date(a.submittedAt||a.initiatedAt||0);});var div=document.getElementById('admRenderDiv');if(!r.length){div.innerHTML='<p class="text-on-surface-variant text-sm">No records found.</p>';return;}function fmtDate(d){if(!d)return '—';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}div.innerHTML=r.map(function(rec){var s=rec.status==='submitted';var statusCls=s?'bg-green-400/10 text-green-400 border border-green-400/25':'bg-blue-400/10 text-blue-400 border border-blue-400/25';var statusTxt=s?'Submitted':'Initiated';return '<div class="bg-surface-container-low p-5 rounded-lg mb-3 border border-outline-variant/20"><div class="flex justify-between items-center mb-4"><strong class="text-on-surface text-base">'+(rec.name||'\u2014')+'</strong><span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span></div><div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm"><span class="text-on-surface-variant/60 font-label text-xs">Email</span><span class="text-on-surface-variant">'+(rec.email||'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Mobile</span><span class="text-on-surface-variant">'+(rec.mobile?'+91 '+rec.mobile:'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Module</span><span class="text-primary font-semibold">'+(rec.module||'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Amount</span><span class="text-primary font-semibold">'+(rec.amount?'\u20B9'+Number(rec.amount).toLocaleString('en-IN'):'\u2014')+'</span><span class="text-on-surface-variant/60 font-label text-xs">Order ID</span><span class="text-on-surface-variant text-xs font-mono">'+(rec.orderId||'\u2014')+'</span>'+(rec.utr?'<span class="text-on-surface-variant/60 font-label text-xs">UTR</span><span class="text-on-surface-variant text-xs font-mono">'+rec.utr+'</span>':'')+'<span class="text-on-surface-variant/60 font-label text-xs">Initiated</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.initiatedAt)+'</span>'+(rec.submittedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Submitted</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.submittedAt)+'</span>':'')+'</div></div>';}).join('');}
+    function admRender(){
+      var r=admRecs.slice().sort(function(a,b){return new Date(b.confirmedAt||b.submittedAt||b.initiatedAt||0)-new Date(a.confirmedAt||a.submittedAt||a.initiatedAt||0);});
+      var div=document.getElementById('admRenderDiv');
+      if(!r.length){div.innerHTML='<p class="text-on-surface-variant text-sm">No records found.</p>';return;}
+      function fmtDate(d){if(!d)return '\u2014';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      function escQ(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+      div.innerHTML=r.map(function(rec){
+        var confirmed=rec.status==='confirmed';
+        var submitted=rec.status==='submitted';
+        var statusCls=confirmed?'bg-green-400/10 text-green-400 border border-green-400/25':submitted?'bg-yellow-400/10 text-yellow-400 border border-yellow-400/25':'bg-blue-400/10 text-blue-400 border border-blue-400/25';
+        var statusTxt=confirmed?'Confirmed':submitted?'Submitted':'Initiated';
+        var amtDisplay=rec.totalAmt?('\u20B9'+Number(rec.totalAmt).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})):rec.amount?('\u20B9'+Number(rec.amount).toLocaleString('en-IN')):'\u2014';
+        var gstRow=rec.baseAmt&&rec.gstAmt?'<span class="text-on-surface-variant/60 font-label text-xs">GST Breakdown</span><span class="text-on-surface-variant text-xs">Base \u20B9'+Number(rec.baseAmt).toFixed(2)+' + IGST \u20B9'+Number(rec.gstAmt).toFixed(2)+'</span>':'';
+        var invRow=rec.invoiceNo?'<span class="text-on-surface-variant/60 font-label text-xs">Invoice No</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.invoiceNo)+'</span>':'';
+        var payIdRow=rec.paymentId?'<span class="text-on-surface-variant/60 font-label text-xs">Payment ID</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.paymentId)+'</span>':'';
+        var confirmedRow=rec.confirmedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Confirmed</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.confirmedAt)+'</span>':'';
+        var submittedRow=rec.submittedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Submitted</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.submittedAt)+'</span>':'';
+        var invBtn=rec.invoiceNo&&rec.gstAmt?'<button onclick="admDlInvoice(\''+escQ(rec.orderId)+'\')" class="mt-3 inline-flex items-center gap-1.5 editorial-gradient text-on-primary px-4 py-1.5 rounded-lg font-label font-semibold text-xs hover:opacity-90 transition-opacity">&#x1F4C4; Download GST Invoice</button>':'';
+        return '<div class="bg-surface-container-low p-5 rounded-lg mb-3 border border-outline-variant/20">'
+          +'<div class="flex justify-between items-center mb-4"><strong class="text-on-surface text-base">'+esc(rec.name||'\u2014')+'</strong><span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span></div>'
+          +'<div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">'
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Email</span><span class="text-on-surface-variant">'+esc(rec.email||'\u2014')+'</span>'
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Mobile</span><span class="text-on-surface-variant">'+(rec.mobile?'+91 '+esc(rec.mobile):'\u2014')+'</span>'
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Module</span><span class="text-primary font-semibold">'+esc(rec.module||'\u2014')+'</span>'
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Amount</span><span class="text-primary font-semibold">'+amtDisplay+'</span>'
+          +gstRow
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Order ID</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.orderId||'\u2014')+'</span>'
+          +(rec.utr?'<span class="text-on-surface-variant/60 font-label text-xs">UTR</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.utr)+'</span>':'')
+          +payIdRow+invRow
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Initiated</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.initiatedAt)+'</span>'
+          +submittedRow+confirmedRow
+          +'</div>'
+          +invBtn
+          +'</div>';
+      }).join('');
+    }
 
     // ========================================
     // LEAD MAGNET POPUP — EXIT INTENT
