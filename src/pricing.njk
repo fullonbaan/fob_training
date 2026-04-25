@@ -367,7 +367,8 @@ pageId: "pricing"
         { name: "Infor LN Multisite", icon: "language", key: "mst_ebook", price: "499", badge: "NEW", preview: "/preview/preview_Multisite.pdf", ebookCount: "5 eBooks", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=60" },
         { name: "Finance Intercompany Setup", icon: "currency_exchange", key: "fin_intercompany", price: "499", badge: "NEW", preview: "/preview/preview_Finance_Intercompany.pdf", ebookCount: "1 eBook", img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=60" },
         { name: "Financial Integration (LN 10.5)", icon: "integration_instructions", key: "fin_integration", price: "499", badge: "NEW", preview: "/preview/preview_Financial_Integration.pdf", ebookCount: "1 eBook", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=60" },
-        { name: "Infor OS", icon: "cloud_circle", key: "infor_os", price: "1999", badge: "ON DEMAND", preview: "/preview/preview_Infor_OS.pdf", ebookCount: "11 eBooks", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=60" }
+        { name: "Infor OS", icon: "cloud_circle", key: "infor_os", price: "1999", badge: "ON DEMAND", preview: "/preview/preview_Infor_OS.pdf", ebookCount: "11 eBooks", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=60" },
+        { name: "Infor IDM", icon: "folder_managed", key: "idm_ebook", price: "999", badge: "NEW", preview: "/preview/preview_IDM.pdf", ebookCount: "6 eBooks", img: "https://images.unsplash.com/photo-1568667256549-094345857637?w=400&q=60" }
       ] %}
       {% for mod in allEbooks %}
       <div class="price-card" data-category="ebook" onclick="selectModule('{{ mod.key }}', event)">
@@ -656,6 +657,7 @@ pageId: "pricing"
                 <option value="fin_intercompany">Finance Intercompany Setup — eBook (₹499)</option>
                 <option value="fin_integration">Financial Integration (LN 10.5) — eBook (₹499)</option>
                 <option value="infor_os">Infor OS — 11 eBooks (₹1,999)</option>
+                <option value="idm_ebook">Infor IDM — 6 eBooks (₹999)</option>
               </optgroup>
               <optgroup label="Special Edition">
                 <option value="cloud_migration">Cloud Migration &amp; Upgrade Strategy — 7 eBooks + Excel Tool (₹2,499)</option>
@@ -1150,6 +1152,7 @@ pageId: "pricing"
     fin_intercompany:   {name:'Finance Intercompany Setup — eBook',                     price:499},
     fin_integration:    {name:'Financial Integration (LN 10.5) — eBook',               price:499},
     infor_os:           {name:'Infor OS — 11 eBooks',                                  price:1999},
+    idm_ebook:          {name:'Infor IDM — 6 eBooks',                                   price:999},
     cloud_migration:    {name:'Cloud Migration & Upgrade Strategy — 7 eBooks + Excel', price:2499},
     ai_genai:           {name:'AI Agents & GenAI in Infor LN — 7 eBooks + Excel',      price:2499},
     dev_video:          {name:'Infor LN Development — Video Course',                   price:3999},
