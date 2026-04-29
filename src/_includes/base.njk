@@ -942,15 +942,33 @@
     // Logo placeholder — pricing.njk overrides with actual base64 when loaded on that page
     var FOB_LOGO_B64='';
 
-    /* ── Number-to-Words (Indian) ──────────────────────────────────────── */
-    function numToWords(n){var ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];var tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];function conv(x){if(x===0)return'';if(x<20)return ones[x]+' ';if(x<100)return tens[Math.floor(x/10)]+' '+(x%10?ones[x%10]+' ':'');if(x<1000)return ones[Math.floor(x/100)]+' Hundred '+(x%100?conv(x%100):'');if(x<100000)return conv(Math.floor(x/1000))+'Thousand '+(x%1000?conv(x%1000):'');if(x<10000000)return conv(Math.floor(x/100000))+'Lakh '+(x%100000?conv(x%100000):'');return conv(Math.floor(x/10000000))+'Crore '+(x%10000000?conv(x%10000000):'');}var r=Math.floor(n),p=Math.round((n-r)*100);var w='Indian Rupee '+conv(r).trim()+(p?' and '+conv(p).trim()+' Paise':'')+' Only';return w.replace(/\s+/g,' ');}
+    /* ── Number-to-Words (Indian or international) ────────────────────── */
+    function numToWords(n,currency){
+      var ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+      var tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+      var curr=currency||'INR';
+      function convIN(x){if(x===0)return'';if(x<20)return ones[x]+' ';if(x<100)return tens[Math.floor(x/10)]+' '+(x%10?ones[x%10]+' ':'');if(x<1000)return ones[Math.floor(x/100)]+' Hundred '+(x%100?convIN(x%100):'');if(x<100000)return convIN(Math.floor(x/1000))+'Thousand '+(x%1000?convIN(x%1000):'');if(x<10000000)return convIN(Math.floor(x/100000))+'Lakh '+(x%100000?convIN(x%100000):'');return convIN(Math.floor(x/10000000))+'Crore '+(x%10000000?convIN(x%10000000):'');}
+      function convEN(x){if(x===0)return'';if(x<20)return ones[x]+' ';if(x<100)return tens[Math.floor(x/10)]+' '+(x%10?ones[x%10]+' ':'');if(x<1000)return ones[Math.floor(x/100)]+' Hundred '+(x%100?convEN(x%100):'');if(x<1000000)return convEN(Math.floor(x/1000))+'Thousand '+(x%1000?convEN(x%1000):'');if(x<1000000000)return convEN(Math.floor(x/1000000))+'Million '+(x%1000000?convEN(x%1000000):'');return convEN(Math.floor(x/1000000000))+'Billion '+(x%1000000000?convEN(x%1000000000):'');}
+      var r=Math.floor(n),p=Math.round((n-r)*100);
+      var labels={INR:{name:'Indian Rupee',sub:'Paise'},USD:{name:'US Dollar',sub:'Cents'},EUR:{name:'Euro',sub:'Cents'},GBP:{name:'Pound Sterling',sub:'Pence'}};
+      var lbl=labels[curr]||{name:curr,sub:'Cents'};
+      var conv=(curr==='INR')?convIN:convEN;
+      var w=lbl.name+' '+conv(r).trim()+(p?' and '+conv(p).trim()+' '+lbl.sub:'')+' Only';
+      return w.replace(/\s+/g,' ');
+    }
+    function pdfCurrSymbol(curr){var map={INR:'Rs.',USD:'$',EUR:'€',GBP:'£'};return map[curr]||curr+' ';}
 
     /* ── GST Invoice PDF builder ───────────────────────────────────────── */
     function generateGSTInvoice(inv){
       var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
       var W=doc.internal.pageSize.getWidth();var H=doc.internal.pageSize.getHeight();
       var NAVY=[10,32,68];var GOLD=[192,140,52];var GOLD2=[240,210,140];var WHITE=[255,255,255];var INK=[25,25,35];var GREY=[110,110,125];var LGREY=[245,245,248];var MGREY=[210,210,218];
-      var fmt2=function(v){return Number(v).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});};var PAD=32;
+      var INV_CURR=inv.currency||'INR';
+      var INV_SYM=pdfCurrSymbol(INV_CURR);
+      var INV_LOCALE=(INV_CURR==='INR')?'en-IN':'en-US';
+      var INV_HAS_GST=(INV_CURR==='INR' && Number(inv.gstAmt||0)>0);
+      var INV_MOBILE_CODE=inv.mobileCode||'+91';
+      var fmt2=function(v){return Number(v).toLocaleString(INV_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2});};var PAD=32;
       doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,0,W,96,'F');
       try{if(FOB_LOGO_B64)doc.addImage(FOB_LOGO_B64,'JPEG',PAD,14,70,52);}catch(e){}
       doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
@@ -965,7 +983,7 @@
       ['172, Shree, 1st Floor, 5th Main, 5th Cross','Mico Layout, BTM 2nd Stage','BANGALORE Karnataka 560076, India','TAN: BLRF03997A   |   PAN: AAFFF1528H','GSTIN: 29AAFFF1528H1ZH'].forEach(function(l,i){doc.text(l,PAD+10,r1Y+30+i*15);});
       doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(midX,r1Y,W-midX-PAD,r1H,'F');
       doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text('BALANCE DUE',W-PAD-8,r1Y+16,{align:'right'});
-      doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('Rs. '+fmt2(inv.totalAmt),W-PAD-8,r1Y+42,{align:'right'});
+      doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text(INV_SYM+' '+fmt2(inv.totalAmt),W-PAD-8,r1Y+42,{align:'right'});
       doc.setLineWidth(0.5);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.line(midX+10,r1Y+50,W-PAD-8,r1Y+50);
       doc.setFont('helvetica','normal');doc.setFontSize(8.5);
       ['Invoice Date:','Terms:','Due Date:'].forEach(function(l,i){doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text(l,midX+12,r1Y+64+i*15);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text([inv.invDate,'Immediate',inv.dueDate||'—'][i],W-PAD-8,r1Y+64+i*15,{align:'right'});});
@@ -974,27 +992,33 @@
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('BILL TO',PAD+10,r2Y+14);
       doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(inv.name,PAD+10,r2Y+30);
       doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(inv.email,PAD+10,r2Y+46);
-      if(inv.mobile)doc.text('+91 '+inv.mobile,PAD+10,r2Y+61);
+      if(inv.mobile)doc.text(INV_MOBILE_CODE+' '+inv.mobile,PAD+10,r2Y+61);
       doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.rect(midX,r2Y,W-midX-PAD,r2H,'FD');
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('SERVICE DETAILS',midX+12,r2Y+14);
       doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);
-      doc.text('SAC Code: 998431',midX+12,r2Y+30);doc.text('Tax Type: IGST @ 18%',midX+12,r2Y+46);
+      doc.text('SAC Code: 998431',midX+12,r2Y+30);
+      doc.text(INV_HAS_GST?'Tax Type: IGST @ 18%':'Currency: '+INV_CURR+' (no GST)',midX+12,r2Y+46);
       doc.text('Payment Ref: '+(inv.paymentId||'').slice(0,22),midX+12,r2Y+61);doc.text('Order Ref: '+(inv.orderRef||inv.orderId||''),midX+12,r2Y+76);
       var tY=r2Y+r2H+12;
-      doc.autoTable({startY:tY,head:[['Sr.','Item & Description','Qty','Rate (INR)','Amount (INR)']],body:[['1',(inv.module||'Training Material')+'\n\nSAC: 998431','1',fmt2(inv.baseAmt),fmt2(inv.baseAmt)]],theme:'plain',headStyles:{fillColor:NAVY,textColor:WHITE,fontStyle:'bold',fontSize:9,halign:'center',cellPadding:9},bodyStyles:{fontSize:9,textColor:INK,cellPadding:{top:14,right:8,bottom:14,left:8}},columnStyles:{0:{cellWidth:44,halign:'center'},1:{cellWidth:'auto'},2:{cellWidth:40,halign:'center'},3:{cellWidth:95,halign:'right'},4:{cellWidth:95,halign:'right'}},margin:{left:PAD,right:PAD},alternateRowStyles:{fillColor:LGREY},tableLineColor:MGREY,tableLineWidth:0.5});
+      doc.autoTable({startY:tY,head:[['Sr.','Item & Description','Qty','Rate ('+INV_CURR+')','Amount ('+INV_CURR+')']],body:[['1',(inv.module||'Training Material')+'\n\nSAC: 998431','1',fmt2(inv.baseAmt),fmt2(inv.baseAmt)]],theme:'plain',headStyles:{fillColor:NAVY,textColor:WHITE,fontStyle:'bold',fontSize:9,halign:'center',cellPadding:9},bodyStyles:{fontSize:9,textColor:INK,cellPadding:{top:14,right:8,bottom:14,left:8}},columnStyles:{0:{cellWidth:44,halign:'center'},1:{cellWidth:'auto'},2:{cellWidth:40,halign:'center'},3:{cellWidth:95,halign:'right'},4:{cellWidth:95,halign:'right'}},margin:{left:PAD,right:PAD},alternateRowStyles:{fillColor:LGREY},tableLineColor:MGREY,tableLineWidth:0.5});
       var fY=doc.lastAutoTable.finalY+14,totW=260,totX=W-PAD-totW;
+      var totBoxH=INV_HAS_GST?98:68;
       doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(totX,fY,totW,30,'F');
       doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Sub Total',totX+14,fY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.baseAmt),W-PAD-8,fY+19,{align:'right'});
-      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,fY+30,totW,30,'F');
-      doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST18 (18%)',totX+14,fY+49);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.gstAmt),W-PAD-8,fY+49,{align:'right'});
-      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(totX,fY+60,totW,38,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TOTAL',totX+14,fY+84);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text('INR '+fmt2(inv.totalAmt),W-PAD-8,fY+84,{align:'right'});
-      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(totX,fY,totW,98,'S');
-      var wY=fY+112;
+      var totalRowY=fY+30;
+      if(INV_HAS_GST){
+        doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,fY+30,totW,30,'F');
+        doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST18 (18%)',totX+14,fY+49);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.gstAmt),W-PAD-8,fY+49,{align:'right'});
+        totalRowY=fY+60;
+      }
+      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(totX,totalRowY,totW,38,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TOTAL',totX+14,totalRowY+24);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text(INV_CURR+' '+fmt2(inv.totalAmt),W-PAD-8,totalRowY+24,{align:'right'});
+      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(totX,fY,totW,totBoxH,'S');
+      var wY=fY+totBoxH+14;
       doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(PAD,wY,W-2*PAD,48,'FD');
       doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Amount in Words:',PAD+10,wY+16);
       doc.setFont('helvetica','bolditalic');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);
-      doc.text(doc.splitTextToSize(numToWords(inv.totalAmt),W-2*PAD-130),PAD+120,wY+16);
+      doc.text(doc.splitTextToSize(numToWords(inv.totalAmt,INV_CURR),W-2*PAD-130),PAD+120,wY+16);
       var tcY=wY+62;
       doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Terms & Conditions',PAD,tcY+2);
       doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.6);doc.line(PAD,tcY+6,W-PAD,tcY+6);
@@ -1012,10 +1036,17 @@
       var rec=admRecs.find(function(x){return x.orderId===orderId;});
       if(!rec){alert('Record not found.');return;}
       try{
-        // Compute GST breakdown if not stored (all our transactions are 18% IGST)
+        // Compute GST breakdown if not stored. Only legacy INR records had GST baked in.
+        var recCurr=rec.currency||'INR';
         var totalAmt=Number(rec.totalAmt||rec.amount)||0;
-        var baseAmt=rec.baseAmt?Number(rec.baseAmt):Math.round(totalAmt/1.18*100)/100;
-        var gstAmt=rec.gstAmt?Number(rec.gstAmt):Math.round((totalAmt-baseAmt)*100)/100;
+        var baseAmt,gstAmt;
+        if(recCurr==='INR'){
+          baseAmt=rec.baseAmt?Number(rec.baseAmt):Math.round(totalAmt/1.18*100)/100;
+          gstAmt=rec.gstAmt?Number(rec.gstAmt):Math.round((totalAmt-baseAmt)*100)/100;
+        }else{
+          baseAmt=rec.baseAmt?Number(rec.baseAmt):totalAmt;
+          gstAmt=0;
+        }
         // Format today as DD/MM/YYYY for invDate fallback
         var today=new Date();
         var fmtD=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
@@ -1026,7 +1057,9 @@
           name:    rec.name||'—',
           email:   rec.email||'—',
           mobile:  rec.mobile||'',
+          mobileCode: rec.mobileCode||'+91',
           module:  rec.module||'Training Material',
+          currency: recCurr,
           baseAmt: baseAmt,
           gstAmt:  gstAmt,
           totalAmt:totalAmt,
@@ -1070,8 +1103,12 @@
         var submitted=rec.status==='submitted';
         var statusCls=confirmed?'bg-green-400/10 text-green-400 border border-green-400/25':submitted?'bg-yellow-400/10 text-yellow-400 border border-yellow-400/25':'bg-blue-400/10 text-blue-400 border border-blue-400/25';
         var statusTxt=confirmed?'Confirmed':submitted?'Submitted':'Initiated';
-        var amtDisplay=rec.totalAmt?('\u20B9'+Number(rec.totalAmt).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})):rec.amount?('\u20B9'+Number(rec.amount).toLocaleString('en-IN')):'\u2014';
-        var gstRow=rec.baseAmt&&rec.gstAmt?'<span class="text-on-surface-variant/60 font-label text-xs">GST Breakdown</span><span class="text-on-surface-variant text-xs">Base \u20B9'+Number(rec.baseAmt).toFixed(2)+' + IGST \u20B9'+Number(rec.gstAmt).toFixed(2)+'</span>':'';
+        var recCurr=rec.currency||'INR';
+        var recCurrSym={INR:'\u20B9',USD:'$',EUR:'\u20AC',GBP:'\u00A3'}[recCurr]||(recCurr+' ');
+        var recLocale=(recCurr==='INR')?'en-IN':'en-US';
+        var amtDisplay=rec.totalAmt?(recCurrSym+Number(rec.totalAmt).toLocaleString(recLocale,{minimumFractionDigits:2,maximumFractionDigits:2})):rec.amount?(recCurrSym+Number(rec.amount).toLocaleString(recLocale)):'\u2014';
+        var hasGst=(recCurr==='INR' && rec.baseAmt && Number(rec.gstAmt||0)>0);
+        var gstRow=hasGst?'<span class="text-on-surface-variant/60 font-label text-xs">GST Breakdown</span><span class="text-on-surface-variant text-xs">Base '+recCurrSym+Number(rec.baseAmt).toFixed(2)+' + IGST '+recCurrSym+Number(rec.gstAmt).toFixed(2)+'</span>':'';
         var invRow=rec.invoiceNo?'<span class="text-on-surface-variant/60 font-label text-xs">Invoice No</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.invoiceNo)+'</span>':'';
         var payIdRow=rec.paymentId?'<span class="text-on-surface-variant/60 font-label text-xs">Payment ID</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.paymentId)+'</span>':'';
         var confirmedRow=rec.confirmedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Confirmed</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.confirmedAt)+'</span>':'';
@@ -1090,7 +1127,7 @@
           // Details grid
           +'<div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">'
           +'<span class="text-on-surface-variant/60 font-label text-xs">Email</span><span class="text-on-surface-variant">'+esc(rec.email||'\u2014')+'</span>'
-          +'<span class="text-on-surface-variant/60 font-label text-xs">Mobile</span><span class="text-on-surface-variant">'+(rec.mobile?'+91 '+esc(rec.mobile):'\u2014')+'</span>'
+          +'<span class="text-on-surface-variant/60 font-label text-xs">Mobile</span><span class="text-on-surface-variant">'+(rec.mobile?esc(rec.mobileCode||'+91')+' '+esc(rec.mobile):'\u2014')+'</span>'
           +'<span class="text-on-surface-variant/60 font-label text-xs">Module</span><span class="text-primary font-semibold">'+esc(rec.module||'\u2014')+'</span>'
           +'<span class="text-on-surface-variant/60 font-label text-xs">Amount</span><span class="text-primary font-semibold">'+amtDisplay+'</span>'
           +gstRow
