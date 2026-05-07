@@ -1038,6 +1038,82 @@ pageId: "pricing"
     </div>
   </div>
 </div>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ADMIN — EDIT BILLING & GST MODAL (for backfilling legacy records)
+═══════════════════════════════════════════════════════════════════════ -->
+<div id="adm-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(6,15,30,0.85);z-index:10001;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#0d1a30;border:1px solid rgba(246,188,104,0.3);border-radius:16px;width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,0.6);">
+    <!-- Header -->
+    <div style="padding:18px 22px;border-bottom:1px solid rgba(246,188,104,0.15);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <div>
+        <div style="font-weight:700;color:#f6bc68;font-size:15px;">✏️ Edit Billing &amp; GST</div>
+        <div id="admEd-meta" style="font-size:11px;color:rgba(212,196,178,0.6);margin-top:3px;"></div>
+      </div>
+      <button onclick="admEditClose()" style="padding:6px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.7);border-radius:8px;cursor:pointer;font-size:12px;">✕ Close</button>
+    </div>
+    <!-- Body (scrollable) -->
+    <div style="padding:18px 22px;overflow-y:auto;color:#f0e8d8;font-size:13px;">
+      <p style="font-size:11.5px;color:rgba(212,196,178,0.7);margin:0 0 12px;line-height:1.55;">Backfill or correct the billing address and GSTIN for this record. The CGST/SGST or IGST split will be recomputed from the buyer's state and the invoice can then be regenerated.</p>
+
+      <!-- Customer (read-only summary) -->
+      <div id="admEd-cust" style="background:rgba(246,188,104,0.05);border:1px solid rgba(246,188,104,0.15);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.55;"></div>
+
+      <!-- Editable fields -->
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+        <input type="text" id="admEd_billCompany" placeholder="Company / Organisation (optional)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+        <input type="text" id="admEd_billLine1" placeholder="Address Line 1 (Flat/House No., Building, Street)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+        <input type="text" id="admEd_billLine2" placeholder="Address Line 2 — Area, Locality (optional)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input type="text" id="admEd_billCity" placeholder="City / Town" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          <input type="text" id="admEd_billPin" placeholder="PIN / ZIP Code" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <select id="admEd_billCountry" onchange="admEdCountryChange()" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+            <option value="IN">India</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="AE">UAE</option>
+            <option value="SA">Saudi Arabia</option>
+            <option value="AU">Australia</option>
+            <option value="CA">Canada</option>
+            <option value="SG">Singapore</option>
+            <option value="MY">Malaysia</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="NL">Netherlands</option>
+            <option value="JP">Japan</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <select id="admEd_billState" onchange="admEdStateChange()" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;"></select>
+          <input type="text" id="admEd_billStateText" placeholder="State / Region / Province" style="display:none;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+        </div>
+
+        <!-- GSTIN -->
+        <div id="admEd-gstin-block" style="margin-top:6px;padding-top:10px;border-top:1px dashed rgba(246,188,104,0.2);">
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:rgba(212,196,178,0.85);margin-bottom:8px;">
+            <input type="checkbox" id="admEd_gstinToggle" onchange="admEdGstinToggle()" style="margin-top:3px;accent-color:#f6bc68;">
+            <span><strong style="color:#f0e8d8;">Buyer has a GSTIN</strong> (claim input tax credit). Invoice will be issued in the registered company name.</span>
+          </label>
+          <div id="admEd-gstin-fields" style="display:none;display:grid;grid-template-columns:1fr;gap:10px;padding-left:24px;border-left:2px solid rgba(246,188,104,0.3);">
+            <input type="text" id="admEd_gstin" placeholder="GSTIN (15 chars, e.g. 29AAFFF1528H1ZH)" maxlength="15" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;text-transform:uppercase;">
+            <input type="text" id="admEd_gstLegalName" placeholder="Legal name of business (as per GST registration)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          </div>
+        </div>
+
+        <!-- Live tax preview -->
+        <div id="admEd-preview" style="margin-top:10px;padding:12px 14px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:8px;font-size:12px;color:#bbf7d0;line-height:1.6;"></div>
+
+        <div id="admEd-err" style="color:#f87171;font-size:12px;min-height:16px;"></div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="padding:14px 22px;border-top:1px solid rgba(246,188,104,0.15);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;">
+      <button onclick="admEditClose()" style="padding:9px 18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.85);border-radius:8px;cursor:pointer;font-size:13px;">Cancel</button>
+      <button onclick="admEditSave()" id="admEd-saveBtn" style="padding:9px 22px;background:linear-gradient(135deg,#f6bc68,#ba8738);border:none;color:#06132a;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;">💾 Save &amp; Recompute Tax</button>
+    </div>
+  </div>
+</div>
+
 <div id="adm-toast" style="position:fixed;bottom:72px;left:20px;background:#1a2f50;border:1px solid rgba(246,188,104,0.3);color:#f0e8d8;padding:8px 16px;border-radius:8px;font-size:13px;z-index:10000;opacity:0;transition:opacity .3s;pointer-events:none;"></div>
 
 {% block scripts %}
@@ -2120,6 +2196,8 @@ pageId: "pricing"
     if(r.mobile)acts+='<button onclick="admCp(\''+aE(rMobCode+r.mobile)+'\',\'Mobile\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📱 Mobile</button>';
     if(r.gstin)acts+='<button onclick="admCp(\''+aE(String(r.gstin).toUpperCase())+'\',\'GSTIN\')" style="padding:5px 10px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);color:#4ade80;border-radius:6px;cursor:pointer;font-size:11px;">🏢 GSTIN</button>';
     acts+='<button onclick="admCp(\''+aE(r.orderId)+'\',\'Ref\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📋 Ref</button>';
+    /* Edit Billing — available on every record so admins can backfill legacy entries */
+    acts+='<button onclick="admEditOpen(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:#4ade80;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">✏️ Edit Billing</button>';
     if(s&&r.invoiceNo){acts+='<button onclick="admDlInvoice(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(246,188,104,0.2);border:1px solid rgba(246,188,104,0.4);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">📄 GST Invoice</button>';}
     return '<div style="background:#0d1a30;border:1px solid rgba(246,188,104,0.1);border-radius:12px;padding:16px;margin-bottom:12px;">' +
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
@@ -2168,6 +2246,224 @@ pageId: "pricing"
       downloadInvoice(invData);admToast('📄 Invoice downloading…');
     }catch(e){console.error(e);admToast('Invoice generation failed.');}
   }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     ADMIN — EDIT BILLING & GST (backfill legacy records, recompute tax)
+  ══════════════════════════════════════════════════════════════════════ */
+  var admEdRec = null; // record currently being edited
+
+  function admEditOpen(orderId){
+    var rec = admRecs.find(function(x){return x.orderId===orderId;});
+    if(!rec){admToast('Record not found.');return;}
+    admEdRec = rec;
+
+    /* Populate state dropdown if not already */
+    var stSel = document.getElementById('admEd_billState');
+    if(stSel && !stSel.dataset.populated){
+      var html = '<option value="">— Select State —</option>';
+      INDIA_STATES.forEach(function(s){
+        html += '<option value="'+s.code+'">'+s.name+' ('+s.code+')</option>';
+      });
+      stSel.innerHTML = html;
+      stSel.dataset.populated = '1';
+    }
+
+    /* Header meta + customer summary */
+    document.getElementById('admEd-meta').textContent =
+      'Order: '+(rec.orderId||'—')+' · Invoice: '+(rec.invoiceNo||'—')+' · '+(rec.module||'—');
+
+    var rCurr = rec.currency||'INR';
+    var rSym  = {INR:'₹',USD:'$',EUR:'€',GBP:'£'}[rCurr]||(rCurr+' ');
+    var custHtml =
+      '<div><strong style="color:#f6bc68;">'+aH(rec.name||'—')+'</strong>'+
+      ' &nbsp;·&nbsp; '+aH(rec.email||'—')+
+      (rec.mobile?' &nbsp;·&nbsp; '+aH((rec.mobileCode||'+91')+' '+rec.mobile):'')+'</div>'+
+      '<div style="color:rgba(212,196,178,0.7);margin-top:4px;">Base '+rSym+Number(rec.baseAmt||0).toFixed(2)+
+      ' · Tax '+rSym+Number(rec.gstAmt||0).toFixed(2)+
+      ' · Total <strong style="color:#f6bc68;">'+rSym+Number(rec.totalAmt||0).toFixed(2)+'</strong> ('+rCurr+')</div>';
+    document.getElementById('admEd-cust').innerHTML = custHtml;
+
+    /* Pre-fill form */
+    document.getElementById('admEd_billCompany').value = rec.billCompany||'';
+    document.getElementById('admEd_billLine1').value   = rec.billLine1  ||'';
+    document.getElementById('admEd_billLine2').value   = rec.billLine2  ||'';
+    document.getElementById('admEd_billCity').value    = rec.billCity   ||'';
+    document.getElementById('admEd_billPin').value     = rec.billPincode||'';
+    document.getElementById('admEd_billCountry').value = rec.billCountry||'IN';
+    admEdCountryChange();
+    if((rec.billCountry||'IN')==='IN'){
+      document.getElementById('admEd_billState').value = rec.billStateCode||'';
+    } else {
+      document.getElementById('admEd_billStateText').value = rec.billStateName||'';
+    }
+    var hasGstin = !!rec.gstin;
+    document.getElementById('admEd_gstinToggle').checked = hasGstin;
+    document.getElementById('admEd_gstin').value         = (rec.gstin||'').toUpperCase();
+    document.getElementById('admEd_gstLegalName').value  = rec.gstLegalName||'';
+    admEdGstinToggle();
+
+    document.getElementById('admEd-err').textContent = '';
+    admEdRefreshPreview();
+
+    var ov = document.getElementById('adm-edit-overlay');
+    ov.style.display = 'flex';
+  }
+
+  function admEditClose(){
+    document.getElementById('adm-edit-overlay').style.display = 'none';
+    admEdRec = null;
+  }
+
+  function admEdCountryChange(){
+    var c = document.getElementById('admEd_billCountry').value;
+    var sel = document.getElementById('admEd_billState');
+    var txt = document.getElementById('admEd_billStateText');
+    var gst = document.getElementById('admEd-gstin-block');
+    if(c==='IN'){
+      if(sel) sel.style.display = '';
+      if(txt) txt.style.display = 'none';
+      if(gst) gst.style.display = '';
+    } else {
+      if(sel) sel.style.display = 'none';
+      if(txt) txt.style.display = '';
+      if(gst) gst.style.display = 'none';
+      var t = document.getElementById('admEd_gstinToggle'); if(t) t.checked=false;
+      admEdGstinToggle();
+    }
+    admEdRefreshPreview();
+  }
+
+  function admEdStateChange(){ admEdRefreshPreview(); }
+
+  function admEdGstinToggle(){
+    var on = document.getElementById('admEd_gstinToggle').checked;
+    document.getElementById('admEd-gstin-fields').style.display = on?'grid':'none';
+  }
+
+  /* Live preview of the new tax split based on current state selection */
+  function admEdRefreshPreview(){
+    if(!admEdRec) return;
+    var prev = document.getElementById('admEd-preview');
+    var rCurr = admEdRec.currency||'INR';
+    var rSym  = {INR:'₹',USD:'$',EUR:'€',GBP:'£'}[rCurr]||(rCurr+' ');
+    var base = Number(admEdRec.baseAmt||0);
+    if(rCurr!=='INR'){
+      prev.innerHTML = '<strong style="color:#fbbf24;">No GST</strong> — international currency ('+rCurr+'). Base '+rSym+base.toFixed(2)+' = Total '+rSym+base.toFixed(2)+'.';
+      return;
+    }
+    var country = document.getElementById('admEd_billCountry').value;
+    var stCd = (country==='IN') ? document.getElementById('admEd_billState').value : '';
+    if(country!=='IN'){
+      prev.innerHTML = '<strong style="color:#fbbf24;">Buyer outside India</strong> — invoice will be issued without GST. (To apply GST, set Country to India and pick a state.)';
+      return;
+    }
+    if(!stCd){
+      prev.innerHTML = '<strong style="color:#fbbf24;">Pick a state</strong> to see whether CGST+SGST or IGST applies.';
+      return;
+    }
+    var split = calcGSTSplit(base, stCd);
+    if(split.taxType==='CGST_SGST'){
+      prev.innerHTML = '<strong style="color:#4ade80;">CGST 9% + SGST 9%</strong> (intra-state, '+getStateNameByCode(stCd)+'): '+
+        'Base '+rSym+split.base.toFixed(2)+' &nbsp;·&nbsp; CGST '+rSym+split.cgst.toFixed(2)+
+        ' + SGST '+rSym+split.sgst.toFixed(2)+' &nbsp;·&nbsp; <strong>Total '+rSym+split.total.toFixed(2)+'</strong>';
+    } else {
+      prev.innerHTML = '<strong style="color:#4ade80;">IGST @ 18%</strong> (inter-state, '+getStateNameByCode(stCd)+'): '+
+        'Base '+rSym+split.base.toFixed(2)+' &nbsp;·&nbsp; IGST '+rSym+split.igst.toFixed(2)+
+        ' &nbsp;·&nbsp; <strong>Total '+rSym+split.total.toFixed(2)+'</strong>';
+    }
+  }
+
+  /* Save: validate → recompute split → upsert merged record → refresh */
+  async function admEditSave(){
+    if(!admEdRec) return;
+    var err = document.getElementById('admEd-err');
+    err.textContent = '';
+
+    var company = (document.getElementById('admEd_billCompany').value||'').trim();
+    var line1   = (document.getElementById('admEd_billLine1').value||'').trim();
+    var line2   = (document.getElementById('admEd_billLine2').value||'').trim();
+    var city    = (document.getElementById('admEd_billCity').value||'').trim();
+    var pin     = (document.getElementById('admEd_billPin').value||'').trim();
+    var country = (document.getElementById('admEd_billCountry').value||'IN').trim();
+    var stCd = '', stName = '';
+    if(country==='IN'){
+      stCd   = document.getElementById('admEd_billState').value || '';
+      stName = stCd ? getStateNameByCode(stCd) : '';
+    } else {
+      stName = (document.getElementById('admEd_billStateText').value||'').trim();
+    }
+    var gstinOn   = !!document.getElementById('admEd_gstinToggle').checked;
+    var gstin     = gstinOn ? (document.getElementById('admEd_gstin').value||'').toUpperCase().trim() : '';
+    var legalName = gstinOn ? (document.getElementById('admEd_gstLegalName').value||'').trim() : '';
+
+    if(!line1){err.textContent='Address Line 1 is required.';return;}
+    if(!city){err.textContent='City is required.';return;}
+    if(!pin){err.textContent='PIN / ZIP is required.';return;}
+    if(country==='IN' && !stCd){err.textContent='Please select an Indian state — it determines CGST+SGST vs IGST.';return;}
+    if(country!=='IN' && !stName){err.textContent='Please enter the state / region.';return;}
+    if(country==='IN' && !/^\d{6}$/.test(pin)){err.textContent='Indian PIN code must be 6 digits.';return;}
+    if(gstinOn){
+      if(!isValidGSTIN(gstin)){err.textContent='GSTIN format is invalid (expected 15 chars).';return;}
+      if(country==='IN' && gstinStateCode(gstin)!==stCd){
+        err.textContent='GSTIN starts with state code '+gstinStateCode(gstin)+' but state is '+stName+' ('+stCd+'). They must match.';return;
+      }
+      if(!legalName){err.textContent='Legal name of business is required when GSTIN is provided.';return;}
+    }
+
+    /* Recompute tax split (only meaningful for INR records) */
+    var rCurr = admEdRec.currency||'INR';
+    var base = Number(admEdRec.baseAmt||0);
+    var cgst=0, sgst=0, igst=0, gstAmt=Number(admEdRec.gstAmt||0), total=Number(admEdRec.totalAmt||0), taxType=admEdRec.taxType||'NONE';
+    if(rCurr==='INR' && base>0){
+      var split = calcGSTSplit(base, country==='IN'?stCd:'');
+      cgst = split.cgst; sgst = split.sgst; igst = split.igst;
+      gstAmt = split.gst; total = split.total; taxType = split.taxType;
+    }
+
+    /* Build the merged record (preserves all other fields by definition) */
+    var merged = Object.assign({}, admEdRec, {
+      billCompany: company,
+      billLine1:   line1,
+      billLine2:   line2,
+      billCity:    city,
+      billPincode: pin,
+      billCountry: country,
+      billStateCode: stCd,
+      billStateName: stName,
+      gstin:        gstin,
+      gstLegalName: legalName,
+      placeOfSupply: stName ? (stName + (stCd?' ('+stCd+')':'')) : '',
+      cgstAmt: cgst, sgstAmt: sgst, igstAmt: igst,
+      gstAmt:  gstAmt, totalAmt: total, taxType: taxType,
+      billingUpdatedAt: new Date().toISOString()
+    });
+
+    var btn = document.getElementById('admEd-saveBtn');
+    var orig = btn.textContent;
+    btn.disabled = true; btn.textContent = '⏳ Saving…';
+
+    try {
+      await ghUpsert(merged);
+      /* Update in-memory list so admin card re-renders immediately */
+      var i = admRecs.findIndex(function(x){return x.orderId===merged.orderId;});
+      if(i>=0) admRecs[i] = merged;
+      admStats(); admRender();
+      admToast('✅ Billing saved & tax recomputed');
+      admEditClose();
+    } catch(e){
+      console.error(e);
+      err.textContent = 'Save failed: '+(e.message||'unknown error');
+    } finally {
+      btn.disabled = false; btn.textContent = orig;
+    }
+  }
+
+  /* Live-update the preview as the admin changes state/country */
+  document.addEventListener('change', function(e){
+    if(e.target && (e.target.id==='admEd_billState' || e.target.id==='admEd_billCountry')){
+      admEdRefreshPreview();
+    }
+  });
 
   /* ══════════════════════════════════════════════════════════════════════
      AUTO-OPEN FROM URL PARAM
