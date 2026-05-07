@@ -1423,12 +1423,19 @@
       var prev=document.getElementById('admEd-preview');
       var rCurr=admEdRec.currency||'INR';
       var rSym={INR:'₹',USD:'$',EUR:'€',GBP:'£'}[rCurr]||(rCurr+' ');
+      /* For INR records that have totalAmt but no baseAmt (legacy records),
+         derive base = total / 1.18 so the preview shows real numbers. */
       var base=Number(admEdRec.baseAmt||0);
+      if((!base || base===0) && rCurr==='INR'){
+        var t=Number(admEdRec.totalAmt||admEdRec.amount||0);
+        if(t>0) base=Math.round((t/1.18)*100)/100;
+      }
       if(rCurr!=='INR'){prev.innerHTML='<strong style="color:#fbbf24;">No GST</strong> — international currency ('+rCurr+'). Base '+rSym+base.toFixed(2)+' = Total '+rSym+base.toFixed(2)+'.';return;}
       var country=document.getElementById('admEd_billCountry').value;
       var stCd=(country==='IN')?document.getElementById('admEd_billState').value:'';
       if(country!=='IN'){prev.innerHTML='<strong style="color:#fbbf24;">Buyer outside India</strong> — invoice will be issued without GST.';return;}
       if(!stCd){prev.innerHTML='<strong style="color:#fbbf24;">Pick a state</strong> to see whether CGST+SGST or IGST applies.';return;}
+      if(!base || base===0){prev.innerHTML='<strong style="color:#fbbf24;">No amount on this record</strong> — cannot compute GST.';return;}
       var split=calcGSTSplit(base,stCd);
       if(split.taxType==='CGST_SGST'){
         prev.innerHTML='<strong style="color:#4ade80;">CGST 9% + SGST 9%</strong> (intra-state, '+getStateNameByCode(stCd)+'): Base '+rSym+split.base.toFixed(2)+' &nbsp;·&nbsp; CGST '+rSym+split.cgst.toFixed(2)+' + SGST '+rSym+split.sgst.toFixed(2)+' &nbsp;·&nbsp; <strong>Total '+rSym+split.total.toFixed(2)+'</strong>';
@@ -1469,8 +1476,13 @@
       }
 
       var rCurr=admEdRec.currency||'INR';
+      /* Derive base from totalAmt for INR records where baseAmt is missing. */
       var base=Number(admEdRec.baseAmt||0);
-      var cgst=0, sgst=0, igst=0, gstAmt=Number(admEdRec.gstAmt||0), total=Number(admEdRec.totalAmt||admEdRec.amount||0), taxType=admEdRec.taxType||'NONE';
+      var total=Number(admEdRec.totalAmt||admEdRec.amount||0);
+      if((!base || base===0) && rCurr==='INR' && total>0){
+        base=Math.round((total/1.18)*100)/100;
+      }
+      var cgst=0, sgst=0, igst=0, gstAmt=Number(admEdRec.gstAmt||0), taxType=admEdRec.taxType||'NONE';
       if(rCurr==='INR' && base>0){
         var split=calcGSTSplit(base, country==='IN'?stCd:'');
         cgst=split.cgst; sgst=split.sgst; igst=split.igst;
