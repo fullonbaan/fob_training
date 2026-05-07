@@ -1558,18 +1558,37 @@ pageId: "pricing"
       description: selDesc,
       image: 'https://training.fullonbaan.com/og-image.png',
       prefill: {name:name, email:email, contact:mobile?(mobileCode+mobile):email},
-      notes: {
-        order_ref:txnRef, module:selDesc, currency:activeCurr,
-        gst_amt:selGD.gst, cgst:selGD.cgst||0, sgst:selGD.sgst||0, igst:selGD.igst||0,
-        tax_type:selGD.taxType||'NONE',
-        bill_company:userData.billCompany||'',
-        bill_line1:userData.billLine1||'',
-        bill_line2:userData.billLine2||'',
-        bill_city:userData.billCity||'',
-        bill_state:userData.billStateName||'', bill_state_code:userData.billStateCode||'',
-        bill_pin:userData.billPincode||'', bill_country:userData.billCountry||'IN',
-        gstin:userData.gstin||'', gst_legal_name:userData.gstLegalName||''
-      },
+      /* Razorpay caps notes at 15 keys — consolidate billing into fewer fields. */
+      notes: (function(){
+        var addr = [userData.billLine1, userData.billLine2].filter(function(p){return !!p;}).join(' | ');
+        var stateLine = userData.billStateName
+          ? (userData.billStateName + (userData.billStateCode?' ('+userData.billStateCode+')':''))
+          : '';
+        var taxSplit = '';
+        if(selGD.taxType==='CGST_SGST') taxSplit = 'CGST '+(selGD.cgst||0)+' + SGST '+(selGD.sgst||0);
+        else if(selGD.taxType==='IGST')  taxSplit = 'IGST '+(selGD.igst||selGD.gst||0);
+        else                              taxSplit = 'NONE';
+        var n = {
+          order_ref:    txnRef,
+          module:       selDesc,
+          currency:     activeCurr,
+          base_amt:     selGD.base,
+          gst_amt:      selGD.gst,
+          total_amt:    selGD.total,
+          tax_type:     selGD.taxType||'NONE',
+          tax_split:    taxSplit,
+          bill_company: userData.billCompany||'',
+          bill_addr:    addr,
+          bill_city:    userData.billCity||'',
+          bill_state:   stateLine,
+          bill_pin:     userData.billPincode||'',
+          bill_country: userData.billCountry||'IN',
+          gstin:        userData.gstin ? (userData.gstin + (userData.gstLegalName?' / '+userData.gstLegalName:'')) : ''
+        };
+        /* Razorpay also rejects empty-string values silently — strip them. */
+        Object.keys(n).forEach(function(k){ if(n[k]==='' || n[k]==null) delete n[k]; });
+        return n;
+      })(),
       theme: {color:'#A8782A'},
       handler: function(response){
         var payId=response.razorpay_payment_id;
