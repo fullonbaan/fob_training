@@ -2207,6 +2207,7 @@ pageId: "pricing"
     acts+='<button onclick="admCp(\''+aE(r.orderId)+'\',\'Ref\')" style="padding:5px 10px;background:rgba(246,188,104,0.1);border:1px solid rgba(246,188,104,0.2);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;">📋 Ref</button>';
     /* Edit Billing — available on every record so admins can backfill legacy entries */
     acts+='<button onclick="admEditOpen(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:#4ade80;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">✏️ Edit Billing</button>';
+    acts+='<button onclick="admDeleteRecord(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.4);color:#f87171;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">🗑️ Delete</button>';
     if(s&&r.invoiceNo){acts+='<button onclick="admDlInvoice(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:rgba(246,188,104,0.2);border:1px solid rgba(246,188,104,0.4);color:#f6bc68;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">📄 GST Invoice</button>';}
     return '<div style="background:#0d1a30;border:1px solid rgba(246,188,104,0.1);border-radius:12px;padding:16px;margin-bottom:12px;">' +
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
@@ -2231,6 +2232,28 @@ pageId: "pricing"
   function admCp(t,lb){navigator.clipboard.writeText(t).then(function(){admToast('📋 Copied '+lb);}).catch(function(){admToast(lb+': '+t);});}
   var _att;
   function admToast(m){var el=document.getElementById('adm-toast');if(!el)return;el.textContent=m;el.style.opacity='1';clearTimeout(_att);_att=setTimeout(function(){el.style.opacity='0';},2200);}
+
+  /* ── Admin: delete a record (with confirmation) ──────────────────── */
+  async function admDeleteRecord(orderId){
+    var rec = admRecs.find(function(x){return x.orderId===orderId;});
+    if(!rec){admToast('Record not found.');return;}
+    var label = (rec.name||'—')+' · '+(rec.module||'—')+' · '+(rec.invoiceNo||rec.orderId);
+    if(!confirm('Permanently delete this record from GitHub?\n\n'+label+'\n\nThis cannot be undone.')) return;
+    try {
+      var gh = await ghRead();
+      var idx = (gh.records||[]).findIndex(function(x){return x.orderId===orderId;});
+      if(idx < 0){ admToast('Record not on server. Refreshing list.'); admRefresh(); return; }
+      gh.records.splice(idx, 1);
+      var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
+      if(!w.ok) throw new Error('GitHub write failed: '+w.status);
+      admRecs = admRecs.filter(function(x){return x.orderId!==orderId;});
+      admStats(); admRender();
+      admToast('🗑️ Deleted '+(rec.invoiceNo||rec.orderId));
+    } catch(e){
+      console.error('Delete failed:', e);
+      alert('Delete failed: '+(e.message||'unknown error'));
+    }
+  }
 
   /* ── Admin: One-click migration to renumber confirmed invoices ──────── */
   async function admMigrateInvoiceNos(){

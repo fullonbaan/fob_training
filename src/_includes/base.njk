@@ -789,6 +789,13 @@
           <button onclick="admRefresh()" class="border border-primary text-primary px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">&circlearrowleft; Refresh</button>
           <button onclick="admMigrateInvoiceNos()" class="border border-yellow-400 text-yellow-400 px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-yellow-400/10" title="Renumber confirmed invoices to FOB####### sequence">&#x1F522; Renumber Invoices</button>
         </div>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold bg-primary/15 text-primary" data-status="all" data-active="1" onclick="admSetFilter('all',event)">All</button>
+          <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="initiated" onclick="admSetFilter('initiated',event)">Initiated</button>
+          <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="submitted" onclick="admSetFilter('submitted',event)">Submitted</button>
+          <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="confirmed" onclick="admSetFilter('confirmed',event)">Confirmed</button>
+          <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="failed" onclick="admSetFilter('failed',event)">Failed</button>
+        </div>
         <div id="admRenderDiv" style="max-height: 500px; overflow-y: auto;"></div>
       </div>
     </div>
@@ -1273,6 +1280,43 @@
       document.getElementById('adm-edit-overlay').style.display='flex';
     }
     function admEditClose(){document.getElementById('adm-edit-overlay').style.display='none';admEdRec=null;}
+    /* ── Admin: filter records by status ─────────────────────────────── */
+    var admStatusFilter = 'all';
+    function admSetFilter(s, ev){
+      admStatusFilter = s;
+      // visual state
+      document.querySelectorAll('.adm-fchip').forEach(function(b){
+        b.dataset.active = (b.dataset.status===s)?'1':'';
+        if(b.dataset.active==='1'){
+          b.classList.add('bg-primary/15','text-primary'); b.classList.remove('text-on-surface-variant');
+        } else {
+          b.classList.remove('bg-primary/15','text-primary'); b.classList.add('text-on-surface-variant');
+        }
+      });
+      admRender();
+    }
+
+    /* ── Admin: delete a record (with confirmation) ──────────────────── */
+    async function admDeleteRecord(orderId){
+      var rec = admRecs.find(function(x){return x.orderId===orderId;});
+      if(!rec){ alert('Record not found.'); return; }
+      var label = (rec.name||'—') + ' · ' + (rec.module||'—') + ' · ' + (rec.invoiceNo||rec.orderId);
+      if(!confirm('Permanently delete this record from GitHub?\n\n' + label + '\n\nThis cannot be undone.')) return;
+      try {
+        var gh = await admGhRead();
+        var idx = (gh.records||[]).findIndex(function(x){return x.orderId===orderId;});
+        if(idx < 0){ alert('Record not on server. Refreshing list.'); admRefresh(); return; }
+        gh.records.splice(idx, 1);
+        var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
+        if(!w.ok) throw new Error('GitHub write failed: '+w.status);
+        admRecs = admRecs.filter(function(x){return x.orderId!==orderId;});
+        admRender();
+      } catch(e){
+        console.error('Delete failed:', e);
+        alert('Delete failed: '+(e.message||'unknown error'));
+      }
+    }
+
     /* ── Admin: One-click migration to renumber confirmed invoices ──────── */
     async function admMigrateInvoiceNos(){
       var msg = 'This will renumber every CONFIRMED invoice to the new FOB####### sequence (sorted by confirmed date) and reset the counter.\n\n' +
@@ -1440,6 +1484,10 @@
         var db=new Date(b.confirmedAt||b.submittedAt||b.initiatedAt||0);
         return db-da;
       });
+      // Apply status filter
+      if(admStatusFilter && admStatusFilter !== 'all'){
+        r = r.filter(function(x){ return (x.status||'') === admStatusFilter; });
+      }
       var div=document.getElementById('admRenderDiv');
       if(!r.length){div.innerHTML='<p class="text-on-surface-variant text-sm">No records found.</p>';return;}
       function fmtDate(d){if(!d)return '\u2014';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}
@@ -1463,7 +1511,9 @@
         // GST Invoice button — shown for all confirmed records (all transactions include 18% IGST)
         var invBtn=confirmed?'<button onclick="admDlInvoice(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">&#x1F4C4; GST Invoice</button>':'';
         // Edit Billing button — available on every record so legacy entries can be backfilled
-        var editBtn='<button onclick="admEditOpen(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);color:#4ade80;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">&#x270F;&#xFE0F; Edit Billing</button>';
+        var editBtn='<button onclick="admEditOpen(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;
+        // Delete record button — for stale/erroneous entries
+        var deleteBtn='<button onclick="admDeleteRecord(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.4);color:#f87171;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">&#x1F5D1;&#xFE0F; Delete</button>';display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);color:#4ade80;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">&#x270F;&#xFE0F; Edit Billing</button>';
         /* Billing & GSTIN summary rows for the admin card */
         var addrParts=[rec.billLine1,rec.billLine2,rec.billCity,rec.billStateName,rec.billPincode,(rec.billCountry==='IN'?'India':rec.billCountry)].filter(function(p){return !!p;});
         var billRow=addrParts.length?'<span class="text-on-surface-variant/60 font-label text-xs">Billing</span><span class="text-on-surface-variant text-xs">'+(rec.billCompany?'<strong>'+esc(rec.billCompany)+'</strong> · ':'')+esc(addrParts.join(', '))+'</span>':'';
@@ -1485,6 +1535,7 @@
           +'<span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span>'
           +invBtn
           +editBtn
+          +deleteBtn
           +'</div>'
           +'</div>'
           // Details grid
