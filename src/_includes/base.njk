@@ -793,6 +793,70 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════════════
+       ADMIN — EDIT BILLING & GST MODAL (backfill legacy records)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="adm-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(6,15,30,0.85);z-index:10001;align-items:center;justify-content:center;padding:24px;">
+    <div style="background:#0d1a30;border:1px solid rgba(246,188,104,0.3);border-radius:16px;width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,0.6);">
+      <div style="padding:18px 22px;border-bottom:1px solid rgba(246,188,104,0.15);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div>
+          <div style="font-weight:700;color:#f6bc68;font-size:15px;">&#x270F;&#xFE0F; Edit Billing &amp; GST</div>
+          <div id="admEd-meta" style="font-size:11px;color:rgba(212,196,178,0.6);margin-top:3px;"></div>
+        </div>
+        <button onclick="admEditClose()" style="padding:6px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.7);border-radius:8px;cursor:pointer;font-size:12px;">&times; Close</button>
+      </div>
+      <div style="padding:18px 22px;overflow-y:auto;color:#f0e8d8;font-size:13px;">
+        <p style="font-size:11.5px;color:rgba(212,196,178,0.7);margin:0 0 12px;line-height:1.55;">Backfill or correct the billing address and GSTIN for this record. The CGST/SGST or IGST split will be recomputed from the buyer's state and the invoice can then be regenerated.</p>
+        <div id="admEd-cust" style="background:rgba(246,188,104,0.05);border:1px solid rgba(246,188,104,0.15);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.55;"></div>
+        <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+          <input type="text" id="admEd_billCompany" placeholder="Company / Organisation (optional)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          <input type="text" id="admEd_billLine1" placeholder="Address Line 1 (Flat/House No., Building, Street)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          <input type="text" id="admEd_billLine2" placeholder="Address Line 2 — Area, Locality (optional)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input type="text" id="admEd_billCity" placeholder="City / Town" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+            <input type="text" id="admEd_billPin" placeholder="PIN / ZIP Code" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <select id="admEd_billCountry" onchange="admEdCountryChange()" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+              <option value="IN">India</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AE">UAE</option>
+              <option value="SA">Saudi Arabia</option>
+              <option value="AU">Australia</option>
+              <option value="CA">Canada</option>
+              <option value="SG">Singapore</option>
+              <option value="MY">Malaysia</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="NL">Netherlands</option>
+              <option value="JP">Japan</option>
+              <option value="OTHER">Other</option>
+            </select>
+            <select id="admEd_billState" onchange="admEdRefreshPreview()" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;"></select>
+            <input type="text" id="admEd_billStateText" placeholder="State / Region / Province" style="display:none;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+          </div>
+          <div id="admEd-gstin-block" style="margin-top:6px;padding-top:10px;border-top:1px dashed rgba(246,188,104,0.2);">
+            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:rgba(212,196,178,0.85);margin-bottom:8px;">
+              <input type="checkbox" id="admEd_gstinToggle" onchange="admEdGstinToggle()" style="margin-top:3px;accent-color:#f6bc68;">
+              <span><strong style="color:#f0e8d8;">Buyer has a GSTIN</strong> (claim input tax credit). Invoice will be issued in the registered company name.</span>
+            </label>
+            <div id="admEd-gstin-fields" style="display:none;display:grid;grid-template-columns:1fr;gap:10px;padding-left:24px;border-left:2px solid rgba(246,188,104,0.3);">
+              <input type="text" id="admEd_gstin" placeholder="GSTIN (15 chars, e.g. 29AAFFF1528H1ZH)" maxlength="15" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;text-transform:uppercase;">
+              <input type="text" id="admEd_gstLegalName" placeholder="Legal name of business (as per GST registration)" style="padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(246,188,104,0.2);border-radius:8px;color:#f0e8d8;font-size:13px;">
+            </div>
+          </div>
+          <div id="admEd-preview" style="margin-top:10px;padding:12px 14px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:8px;font-size:12px;color:#bbf7d0;line-height:1.6;"></div>
+          <div id="admEd-err" style="color:#f87171;font-size:12px;min-height:16px;"></div>
+        </div>
+      </div>
+      <div style="padding:14px 22px;border-top:1px solid rgba(246,188,104,0.15);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;">
+        <button onclick="admEditClose()" style="padding:9px 18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.85);border-radius:8px;cursor:pointer;font-size:13px;">Cancel</button>
+        <button onclick="admEditSave()" id="admEd-saveBtn" style="padding:9px 22px;background:linear-gradient(135deg,#f6bc68,#ba8738);border:none;color:#06132a;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;">&#x1F4BE; Save &amp; Recompute Tax</button>
+      </div>
+    </div>
+  </div>
+
   <!-- GLOBAL SCRIPTS -->
   <script>
     // Hamburger menu
@@ -958,7 +1022,42 @@
     }
     function pdfCurrSymbol(curr){var map={INR:'Rs.',USD:'$',EUR:'€',GBP:'£'};return map[curr]||curr+' ';}
 
-    /* ── GST Invoice PDF builder ───────────────────────────────────────── */
+    /* ── GST Helpers (intra-state vs inter-state, GSTIN, Indian states) ── */
+    var SELLER_STATE_CODE='29';   /* FullOnBaan Consulting Service LLP — Karnataka */
+    var SELLER_STATE_NAME='Karnataka';
+    var GST_RATE_FULL=0.18;
+    function calcGSTSplit(basePrice,buyerStateCode){
+      var base=Math.round(basePrice*100)/100;
+      var totalGst=Math.round(base*GST_RATE_FULL*100)/100;
+      var total=Math.round((base+totalGst)*100)/100;
+      var isIntra=!!buyerStateCode && String(buyerStateCode)===SELLER_STATE_CODE;
+      if(isIntra){
+        var cgst=Math.round(base*0.09*100)/100;
+        var sgst=Math.round((totalGst-cgst)*100)/100;
+        return{base:base,cgst:cgst,sgst:sgst,igst:0,gst:totalGst,total:total,taxType:'CGST_SGST'};
+      }
+      return{base:base,cgst:0,sgst:0,igst:totalGst,gst:totalGst,total:total,taxType:'IGST'};
+    }
+    var INDIA_STATES=[
+      {code:'35',name:'Andaman & Nicobar Islands'},{code:'37',name:'Andhra Pradesh'},
+      {code:'12',name:'Arunachal Pradesh'},{code:'18',name:'Assam'},{code:'10',name:'Bihar'},
+      {code:'04',name:'Chandigarh'},{code:'22',name:'Chhattisgarh'},
+      {code:'26',name:'Dadra & Nagar Haveli and Daman & Diu'},{code:'07',name:'Delhi'},
+      {code:'30',name:'Goa'},{code:'24',name:'Gujarat'},{code:'06',name:'Haryana'},
+      {code:'02',name:'Himachal Pradesh'},{code:'01',name:'Jammu & Kashmir'},{code:'20',name:'Jharkhand'},
+      {code:'29',name:'Karnataka'},{code:'32',name:'Kerala'},{code:'38',name:'Ladakh'},
+      {code:'31',name:'Lakshadweep'},{code:'23',name:'Madhya Pradesh'},{code:'27',name:'Maharashtra'},
+      {code:'14',name:'Manipur'},{code:'17',name:'Meghalaya'},{code:'15',name:'Mizoram'},
+      {code:'13',name:'Nagaland'},{code:'21',name:'Odisha'},{code:'34',name:'Puducherry'},
+      {code:'03',name:'Punjab'},{code:'08',name:'Rajasthan'},{code:'11',name:'Sikkim'},
+      {code:'33',name:'Tamil Nadu'},{code:'36',name:'Telangana'},{code:'16',name:'Tripura'},
+      {code:'09',name:'Uttar Pradesh'},{code:'05',name:'Uttarakhand'},{code:'19',name:'West Bengal'}
+    ];
+    function getStateNameByCode(code){var s=INDIA_STATES.find(function(x){return x.code===code;});return s?s.name:'';}
+    function isValidGSTIN(g){if(!g)return false;g=String(g).toUpperCase().trim();return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[0-9A-Z]{1}$/.test(g);}
+    function gstinStateCode(g){return(g&&g.length>=2)?String(g).toUpperCase().slice(0,2):'';}
+
+    /* ── GST Invoice PDF builder (white header, CGST+SGST or IGST split) ── */
     function generateGSTInvoice(inv){
       var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
       var W=doc.internal.pageSize.getWidth();var H=doc.internal.pageSize.getHeight();
@@ -968,11 +1067,28 @@
       var INV_LOCALE=(INV_CURR==='INR')?'en-IN':'en-US';
       var INV_HAS_GST=(INV_CURR==='INR' && Number(inv.gstAmt||0)>0);
       var INV_MOBILE_CODE=inv.mobileCode||'+91';
+      /* Tax-type derivation */
+      var INV_TAX_TYPE=inv.taxType||(INV_HAS_GST?((inv.billStateCode&&String(inv.billStateCode)===SELLER_STATE_CODE)?'CGST_SGST':'IGST'):'NONE');
+      var INV_CGST=Number(inv.cgstAmt||0),INV_SGST=Number(inv.sgstAmt||0),INV_IGST=Number(inv.igstAmt||0);
+      if(INV_HAS_GST&&!INV_CGST&&!INV_SGST&&!INV_IGST){
+        if(INV_TAX_TYPE==='CGST_SGST'){INV_CGST=Math.round(Number(inv.baseAmt)*0.09*100)/100;INV_SGST=Math.round((Number(inv.gstAmt)-INV_CGST)*100)/100;}
+        else{INV_IGST=Number(inv.gstAmt);}
+      }
+      var INV_PLACE_OF_SUPPLY=inv.placeOfSupply||(inv.billStateName?(inv.billStateName+(inv.billStateCode?' ('+inv.billStateCode+')':'')):'');
       var fmt2=function(v){return Number(v).toLocaleString(INV_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2});};var PAD=32;
-      doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,0,W,96,'F');
-      try{if(FOB_LOGO_B64)doc.addImage(FOB_LOGO_B64,'JPEG',PAD,14,70,52);}catch(e){}
-      doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
-      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+      /* ── Header: white background so the FullOnBaan logo sits cleanly ── */
+      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(0,0,W,96,'F');
+      var __logoOk=false;
+      try{if(FOB_LOGO_B64){doc.addImage(FOB_LOGO_B64,'PNG',PAD,14,90,68);__logoOk=true;}}catch(e){}
+      if(!__logoOk){try{if(FOB_LOGO_B64){doc.addImage(FOB_LOGO_B64,'JPEG',PAD,14,90,68);__logoOk=true;}}catch(e){}}
+      if(!__logoOk){
+        doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Full',PAD,44);
+        doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('On',PAD+38,44);
+        doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Baan',PAD+58,44);
+        doc.setFont('helvetica','italic');doc.setFontSize(7.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('One stop destination for IT solutions',PAD,58);
+      }
+      doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
+      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(INK[0],INK[1],INK[2]);
       doc.text('Invoice No: '+inv.invNo,W-PAD,60,{align:'right'});doc.text('Date: '+inv.invDate,W-PAD,74,{align:'right'});
       doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,96,W,4,'F');
       var r1Y=106,r1H=112,midX=W/2+10;
@@ -988,29 +1104,65 @@
       doc.setFont('helvetica','normal');doc.setFontSize(8.5);
       ['Invoice Date:','Terms:','Due Date:'].forEach(function(l,i){doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);doc.text(l,midX+12,r1Y+64+i*15);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text([inv.invDate,'Immediate',inv.dueDate||'—'][i],W-PAD-8,r1Y+64+i*15,{align:'right'});});
       var r2Y=r1Y+r1H+10,r2H=88;
-      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.setLineWidth(0.6);doc.rect(PAD,r2Y,midX-PAD-8,r2H,'FD');
+      /* BILL TO — expanded to fit billing address + optional GSTIN */
+      var billBoxH=r2H+60;
+      doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.setLineWidth(0.6);doc.rect(PAD,r2Y,midX-PAD-8,billBoxH,'FD');
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('BILL TO',PAD+10,r2Y+14);
-      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(inv.name,PAD+10,r2Y+30);
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(inv.email,PAD+10,r2Y+46);
-      if(inv.mobile)doc.text(INV_MOBILE_CODE+' '+inv.mobile,PAD+10,r2Y+61);
-      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.rect(midX,r2Y,W-midX-PAD,r2H,'FD');
+      var BILL_NAME=inv.gstLegalName||inv.billCompany||inv.name;
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(String(BILL_NAME).slice(0,42),PAD+10,r2Y+30);
+      var billY=r2Y+44;
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(INK[0],INK[1],INK[2]);
+      if(BILL_NAME!==inv.name && inv.name){doc.text('Attn: '+String(inv.name).slice(0,46),PAD+10,billY); billY+=12;}
+      var addrLines=[];
+      if(inv.billLine1) addrLines.push(String(inv.billLine1));
+      if(inv.billLine2) addrLines.push(String(inv.billLine2));
+      var cityLine=[inv.billCity, inv.billStateName, inv.billPincode].filter(function(p){return !!p;}).join(', ');
+      if(cityLine) addrLines.push(cityLine);
+      if(inv.billCountry) addrLines.push(inv.billCountry==='IN'?'India':String(inv.billCountry));
+      addrLines.forEach(function(l){var wrapped=doc.splitTextToSize(l,midX-PAD-28);wrapped.forEach(function(w){doc.text(w,PAD+10,billY);billY+=11;});});
+      if(inv.email){doc.text('Email: '+inv.email,PAD+10,billY); billY+=11;}
+      if(inv.mobile){doc.text('Mobile: '+INV_MOBILE_CODE+' '+inv.mobile,PAD+10,billY); billY+=11;}
+      if(inv.gstin){doc.setFont('helvetica','bold');doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('GSTIN: '+String(inv.gstin).toUpperCase(),PAD+10,billY); billY+=11; doc.setFont('helvetica','normal');doc.setTextColor(INK[0],INK[1],INK[2]);}
+      /* SERVICE DETAILS — Place of Supply + tax type */
+      doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.rect(midX,r2Y,W-midX-PAD,billBoxH,'FD');
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('SERVICE DETAILS',midX+12,r2Y+14);
       doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK[0],INK[1],INK[2]);
-      doc.text('SAC Code: 998431',midX+12,r2Y+30);
-      doc.text(INV_HAS_GST?'Tax Type: IGST @ 18%':'Currency: '+INV_CURR+' (no GST)',midX+12,r2Y+46);
-      doc.text('Payment Ref: '+(inv.paymentId||'').slice(0,22),midX+12,r2Y+61);doc.text('Order Ref: '+(inv.orderRef||inv.orderId||''),midX+12,r2Y+76);
-      var tY=r2Y+r2H+12;
+      var sdY=r2Y+30;
+      doc.text('SAC Code: 998431',midX+12,sdY); sdY+=14;
+      var taxLabel;
+      if(INV_TAX_TYPE==='CGST_SGST') taxLabel='Tax Type: CGST 9% + SGST 9%';
+      else if(INV_TAX_TYPE==='IGST')  taxLabel='Tax Type: IGST @ 18%';
+      else                            taxLabel='Currency: '+INV_CURR+' (no GST)';
+      doc.text(taxLabel,midX+12,sdY); sdY+=14;
+      if(INV_HAS_GST){
+        doc.text('Place of Supply: '+(INV_PLACE_OF_SUPPLY||'—'),midX+12,sdY); sdY+=14;
+        doc.text('Supplier State: '+SELLER_STATE_NAME+' ('+SELLER_STATE_CODE+')',midX+12,sdY); sdY+=14;
+      }
+      doc.text('Payment Ref: '+(inv.paymentId||'').slice(0,22),midX+12,sdY); sdY+=14;
+      doc.text('Order Ref: '+(inv.orderRef||inv.orderId||''),midX+12,sdY);
+      var tY=r2Y+billBoxH+12;
       doc.autoTable({startY:tY,head:[['Sr.','Item & Description','Qty','Rate ('+INV_CURR+')','Amount ('+INV_CURR+')']],body:[['1',(inv.module||'Training Material')+'\n\nSAC: 998431','1',fmt2(inv.baseAmt),fmt2(inv.baseAmt)]],theme:'plain',headStyles:{fillColor:NAVY,textColor:WHITE,fontStyle:'bold',fontSize:9,halign:'center',cellPadding:9},bodyStyles:{fontSize:9,textColor:INK,cellPadding:{top:14,right:8,bottom:14,left:8}},columnStyles:{0:{cellWidth:44,halign:'center'},1:{cellWidth:'auto'},2:{cellWidth:40,halign:'center'},3:{cellWidth:95,halign:'right'},4:{cellWidth:95,halign:'right'}},margin:{left:PAD,right:PAD},alternateRowStyles:{fillColor:LGREY},tableLineColor:MGREY,tableLineWidth:0.5});
       var fY=doc.lastAutoTable.finalY+14,totW=260,totX=W-PAD-totW;
-      var totBoxH=INV_HAS_GST?98:68;
+      var taxRows=0; if(INV_HAS_GST) taxRows=(INV_TAX_TYPE==='CGST_SGST')?2:1;
+      var totBoxH=30+(taxRows*30)+38;
       doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(totX,fY,totW,30,'F');
       doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('Sub Total',totX+14,fY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.baseAmt),W-PAD-8,fY+19,{align:'right'});
-      var totalRowY=fY+30;
+      var rowY=fY+30;
       if(INV_HAS_GST){
-        doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,fY+30,totW,30,'F');
-        doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST18 (18%)',totX+14,fY+49);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(inv.gstAmt),W-PAD-8,fY+49,{align:'right'});
-        totalRowY=fY+60;
+        if(INV_TAX_TYPE==='CGST_SGST'){
+          doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,rowY,totW,30,'F');
+          doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('CGST (9%)',totX+14,rowY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(INV_CGST),W-PAD-8,rowY+19,{align:'right'});
+          rowY+=30;
+          doc.setFillColor(LGREY[0],LGREY[1],LGREY[2]);doc.rect(totX,rowY,totW,30,'F');
+          doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('SGST (9%)',totX+14,rowY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(INV_SGST),W-PAD-8,rowY+19,{align:'right'});
+          rowY+=30;
+        } else {
+          doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.rect(totX,rowY,totW,30,'F');
+          doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('IGST (18%)',totX+14,rowY+19);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(fmt2(INV_IGST||inv.gstAmt),W-PAD-8,rowY+19,{align:'right'});
+          rowY+=30;
+        }
       }
+      var totalRowY=rowY;
       doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(totX,totalRowY,totW,38,'F');
       doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);doc.text('TOTAL',totX+14,totalRowY+24);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.text(INV_CURR+' '+fmt2(inv.totalAmt),W-PAD-8,totalRowY+24,{align:'right'});
       doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.8);doc.rect(totX,fY,totW,totBoxH,'S');
@@ -1063,12 +1215,159 @@
           baseAmt: baseAmt,
           gstAmt:  gstAmt,
           totalAmt:totalAmt,
+          /* Billing & GST split — newly captured fields, populated for backfilled records */
+          cgstAmt: Number(rec.cgstAmt||0), sgstAmt: Number(rec.sgstAmt||0), igstAmt: Number(rec.igstAmt||0),
+          taxType: rec.taxType||'',
+          billCompany: rec.billCompany||'', billLine1: rec.billLine1||'', billLine2: rec.billLine2||'',
+          billCity: rec.billCity||'', billPincode: rec.billPincode||'',
+          billStateCode: rec.billStateCode||'', billStateName: rec.billStateName||'',
+          billCountry: rec.billCountry||'IN',
+          gstin: rec.gstin||'', gstLegalName: rec.gstLegalName||'',
+          placeOfSupply: rec.placeOfSupply||'',
           paymentId:rec.paymentId||rec.utr||'—',
           orderRef: rec.orderId
         };
         var doc=generateGSTInvoice(inv);doc.save('Invoice-'+inv.invNo+'.pdf');
       }catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
     }
+
+    /* ── Admin: Edit Billing & GST (backfill legacy records, recompute tax) ── */
+    var admEdRec=null;
+    function admEditOpen(orderId){
+      var rec=admRecs.find(function(x){return x.orderId===orderId;});
+      if(!rec){alert('Record not found.');return;}
+      admEdRec=rec;
+      var stSel=document.getElementById('admEd_billState');
+      if(stSel && !stSel.dataset.populated){
+        var html='<option value="">— Select State —</option>';
+        INDIA_STATES.forEach(function(s){html+='<option value="'+s.code+'">'+s.name+' ('+s.code+')</option>';});
+        stSel.innerHTML=html; stSel.dataset.populated='1';
+      }
+      document.getElementById('admEd-meta').textContent='Order: '+(rec.orderId||'—')+' · Invoice: '+(rec.invoiceNo||'—')+' · '+(rec.module||'—');
+      var rCurr=rec.currency||'INR';
+      var rSym={INR:'₹',USD:'$',EUR:'€',GBP:'£'}[rCurr]||(rCurr+' ');
+      var custH='<div><strong style="color:#f6bc68;">'+(rec.name||'—')+'</strong> · '+(rec.email||'—')+(rec.mobile?' · '+(rec.mobileCode||'+91')+' '+rec.mobile:'')+'</div>'+
+        '<div style="color:rgba(212,196,178,0.7);margin-top:4px;">Base '+rSym+Number(rec.baseAmt||0).toFixed(2)+' · Tax '+rSym+Number(rec.gstAmt||0).toFixed(2)+' · Total <strong style="color:#f6bc68;">'+rSym+Number(rec.totalAmt||rec.amount||0).toFixed(2)+'</strong> ('+rCurr+')</div>';
+      document.getElementById('admEd-cust').innerHTML=custH;
+      document.getElementById('admEd_billCompany').value=rec.billCompany||'';
+      document.getElementById('admEd_billLine1').value  =rec.billLine1  ||'';
+      document.getElementById('admEd_billLine2').value  =rec.billLine2  ||'';
+      document.getElementById('admEd_billCity').value   =rec.billCity   ||'';
+      document.getElementById('admEd_billPin').value    =rec.billPincode||'';
+      document.getElementById('admEd_billCountry').value=rec.billCountry||'IN';
+      admEdCountryChange();
+      if((rec.billCountry||'IN')==='IN'){
+        document.getElementById('admEd_billState').value=rec.billStateCode||'';
+      } else {
+        document.getElementById('admEd_billStateText').value=rec.billStateName||'';
+      }
+      var hasGstin=!!rec.gstin;
+      document.getElementById('admEd_gstinToggle').checked=hasGstin;
+      document.getElementById('admEd_gstin').value=(rec.gstin||'').toUpperCase();
+      document.getElementById('admEd_gstLegalName').value=rec.gstLegalName||'';
+      admEdGstinToggle();
+      document.getElementById('admEd-err').textContent='';
+      admEdRefreshPreview();
+      document.getElementById('adm-edit-overlay').style.display='flex';
+    }
+    function admEditClose(){document.getElementById('adm-edit-overlay').style.display='none';admEdRec=null;}
+    function admEdCountryChange(){
+      var c=document.getElementById('admEd_billCountry').value;
+      var sel=document.getElementById('admEd_billState');
+      var txt=document.getElementById('admEd_billStateText');
+      var gst=document.getElementById('admEd-gstin-block');
+      if(c==='IN'){
+        if(sel)sel.style.display=''; if(txt)txt.style.display='none'; if(gst)gst.style.display='';
+      } else {
+        if(sel)sel.style.display='none'; if(txt)txt.style.display=''; if(gst)gst.style.display='none';
+        var t=document.getElementById('admEd_gstinToggle'); if(t)t.checked=false;
+        admEdGstinToggle();
+      }
+      admEdRefreshPreview();
+    }
+    function admEdGstinToggle(){var on=document.getElementById('admEd_gstinToggle').checked;document.getElementById('admEd-gstin-fields').style.display=on?'grid':'none';}
+    function admEdRefreshPreview(){
+      if(!admEdRec)return;
+      var prev=document.getElementById('admEd-preview');
+      var rCurr=admEdRec.currency||'INR';
+      var rSym={INR:'₹',USD:'$',EUR:'€',GBP:'£'}[rCurr]||(rCurr+' ');
+      var base=Number(admEdRec.baseAmt||0);
+      if(rCurr!=='INR'){prev.innerHTML='<strong style="color:#fbbf24;">No GST</strong> — international currency ('+rCurr+'). Base '+rSym+base.toFixed(2)+' = Total '+rSym+base.toFixed(2)+'.';return;}
+      var country=document.getElementById('admEd_billCountry').value;
+      var stCd=(country==='IN')?document.getElementById('admEd_billState').value:'';
+      if(country!=='IN'){prev.innerHTML='<strong style="color:#fbbf24;">Buyer outside India</strong> — invoice will be issued without GST.';return;}
+      if(!stCd){prev.innerHTML='<strong style="color:#fbbf24;">Pick a state</strong> to see whether CGST+SGST or IGST applies.';return;}
+      var split=calcGSTSplit(base,stCd);
+      if(split.taxType==='CGST_SGST'){
+        prev.innerHTML='<strong style="color:#4ade80;">CGST 9% + SGST 9%</strong> (intra-state, '+getStateNameByCode(stCd)+'): Base '+rSym+split.base.toFixed(2)+' &nbsp;·&nbsp; CGST '+rSym+split.cgst.toFixed(2)+' + SGST '+rSym+split.sgst.toFixed(2)+' &nbsp;·&nbsp; <strong>Total '+rSym+split.total.toFixed(2)+'</strong>';
+      } else {
+        prev.innerHTML='<strong style="color:#4ade80;">IGST @ 18%</strong> (inter-state, '+getStateNameByCode(stCd)+'): Base '+rSym+split.base.toFixed(2)+' &nbsp;·&nbsp; IGST '+rSym+split.igst.toFixed(2)+' &nbsp;·&nbsp; <strong>Total '+rSym+split.total.toFixed(2)+'</strong>';
+      }
+    }
+    async function admEditSave(){
+      if(!admEdRec)return;
+      var err=document.getElementById('admEd-err'); err.textContent='';
+      var company=(document.getElementById('admEd_billCompany').value||'').trim();
+      var line1  =(document.getElementById('admEd_billLine1').value||'').trim();
+      var line2  =(document.getElementById('admEd_billLine2').value||'').trim();
+      var city   =(document.getElementById('admEd_billCity').value||'').trim();
+      var pin    =(document.getElementById('admEd_billPin').value||'').trim();
+      var country=(document.getElementById('admEd_billCountry').value||'IN').trim();
+      var stCd='', stName='';
+      if(country==='IN'){
+        stCd=document.getElementById('admEd_billState').value||'';
+        stName=stCd?getStateNameByCode(stCd):'';
+      } else {
+        stName=(document.getElementById('admEd_billStateText').value||'').trim();
+      }
+      var gstinOn=!!document.getElementById('admEd_gstinToggle').checked;
+      var gstin=gstinOn?(document.getElementById('admEd_gstin').value||'').toUpperCase().trim():'';
+      var legalName=gstinOn?(document.getElementById('admEd_gstLegalName').value||'').trim():'';
+
+      if(!line1){err.textContent='Address Line 1 is required.';return;}
+      if(!city){err.textContent='City is required.';return;}
+      if(!pin){err.textContent='PIN / ZIP is required.';return;}
+      if(country==='IN' && !stCd){err.textContent='Please select an Indian state — it determines CGST+SGST vs IGST.';return;}
+      if(country!=='IN' && !stName){err.textContent='Please enter the state / region.';return;}
+      if(country==='IN' && !/^\d{6}$/.test(pin)){err.textContent='Indian PIN code must be 6 digits.';return;}
+      if(gstinOn){
+        if(!isValidGSTIN(gstin)){err.textContent='GSTIN format is invalid (expected 15 chars).';return;}
+        if(country==='IN' && gstinStateCode(gstin)!==stCd){err.textContent='GSTIN starts with state code '+gstinStateCode(gstin)+' but state is '+stName+' ('+stCd+'). They must match.';return;}
+        if(!legalName){err.textContent='Legal name of business is required when GSTIN is provided.';return;}
+      }
+
+      var rCurr=admEdRec.currency||'INR';
+      var base=Number(admEdRec.baseAmt||0);
+      var cgst=0, sgst=0, igst=0, gstAmt=Number(admEdRec.gstAmt||0), total=Number(admEdRec.totalAmt||admEdRec.amount||0), taxType=admEdRec.taxType||'NONE';
+      if(rCurr==='INR' && base>0){
+        var split=calcGSTSplit(base, country==='IN'?stCd:'');
+        cgst=split.cgst; sgst=split.sgst; igst=split.igst;
+        gstAmt=split.gst; total=split.total; taxType=split.taxType;
+      }
+      var merged=Object.assign({},admEdRec,{
+        billCompany:company,billLine1:line1,billLine2:line2,billCity:city,billPincode:pin,
+        billCountry:country,billStateCode:stCd,billStateName:stName,
+        gstin:gstin,gstLegalName:legalName,
+        placeOfSupply:stName?(stName+(stCd?' ('+stCd+')':'')):'',
+        cgstAmt:cgst,sgstAmt:sgst,igstAmt:igst,gstAmt:gstAmt,totalAmt:total,taxType:taxType,
+        billingUpdatedAt:new Date().toISOString()
+      });
+
+      var btn=document.getElementById('admEd-saveBtn');
+      var orig=btn.textContent;
+      btn.disabled=true; btn.textContent='⏳ Saving…';
+      try {
+        await admGhUpsert(merged);
+        var i=admRecs.findIndex(function(x){return x.orderId===merged.orderId;});
+        if(i>=0) admRecs[i]=merged;
+        admRender();
+        admEditClose();
+      } catch(e){console.error(e);err.textContent='Save failed: '+(e.message||'unknown error');}
+      finally { btn.disabled=false; btn.textContent=orig; }
+    }
+    document.addEventListener('change', function(e){
+      if(e.target && (e.target.id==='admEd_billState' || e.target.id==='admEd_billCountry')){ admEdRefreshPreview(); }
+    });
 
     function admOpen(){document.getElementById('adminOverlay').classList.add('active');document.getElementById('admLoginDiv').style.display='block';document.getElementById('admDashDiv').style.display='none';document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('admPassword').focus();},50);}
     function admClose(){document.getElementById('adminOverlay').classList.remove('active');document.body.style.overflow='';}
@@ -1115,6 +1414,21 @@
         var submittedRow=rec.submittedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Submitted</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.submittedAt)+'</span>':'';
         // GST Invoice button — shown for all confirmed records (all transactions include 18% IGST)
         var invBtn=confirmed?'<button onclick="admDlInvoice(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">&#x1F4C4; GST Invoice</button>':'';
+        // Edit Billing button — available on every record so legacy entries can be backfilled
+        var editBtn='<button onclick="admEditOpen(\''+escQ(rec.orderId)+'\')" style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);color:#4ade80;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">&#x270F;&#xFE0F; Edit Billing</button>';
+        /* Billing & GSTIN summary rows for the admin card */
+        var addrParts=[rec.billLine1,rec.billLine2,rec.billCity,rec.billStateName,rec.billPincode,(rec.billCountry==='IN'?'India':rec.billCountry)].filter(function(p){return !!p;});
+        var billRow=addrParts.length?'<span class="text-on-surface-variant/60 font-label text-xs">Billing</span><span class="text-on-surface-variant text-xs">'+(rec.billCompany?'<strong>'+esc(rec.billCompany)+'</strong> · ':'')+esc(addrParts.join(', '))+'</span>':'';
+        var gstinRow=rec.gstin?'<span class="text-on-surface-variant/60 font-label text-xs">GSTIN</span><span class="text-green-400 text-xs font-mono">'+esc(String(rec.gstin).toUpperCase())+(rec.gstLegalName?' · '+esc(rec.gstLegalName):'')+'</span>':'';
+        /* Better tax breakdown line: CGST + SGST or IGST */
+        if(hasGst){
+          var rTaxType=rec.taxType||((rec.billStateCode&&String(rec.billStateCode)===SELLER_STATE_CODE)?'CGST_SGST':'IGST');
+          if(rTaxType==='CGST_SGST'){
+            gstRow='<span class="text-on-surface-variant/60 font-label text-xs">GST Breakdown</span><span class="text-on-surface-variant text-xs">Base '+recCurrSym+Number(rec.baseAmt).toFixed(2)+' + CGST '+recCurrSym+Number(rec.cgstAmt||0).toFixed(2)+' + SGST '+recCurrSym+Number(rec.sgstAmt||0).toFixed(2)+'</span>';
+          } else {
+            gstRow='<span class="text-on-surface-variant/60 font-label text-xs">GST Breakdown</span><span class="text-on-surface-variant text-xs">Base '+recCurrSym+Number(rec.baseAmt).toFixed(2)+' + IGST '+recCurrSym+Number(rec.igstAmt||rec.gstAmt).toFixed(2)+'</span>';
+          }
+        }
         return '<div class="bg-surface-container-low p-5 rounded-lg mb-3 border border-outline-variant/20">'
           // Header: name on left, status badge + invoice button stacked on right
           +'<div class="flex justify-between items-start mb-4">'
@@ -1122,6 +1436,7 @@
           +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:0;">'
           +'<span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span>'
           +invBtn
+          +editBtn
           +'</div>'
           +'</div>'
           // Details grid
@@ -1131,6 +1446,8 @@
           +'<span class="text-on-surface-variant/60 font-label text-xs">Module</span><span class="text-primary font-semibold">'+esc(rec.module||'\u2014')+'</span>'
           +'<span class="text-on-surface-variant/60 font-label text-xs">Amount</span><span class="text-primary font-semibold">'+amtDisplay+'</span>'
           +gstRow
+          +billRow
+          +gstinRow
           +'<span class="text-on-surface-variant/60 font-label text-xs">Order ID</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.orderId||'\u2014')+'</span>'
           +(rec.utr?'<span class="text-on-surface-variant/60 font-label text-xs">UTR</span><span class="text-on-surface-variant text-xs font-mono">'+esc(rec.utr)+'</span>':'')
           +payIdRow+invRow
