@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Sample GST Invoice — Preview (FullOnBaan)</title>
+<style>
+  :root{
+    --navy:#0a2044; --gold:#c08c34; --gold2:#f0d28c; --white:#fff;
+    --ink:#191923; --grey:#6e6e7d; --lgrey:#f5f5f8; --mgrey:#d2d2da;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px;background:#e9ecf3;font-family:Helvetica,Arial,sans-serif;color:var(--ink);}
+  .toolbar{max-width:840px;margin:0 auto 18px;display:flex;justify-content:space-between;align-items:center;color:#445}
+  .toolbar h1{font-size:14px;margin:0;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#0a2044}
+  .toolbar p{font-size:12px;margin:0;color:#667}
+  .toolbar .scenarios{font-size:12px}
+  .scenarios b{color:var(--navy)}
+
+  /* A4 page (595 x 842 pt -> we render at ~840px wide) */
+  .page{
+    width:840px;min-height:1188px;margin:0 auto;background:#fff;
+    box-shadow:0 12px 40px rgba(8,16,40,.18),0 1px 0 rgba(0,0,0,.04);
+    border-radius:4px;overflow:hidden;position:relative;font-size:13px;
+  }
+
+  /* ── Header (white) ───────────────────────────────────────────── */
+  .hdr{position:relative;background:var(--white);height:128px;padding:18px 42px;display:flex;align-items:center;justify-content:space-between}
+  .hdr .logo{display:flex;align-items:center;gap:12px}
+  .hdr .logo .mark{
+    width:78px;height:78px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%,#3a7ad8 0,#1a3a82 60%,#0a1f4f 100%);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-style:italic;
+    font-size:46px;font-family:Georgia,serif;letter-spacing:-.04em;box-shadow:0 4px 14px rgba(10,32,68,.25);
+  }
+  .hdr .logo .mark span{transform:translate(-2px,-2px) skewX(-10deg);text-shadow:1px 1px 0 rgba(255,255,255,.4)}
+  .hdr .logo .wm{display:flex;flex-direction:column;line-height:1}
+  .hdr .logo .wm .nm{font-family:Georgia,serif;font-weight:700;font-size:24px;letter-spacing:-.01em}
+  .hdr .logo .wm .nm .l{color:#0a2044}
+  .hdr .logo .wm .nm .r{color:#19a09a}
+  .hdr .logo .wm .tag{font-size:10px;color:#888;margin-top:6px;font-style:italic}
+  .hdr .right{text-align:right}
+  .hdr .right .ti{font-weight:800;font-size:32px;color:var(--navy);letter-spacing:.02em}
+  .hdr .right .meta{margin-top:4px;color:var(--ink);font-size:11.5px;line-height:1.6}
+  .hdr .stripe{position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--gold)}
+
+  /* ── Row 1: Seller / Balance Due ─────────────────────────────── */
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 38px}
+  .row .seller{
+    background:var(--lgrey);border:1px solid var(--gold);border-radius:2px;padding:14px 16px;
+  }
+  .row .seller h3{margin:0 0 6px;color:var(--navy);font-size:12.5px;font-weight:800}
+  .row .seller p{margin:2px 0;font-size:11px;color:var(--ink);line-height:1.5}
+  .row .due{
+    background:var(--navy);color:#fff;border-radius:2px;padding:14px 16px;text-align:right;display:flex;flex-direction:column;justify-content:flex-start;
+  }
+  .row .due .lab{color:var(--gold2);font-size:11px;letter-spacing:.06em}
+  .row .due .amt{color:var(--gold);font-weight:800;font-size:28px;letter-spacing:.01em;margin-top:2px}
+  .row .due hr{border:0;border-top:1px solid var(--gold);margin:8px 0}
+  .row .due .terms{display:flex;justify-content:space-between;font-size:11px;margin:3px 0}
+  .row .due .terms .k{color:var(--gold2)}
+  .row .due .terms .v{color:#fff}
+
+  /* ── Row 2: Bill To / Service Details ─────────────────────────── */
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 38px 0;margin-top:6px}
+  .billto{background:#fff;border:1px solid var(--mgrey);border-radius:2px;padding:14px 16px;min-height:170px}
+  .billto .lbl{font-size:9.5px;font-weight:800;color:var(--grey);letter-spacing:.1em;margin-bottom:4px}
+  .billto .name{font-size:14px;color:var(--navy);font-weight:800;margin:0 0 4px}
+  .billto .attn{font-size:11px;color:var(--ink);margin:0 0 6px;font-style:italic}
+  .billto .ln{font-size:11px;color:var(--ink);line-height:1.55;margin:0}
+  .billto .gstin{font-size:11px;color:var(--navy);font-weight:700;margin-top:8px}
+  .svc{background:var(--lgrey);border:1px solid var(--mgrey);border-radius:2px;padding:14px 16px;min-height:170px}
+  .svc .lbl{font-size:9.5px;font-weight:800;color:var(--grey);letter-spacing:.1em;margin-bottom:6px}
+  .svc p{font-size:11px;margin:3px 0;color:var(--ink);line-height:1.5}
+  .svc .em{color:var(--navy);font-weight:600}
+
+  /* ── Items table ──────────────────────────────────────────────── */
+  table.items{width:calc(100% - 76px);margin:14px 38px 0;border-collapse:collapse;font-size:11.5px}
+  table.items thead th{background:var(--navy);color:#fff;font-weight:700;font-size:10.5px;padding:10px 8px;text-align:center;letter-spacing:.05em}
+  table.items tbody td{padding:14px 8px;border-bottom:.5px solid var(--mgrey);background:var(--lgrey);font-size:11px;color:var(--ink)}
+  table.items td.desc{text-align:left;line-height:1.6}
+  table.items td.qty,table.items td.cn{text-align:center}
+  table.items td.amt,table.items td.rt{text-align:right}
+  table.items th.desc{text-align:left}
+  table.items td .sac{display:block;color:var(--grey);font-size:10px;margin-top:4px}
+
+  /* ── Totals box ───────────────────────────────────────────────── */
+  .totals-wrap{display:flex;justify-content:flex-end;padding:14px 38px 0}
+  .totals{width:330px;border:1px solid var(--gold);border-radius:2px;overflow:hidden;font-size:11.5px}
+  .totals .r{display:flex;justify-content:space-between;padding:10px 14px}
+  .totals .r .k{color:var(--grey)}
+  .totals .r .v{color:var(--ink)}
+  .totals .r.subtot{background:var(--lgrey)}
+  .totals .r.cgst{background:#fff}
+  .totals .r.sgst{background:var(--lgrey)}
+  .totals .r.igst{background:#fff}
+  .totals .r.total{background:var(--navy);padding:14px;color:#fff}
+  .totals .r.total .k{color:var(--gold);font-weight:800;font-size:13px}
+  .totals .r.total .v{color:#fff;font-weight:800;font-size:13px}
+
+  /* ── Words / Terms / Footer ───────────────────────────────────── */
+  .words{margin:14px 38px;background:var(--lgrey);border:1px solid var(--gold);padding:10px 14px;font-size:11px}
+  .words .l{color:var(--grey)}
+  .words .v{color:var(--navy);font-style:italic;font-weight:700}
+  .terms{margin:10px 38px}
+  .terms h4{color:var(--navy);font-size:12px;margin:0;border-bottom:.5px solid var(--gold);padding-bottom:4px}
+  .terms ul{margin:8px 0 0;padding-left:18px;color:var(--grey);font-size:10.5px;line-height:1.65}
+  .ftbar{position:absolute;left:0;right:0;bottom:0;height:38px;background:var(--navy);color:var(--gold2);font-size:10.5px;display:flex;align-items:center;justify-content:center;letter-spacing:.04em}
+  .ftbar::before{content:"";position:absolute;left:0;right:0;top:-4px;height:4px;background:var(--gold)}
+
+  /* Compare callouts */
+  .callouts{max-width:840px;margin:14px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .callout{background:#fff;border:1px solid #d8def0;border-radius:8px;padding:10px 14px;font-size:12px;color:#3a425c}
+  .callout b{color:#0a2044}
+  .pill{display:inline-block;background:#0a2044;color:#fff;border-radius:6px;padding:2px 8px;font-size:10px;letter-spacing:.04em}
+  .pill.alt{background:#19a09a}
+  .pill.gold{background:#c08c34}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .toolbar,.callouts{display:none}
+    .page{box-shadow:none;border-radius:0}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>
+    <h1>Sample Tax Invoice — Preview</h1>
+    <p>Renders the new white-header layout, expanded Bill-To, Place-of-Supply line, and CGST 9% + SGST 9% intra-state split</p>
+  </div>
+  <div class="scenarios"><span class="pill gold">FOBT0001023</span> &nbsp; <span class="pill">CGST + SGST (Karnataka buyer)</span></div>
+</div>
+
+<div class="page">
+
+  <!-- HEADER (white) -->
+  <div class="hdr">
+    <div class="logo">
+      <div class="mark"><span>F</span></div>
+      <div class="wm">
+        <div class="nm"><span class="l">Fullon</span><span class="r">Baan</span></div>
+        <div class="tag">— One stop destination for IT solutions —</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="ti">TAX INVOICE</div>
+      <div class="meta">
+        Invoice No: FOBT0001023<br>
+        Date: 07/05/2026
+      </div>
+    </div>
+    <div class="stripe"></div>
+  </div>
+
+  <!-- ROW 1: Seller + Balance Due -->
+  <div class="row">
+    <div class="seller">
+      <h3>FULLONBAAN CONSULTING SERVICE LLP</h3>
+      <p>172, Shree, 1st Floor, 5th Main, 5th Cross</p>
+      <p>Mico Layout, BTM 2nd Stage</p>
+      <p>BANGALORE Karnataka 560076, India</p>
+      <p>TAN: BLRF03997A &nbsp;&nbsp;|&nbsp;&nbsp; PAN: AAFFF1528H</p>
+      <p>GSTIN: 29AAFFF1528H1ZH</p>
+    </div>
+    <div class="due">
+      <div class="lab">BALANCE DUE</div>
+      <div class="amt">Rs. 5,308.82</div>
+      <hr>
+      <div class="terms"><span class="k">Invoice Date:</span><span class="v">07/05/2026</span></div>
+      <div class="terms"><span class="k">Terms:</span><span class="v">Immediate</span></div>
+      <div class="terms"><span class="k">Due Date:</span><span class="v">22/05/2026</span></div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Bill To + Service Details (expanded) -->
+  <div class="row2">
+    <div class="billto">
+      <div class="lbl">BILL TO</div>
+      <div class="name">TechCorp India Pvt Ltd</div>
+      <div class="attn">Attn: Rajesh Kumar</div>
+      <p class="ln">Plot 41, 4th Block, HSR Layout</p>
+      <p class="ln">Bengaluru, Karnataka, 560102</p>
+      <p class="ln">India</p>
+      <p class="ln" style="margin-top:6px">Email: rajesh.kumar@techcorp.in</p>
+      <p class="ln">Mobile: +91 9845011234</p>
+      <div class="gstin">GSTIN: 29ABCDE1234F1Z5</div>
+    </div>
+    <div class="svc">
+      <div class="lbl">SERVICE DETAILS</div>
+      <p>SAC Code: 998431</p>
+      <p class="em">Tax Type: CGST 9% + SGST 9%</p>
+      <p>Place of Supply: Karnataka (29)</p>
+      <p>Supplier State: Karnataka (29)</p>
+      <p>Payment Ref: pay_SfdZ3ZiUo7kKeD</p>
+      <p>Order Ref: FOBT1776663943550</p>
+    </div>
+  </div>
+
+  <!-- ITEMS TABLE -->
+  <table class="items">
+    <thead>
+      <tr>
+        <th style="width:6%">Sr.</th>
+        <th class="desc">Item &amp; Description</th>
+        <th style="width:8%">Qty</th>
+        <th style="width:18%">Rate (INR)</th>
+        <th style="width:18%">Amount (INR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cn">1</td>
+        <td class="desc">Infor LN Finance — Combo (eBook + Video)<span class="sac">SAC: 998431</span></td>
+        <td class="qty">1</td>
+        <td class="rt">4,499.00</td>
+        <td class="amt">4,499.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TOTALS BOX (CGST + SGST split) -->
+  <div class="totals-wrap">
+    <div class="totals">
+      <div class="r subtot"><span class="k">Sub Total</span><span class="v">4,499.00</span></div>
+      <div class="r cgst"><span class="k">CGST (9%)</span><span class="v">404.91</span></div>
+      <div class="r sgst"><span class="k">SGST (9%)</span><span class="v">404.91</span></div>
+      <div class="r total"><span class="k">TOTAL</span><span class="v">INR 5,308.82</span></div>
+    </div>
+  </div>
+
+  <!-- AMOUNT IN WORDS -->
+  <div class="words">
+    <span class="l">Amount in Words:</span>
+    &nbsp;&nbsp;<span class="v">Five Thousand Three Hundred Eight Indian Rupee and Eighty Two Paise Only</span>
+  </div>
+
+  <!-- TERMS -->
+  <div class="terms">
+    <h4>Terms &amp; Conditions</h4>
+    <ul>
+      <li>This is a computer-generated tax invoice for a digital product (Training Material).</li>
+      <li>SAC Code 998431 — Online content delivery services.</li>
+      <li>For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.</li>
+      <li>WhatsApp: +91 63605 93122 &nbsp;|&nbsp; training.fullonbaan.com</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ftbar">training.fullonbaan.com &nbsp;•&nbsp; fullonbaan@gmail.com &nbsp;•&nbsp; +91 63605 93122</div>
+
+</div>
+
+<!-- Comparison callouts (browser only — hidden on print) -->
+<div class="callouts">
+  <div class="callout">
+    <b>Same-state buyer (Karnataka, code 29)</b><br>
+    Tax Type: <span class="pill alt">CGST 9% + SGST 9%</span>&nbsp; Sub Total ₹4,499 → CGST ₹404.91 + SGST ₹404.91 = ₹5,308.82
+  </div>
+  <div class="callout">
+    <b>Different-state buyer (e.g. Maharashtra, code 27)</b><br>
+    Tax Type: <span class="pill alt">IGST @ 18%</span>&nbsp; Sub Total ₹4,499 → IGST ₹809.82 = ₹5,308.82
+  </div>
+</div>
+
+</body>
+</html>
