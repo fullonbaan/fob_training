@@ -1007,6 +1007,7 @@ pageId: "pricing"
           <span id="aslbl">—</span>
         </div>
         <button onclick="admRefresh()" style="padding:7px 14px;background:rgba(246,188,104,0.15);border:1px solid rgba(246,188,104,0.3);color:#f6bc68;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;">↻ Refresh</button>
+        <button onclick="admMigrateInvoiceNos()" style="padding:7px 14px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.4);color:#fbbf24;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;" title="Renumber confirmed invoices to FOB####### sequence">🔢 Renumber Invoices</button>
         <button onclick="admClose()" style="padding:7px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(212,196,178,0.7);border-radius:8px;cursor:pointer;font-size:12px;">✕ Close</button>
       </div>
     </div>
@@ -1249,7 +1250,7 @@ pageId: "pricing"
   var ADM_API = '/api/payments';
   var ADM_PW  = 'Admin@M3Pay2025';
 
-  /* ── Invoice number — sequential via /api/invoice-counter ──────────── */
+  /* ── Invoice number — sequential via /api/invoice-counter (FOB#######) ── */
   async function genInvoiceNoGH() {
     try {
       var r = await fetch('/api/invoice-counter');
@@ -1260,7 +1261,7 @@ pageId: "pricing"
     } catch(e) {
       console.warn('Invoice counter API error — using timestamp fallback:', e);
     }
-    return 'FOBT' + Date.now(); // fallback only if API is down
+    return 'FOB' + Date.now(); // fallback only if API is down
   }
 
   /* ── Payment record storage via proxy ───────────────────────────────── */
@@ -1617,11 +1618,11 @@ pageId: "pricing"
     // Capture active currency NOW so it's available to payInitiated
     var activeCurr=selCurr||getActiveCurrency();
 
-    // Fetch invoice number async before Razorpay opens
-    genInvoiceNoGH().then(function(invNo){
-      pendingInvNo=invNo;
-      payInitiated(txnRef,userData,selDesc,selGD,activeCurr,invNo);
-    });
+    /* Invoice number is intentionally NOT generated here. It is generated and
+       persisted only after a successful payment so the counter only increments
+       on confirmed transactions. */
+    pendingInvNo = null;
+    payInitiated(txnRef, userData, selDesc, selGD, activeCurr, '');
 
     // Google Ads: begin_checkout
     if(typeof gtag!=='undefined'){gtag('event','begin_checkout',{value:selGD.total,currency:activeCurr,items:[{item_name:selDesc,price:selGD.total,quantity:1}]});}
@@ -1689,10 +1690,17 @@ pageId: "pricing"
   };
 
   /* ── Payment Success ──────────────────────────────────────────────────── */
-  window.onPaymentSuccess=function(payId){
-    if(successFired)return; successFired=true;
-    var invNo=pendingInvNo||('FOBT'+String(Date.now()).slice(-7));
-    pendingInvNo=null;
+  window.onPaymentSuccess = async function(payId){
+    if(successFired) return; successFired=true;
+    /* Counter only increments on confirmed payments — generate the invoice number now */
+    var invNo;
+    try {
+      invNo = await genInvoiceNoGH();
+    } catch(e) {
+      console.warn('Invoice counter API failed, using timestamp fallback:', e);
+      invNo = 'FOB' + Date.now();
+    }
+    pendingInvNo = null;
     var today=new Date();
     var fmt=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
     var invDate=fmt(today);
@@ -1950,8 +1958,9 @@ pageId: "pricing"
     }
     /* "TAX INVOICE" + invoice number/date on the right — dark navy on white */
     doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('TAX INVOICE',W-PAD,44,{align:'right'});
-    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(INK[0],INK[1],INK[2]);
-    doc.text('Invoice No: '+inv.invNo,W-PAD,60,{align:'right'});doc.text('Date: '+inv.invDate,W-PAD,74,{align:'right'});
+    /* Invoice No — bold; Date — normal weight */
+    doc.setFont('helvetica','bold');doc.setFontSize(10.5);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Invoice No: '+inv.invNo,W-PAD,60,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text('Date: '+inv.invDate,W-PAD,74,{align:'right'});
     /* Gold separator line below the white header */
     doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,96,W,4,'F');
     var r1Y=106,r1H=112,midX=W/2+10;
@@ -2058,11 +2067,11 @@ pageId: "pricing"
     doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Terms & Conditions',PAD,tcY+2);
     doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.6);doc.line(PAD,tcY+6,W-PAD,tcY+6);
     doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);
-    doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   training.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
+    doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   www.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
     doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,H-38,W,38,'F');
     doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,H-42,W,4,'F');
     doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);
-    doc.text('training.fullonbaan.com   •   fullonbaan@gmail.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
+    doc.text('www.fullonbaan.com   •   fullonbaan@gmail.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
     return doc;
   }
 
@@ -2222,6 +2231,50 @@ pageId: "pricing"
   function admCp(t,lb){navigator.clipboard.writeText(t).then(function(){admToast('📋 Copied '+lb);}).catch(function(){admToast(lb+': '+t);});}
   var _att;
   function admToast(m){var el=document.getElementById('adm-toast');if(!el)return;el.textContent=m;el.style.opacity='1';clearTimeout(_att);_att=setTimeout(function(){el.style.opacity='0';},2200);}
+
+  /* ── Admin: One-click migration to renumber confirmed invoices ──────── */
+  async function admMigrateInvoiceNos(){
+    var msg = 'This will renumber every CONFIRMED invoice to the new FOB####### sequence (sorted by confirmed date) and reset the counter.\n\n' +
+              'Existing invoice numbers are preserved as legacyInvoiceNo on each record.\n\n' +
+              'Continue?';
+    if(!confirm(msg)) return;
+    try {
+      var gh = await ghRead();
+      var allRecs = gh.records || [];
+      var confirmedRecs = allRecs.filter(function(r){return r.status==='confirmed';})
+        .sort(function(a,b){
+          var da = new Date(a.confirmedAt||a.initiatedAt||0).getTime();
+          var db = new Date(b.confirmedAt||b.initiatedAt||0).getTime();
+          return da - db;
+        });
+      if(!confirmedRecs.length){ admToast('No confirmed records to renumber.'); return; }
+      var changed = 0;
+      confirmedRecs.forEach(function(r, i){
+        var newNo = 'FOB' + String(i+1).padStart(7, '0');
+        if(r.invoiceNo && r.invoiceNo !== newNo){
+          if(!r.legacyInvoiceNo) r.legacyInvoiceNo = r.invoiceNo;
+          r.invoiceNo = newNo;
+          r.invoiceMigratedAt = new Date().toISOString();
+          changed++;
+        } else if(!r.invoiceNo){
+          r.invoiceNo = newNo;
+          r.invoiceMigratedAt = new Date().toISOString();
+          changed++;
+        }
+      });
+      var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:allRecs,sha:gh.sha,message:'invoice-migration: renumbered '+confirmedRecs.length+' confirmed invoices (changed '+changed+')'})});
+      if(!w.ok){throw new Error('GitHub write failed: '+w.status);}
+      try {
+        await fetch('/api/invoice-counter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({counter: confirmedRecs.length})});
+      } catch(e){ console.warn('Counter set failed, but records updated:', e); }
+      admToast('✅ Renumbered '+confirmedRecs.length+' invoice(s)');
+      alert('✅ Renumbered ' + confirmedRecs.length + ' confirmed invoice(s).\nNext payment will be FOB' + String(confirmedRecs.length+1).padStart(7,'0') + '.');
+      admRefresh();
+    } catch(e){
+      console.error('Migration failed:', e);
+      alert('Migration failed: '+(e.message||'unknown error'));
+    }
+  }
 
   function admDlInvoice(orderId){
     var rec=admRecs.find(function(x){return x.orderId===orderId;});

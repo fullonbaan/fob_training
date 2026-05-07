@@ -1,12 +1,15 @@
 // api/invoice-counter.js — Sequential GST invoice number generator
-// Reads/increments a counter stored in fob_pay_store_ln_int repo.
-// GET → returns next invoice number (e.g. FOBT0001024) and saves it atomically.
+// GET            → atomically increments counter and returns next FOB#######
+// POST {counter} → sets counter to a specific value (used by admin migration).
+// Storage: fob_pay_store_ln_int / payments/invoice_counter.json
 
 const https = require('https');
 
 const GH_OWNER = 'fullonbaan';
 const GH_REPO  = 'fob_pay_store_ln_int';
 const GH_FILE  = 'payments/invoice_counter.json';
+const PREFIX   = 'FOB';
+const PAD      = 7;        // FOB + 7 digits → FOB0000001 .. FOB9999999
 
 function ghRequest(method, bodyObj) {
   return new Promise((resolve, reject) => {
@@ -21,7 +24,7 @@ function ghRequest(method, bodyObj) {
       headers: {
         'Authorization': `token ${pat.trim()}`,
         'Accept':        'application/vnd.github.v3+json',
-        'User-Agent':    'fob-invoice-counter/1.0',
+        'User-Agent':    'fob-invoice-counter/2.0',
         'Content-Type':  'application/json',
         ...(payload ? { 'Content-Length': Buffer.byteLength(payload) } : {})
       }
@@ -38,66 +41,69 @@ function ghRequest(method, bodyObj) {
   });
 }
 
+function fmt(n) { return PREFIX + String(n).padStart(PAD, '0'); }
+
+async function readCounter() {
+  const r = await ghRequest('GET');
+  if (r.status === 404) return { current: 0, sha: null };
+  if (r.status !== 200) throw new Error('GitHub GET ' + r.status);
+  const ghData = JSON.parse(r.body);
+  let current = 0;
+  if (ghData.content) {
+    const decoded = Buffer.from(ghData.content.replace(/\n/g, ''), 'base64').toString('utf8');
+    try {
+      const data = JSON.parse(decoded);
+      current = Number(data.counter) || 0;
+    } catch(e) { /* keep current = 0 */ }
+  }
+  return { current, sha: ghData.sha || null };
+}
+
+async function writeCounter(value, sha) {
+  const content = Buffer.from(JSON.stringify({ counter: value }, null, 2)).toString('base64');
+  const body = { message: `invoice-counter: ${value}`, content };
+  if (sha) body.sha = sha;
+  const r = await ghRequest('PUT', body);
+  if (r.status !== 200 && r.status !== 201) throw new Error('GitHub PUT ' + r.status);
+  return value;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed.' });
 
-  try {
-    // ── Read current counter ──────────────────────────────────────────────
-    const getResult = await ghRequest('GET');
-    let current = 1023; // default — will produce FOBT0001024 on first run
-    let sha = null;
-
-    if (getResult.status === 200) {
-      let ghData;
-      try { ghData = JSON.parse(getResult.body); } catch(e) {
-        return res.status(502).json({ error: 'Invalid JSON from GitHub: ' + e.message });
-      }
-      if (ghData.content) {
-        try {
-          const decoded = Buffer.from(ghData.content.replace(/\n/g, ''), 'base64').toString('utf8');
-          const data = JSON.parse(decoded);
-          current = data.counter || 1023;
-          sha = ghData.sha;
-        } catch(e) {
-          console.error('Counter decode error:', e.message);
-        }
-      } else {
-        sha = ghData.sha || null;
-      }
-    } else if (getResult.status !== 404) {
-      console.error('GitHub GET counter error', getResult.status, getResult.body.slice(0, 200));
-      // Fall through — use timestamp fallback
-      const fallback = 'FOBT' + Date.now();
-      return res.status(200).json({ invoiceNo: fallback, fallback: true });
+  // ── GET: atomically increment and return next invoice number ─────────
+  if (req.method === 'GET') {
+    try {
+      const { current, sha } = await readCounter();
+      const next = current + 1;
+      await writeCounter(next, sha);
+      return res.status(200).json({ invoiceNo: fmt(next), counter: next });
+    } catch (e) {
+      console.error('invoice-counter GET error:', e);
+      // Never block a confirmed payment — return a timestamp fallback
+      return res.status(200).json({ invoiceNo: PREFIX + Date.now(), fallback: true });
     }
-
-    // ── Increment and save ────────────────────────────────────────────────
-    const next = current + 1;
-    const content = Buffer.from(JSON.stringify({ counter: next }, null, 2)).toString('base64');
-    const putBody = { message: `invoice-counter: ${next}`, content };
-    if (sha) putBody.sha = sha;
-
-    const putResult = await ghRequest('PUT', putBody);
-
-    if (putResult.status !== 200 && putResult.status !== 201) {
-      console.error('GitHub PUT counter error', putResult.status, putResult.body.slice(0, 200));
-      // Return timestamp fallback rather than failing the payment
-      const fallback = 'FOBT' + Date.now();
-      return res.status(200).json({ invoiceNo: fallback, fallback: true });
-    }
-
-    const invoiceNo = 'FOBT' + String(next).padStart(7, '0');
-    return res.status(200).json({ invoiceNo });
-
-  } catch (e) {
-    console.error('invoice-counter error:', e);
-    // Never fail a payment — return timestamp fallback
-    const fallback = 'FOBT' + Date.now();
-    return res.status(200).json({ invoiceNo: fallback, fallback: true });
   }
+
+  // ── POST { counter: N }: set counter to a specific value (migration) ──
+  if (req.method === 'POST') {
+    try {
+      const newCounter = parseInt(req.body && req.body.counter, 10);
+      if (!Number.isFinite(newCounter) || newCounter < 0) {
+        return res.status(400).json({ error: 'Invalid counter value' });
+      }
+      const { sha } = await readCounter();
+      await writeCounter(newCounter, sha);
+      return res.status(200).json({ counter: newCounter, invoiceNo: fmt(newCounter) });
+    } catch (e) {
+      console.error('invoice-counter POST error:', e);
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed.' });
 };
