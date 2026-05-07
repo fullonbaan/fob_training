@@ -1000,13 +1000,38 @@
       try { localStorage.setItem('fob_currency', currency); } catch(e){}
     }
 
-    // Restore saved currency preference
-    try {
-      var savedCurrency = localStorage.getItem('fob_currency');
-      if (savedCurrency && CURRENCY_RATES[savedCurrency]) {
-        document.addEventListener('DOMContentLoaded', function(){ switchCurrency(savedCurrency); });
+    /* Auto-detect the visitor's preferred currency, with priority:
+       1. Saved manual choice (localStorage)
+       2. Browser timezone — Asia/Kolkata→INR, Europe/*→EUR, else→USD
+       3. Browser language fallback — *-IN/hi→INR, EU languages→EUR
+       4. Default → USD */
+    function detectInitialCurrency(){
+      try {
+        var saved = localStorage.getItem('fob_currency');
+        if(saved && CURRENCY_RATES[saved]) return saved;
+      } catch(e){}
+      try {
+        var tz = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().timeZone : '';
+        if(tz){
+          if(tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') return 'INR';
+          if(tz.indexOf('Europe/') === 0) return 'EUR';
+          return 'USD';
+        }
+      } catch(e){}
+      try {
+        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if(lang.indexOf('-in') > 0 || lang === 'hi') return 'INR';
+        var euLangs = ['de','fr','es','it','nl','pt','el','sv','da','fi','no','pl','cs','sk','hu','ro','bg','hr','sl','et','lv','lt','ga','mt'];
+        for(var i=0;i<euLangs.length;i++){ if(lang.indexOf(euLangs[i]) === 0) return 'EUR'; }
+      } catch(e){}
+      return 'USD';
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      var initial = detectInitialCurrency();
+      if(typeof switchCurrency === 'function' && CURRENCY_RATES && CURRENCY_RATES[initial]){
+        switchCurrency(initial);
       }
-    } catch(e){}
+    });
 
     var ADM_PW='Admin@M3Pay2025';
     var ADM_API='/api/payments';
@@ -1073,7 +1098,22 @@
       var INV_CURR=inv.currency||'INR';
       var INV_SYM=pdfCurrSymbol(INV_CURR);
       var INV_LOCALE=(INV_CURR==='INR')?'en-IN':'en-US';
-      var INV_HAS_GST=(INV_CURR==='INR' && Number(inv.gstAmt||0)>0);
+      /* Currency-driven GST applicability — INR sales always carry GST. */
+    var INV_HAS_GST=(INV_CURR==='INR' && (Number(inv.totalAmt||0)>0 || Number(inv.baseAmt||0)>0));
+    /* Auto-recover baseAmt/gstAmt for INR records that are missing the split. */
+    if(INV_HAS_GST && (!Number(inv.baseAmt) || !Number(inv.gstAmt))){
+      var totalForRecover=Number(inv.totalAmt) || (Number(inv.baseAmt)+Number(inv.gstAmt||0)) || 0;
+      if(totalForRecover>0 && typeof calcGSTSplit==='function'){
+        var split=calcGSTSplit(totalForRecover/1.18, inv.billStateCode||'');
+        if(!Number(inv.baseAmt)) inv.baseAmt=split.base;
+        if(!Number(inv.gstAmt))  inv.gstAmt =split.gst;
+        if(!Number(inv.cgstAmt)) inv.cgstAmt=split.cgst;
+        if(!Number(inv.sgstAmt)) inv.sgstAmt=split.sgst;
+        if(!Number(inv.igstAmt)) inv.igstAmt=split.igst;
+        if(!inv.taxType)         inv.taxType=split.taxType;
+        if(!inv.totalAmt)        inv.totalAmt=split.total;
+      }
+    }
       var INV_MOBILE_CODE=inv.mobileCode||'+91';
       /* Tax-type derivation */
       var INV_TAX_TYPE=inv.taxType||(INV_HAS_GST?((inv.billStateCode&&String(inv.billStateCode)===SELLER_STATE_CODE)?'CGST_SGST':'IGST'):'NONE');

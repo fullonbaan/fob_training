@@ -1920,7 +1920,22 @@ pageId: "pricing"
     var INV_CURR=inv.currency||'INR';
     var INV_SYM=pdfCurrSymbol(INV_CURR);
     var INV_LOCALE=(INV_CURR==='INR')?'en-IN':'en-US';
-    var INV_HAS_GST=(INV_CURR==='INR' && Number(inv.gstAmt||0)>0);
+    /* Currency-driven GST applicability — INR sales always carry GST. */
+    var INV_HAS_GST=(INV_CURR==='INR' && (Number(inv.totalAmt||0)>0 || Number(inv.baseAmt||0)>0));
+    /* Auto-recover baseAmt/gstAmt for INR records that are missing the split. */
+    if(INV_HAS_GST && (!Number(inv.baseAmt) || !Number(inv.gstAmt))){
+      var totalForRecover=Number(inv.totalAmt) || (Number(inv.baseAmt)+Number(inv.gstAmt||0)) || 0;
+      if(totalForRecover>0 && typeof calcGSTSplit==='function'){
+        var split=calcGSTSplit(totalForRecover/1.18, inv.billStateCode||'');
+        if(!Number(inv.baseAmt)) inv.baseAmt=split.base;
+        if(!Number(inv.gstAmt))  inv.gstAmt =split.gst;
+        if(!Number(inv.cgstAmt)) inv.cgstAmt=split.cgst;
+        if(!Number(inv.sgstAmt)) inv.sgstAmt=split.sgst;
+        if(!Number(inv.igstAmt)) inv.igstAmt=split.igst;
+        if(!inv.taxType)         inv.taxType=split.taxType;
+        if(!inv.totalAmt)        inv.totalAmt=split.total;
+      }
+    }
     var INV_MOBILE_CODE=inv.mobileCode||'+91';
     /* Tax-type derivation: prefer the explicit taxType captured at checkout;
        fall back to comparing buyer state code against seller state code. */
