@@ -1157,11 +1157,12 @@
       var billBoxH=r2H+60;
       doc.setFillColor(WHITE[0],WHITE[1],WHITE[2]);doc.setDrawColor(MGREY[0],MGREY[1],MGREY[2]);doc.setLineWidth(0.6);doc.rect(PAD,r2Y,midX-PAD-8,billBoxH,'FD');
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(GREY[0],GREY[1],GREY[2]);doc.text('BILL TO',PAD+10,r2Y+14);
-      var BILL_NAME=inv.gstLegalName||inv.billCompany||inv.name;
+      var BILL_NAME=inv.name||inv.gstLegalName||inv.billCompany;
       doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text(String(BILL_NAME).slice(0,42),PAD+10,r2Y+30);
       var billY=r2Y+44;
       doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(INK[0],INK[1],INK[2]);
-      if(BILL_NAME!==inv.name && inv.name){doc.text('Attn: '+String(inv.name).slice(0,46),PAD+10,billY); billY+=12;}
+      var BILL_ALT=inv.gstLegalName||inv.billCompany;
+      if(BILL_ALT && BILL_ALT!==BILL_NAME){doc.text(String(BILL_ALT).slice(0,46),PAD+10,billY); billY+=12;}
       var addrLines=[];
       if(inv.billLine1) addrLines.push(String(inv.billLine1));
       if(inv.billLine2) addrLines.push(String(inv.billLine2));
