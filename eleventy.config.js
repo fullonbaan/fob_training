@@ -1,6 +1,7 @@
 module.exports = function(eleventyConfig) {
   // Pass through static assets
   eleventyConfig.addPassthroughCopy("src/preview");
+  eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/favicon.ico");
   eleventyConfig.addPassthroughCopy("src/favicon-32x32.png");
   eleventyConfig.addPassthroughCopy("src/apple-touch-icon.png");
