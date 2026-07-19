@@ -675,34 +675,6 @@
     </div>
   </footer>
 
-  <!-- SLIM TOP PROMO BAR -->
-  <div id="promoBar" class="fixed top-0 left-0 right-0 z-[9999]" style="animation: promoSlideDown .4s .6s ease both;">
-    <div style="background: linear-gradient(90deg, #bf360c 0%, #e65100 50%, #bf360c 100%); padding: 8px 16px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; position: relative;">
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
-        <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:#ffcc80;text-transform:uppercase;">Limited Time</span>
-        <span style="font-size:14px;font-weight:800;color:#fff;">40% OFF</span>
-        <span style="font-size:12px;color:#ffccbc;">entire video library</span>
-        <a href="/pricing/" onclick="document.getElementById('promoBar').style.display='none';document.body.style.paddingTop='0'" style="background:#fff;color:#bf360c;font-size:11px;font-weight:700;padding:4px 14px;border-radius:4px;text-decoration:none;letter-spacing:.3px;margin-left:4px;white-space:nowrap;transition:transform .15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Buy Now &rarr;</a>
-      </div>
-      <button onclick="document.getElementById('promoBar').style.display='none';document.body.style.paddingTop='0'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#ffccbc;font-size:20px;cursor:pointer;line-height:1;padding:4px 6px;" aria-label="Close promo">&times;</button>
-    </div>
-  </div>
-  <script>
-    // Push page content down so the promo bar doesn't overlap
-    (function(){
-      var bar = document.getElementById('promoBar');
-      if (bar) {
-        function adjustPadding() {
-          if (bar.style.display !== 'none') {
-            document.body.style.paddingTop = bar.offsetHeight + 'px';
-          }
-        }
-        window.addEventListener('load', function(){ setTimeout(adjustPadding, 700); });
-        window.addEventListener('resize', adjustPadding);
-      }
-    })();
-  </script>
-
   <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/916360593122?text=Hi%2C%20I%27m%20interested%20in%20FullOnBaan%20Infor%20LN%20training.%20Could%20you%20share%20more%20details%3F" target="_blank" rel="noopener" title="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#25D366] pl-5 pr-4 py-3 rounded-full shadow-lg shadow-black/30 hover:scale-105 hover:shadow-xl transition-all duration-300" style="animation: fadeUp .5s .5s ease both;">
     <span class="text-white text-sm font-semibold">Chat with us</span>
