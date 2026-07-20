@@ -61,16 +61,41 @@
     gtag('config', 'AW-18000254476');
   </script>
 
-  <!-- jsPDF + AutoTable for GST Invoice generation (admin panel + pricing page) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
-
   <!-- Defer: EmailJS (only needed on pricing/contact pages) -->
   <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     var EMAILJS_PUBLIC_KEY = '3U-YZo2UCV_RG5Gjo';
     var EMAILJS_SERVICE_ID = 'service_t9cqgtn';
     var EMAILJS_TEMPLATE_ID = 'template_ezdle7f';
+  </script>
+
+  <!-- JSON-LD: Organization (site-wide) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "FullOnBaan Education",
+    "alternateName": "FullOnBaan",
+    "url": "https://training.fullonbaan.com/",
+    "logo": "https://training.fullonbaan.com/og-image.png",
+    "description": "India's most comprehensive Infor LN training provider offering eBooks, video courses, and combo packages across 14 modules.",
+    "foundingDate": "2015",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-6360593122",
+      "contactType": "customer service",
+      "email": "fullonbaan@gmail.com",
+      "availableLanguage": ["English", "Hindi"],
+      "areaServed": "Worldwide"
+    },
+    "sameAs": [
+      "https://linkedin.com/company/fullonbaan/",
+      "https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA",
+      "https://www.facebook.com/p/FullonBaaN-100067220493183/",
+      "https://www.instagram.com/fullonbaan/",
+      "https://www.fullonbaan.com/"
+    ]
+  }
   </script>
 
   {% block head %}{% endblock %}

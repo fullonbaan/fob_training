@@ -6,35 +6,7 @@ canonical: "/"
 pageId: "home"
 ---
 
-<!-- JSON-LD Structured Data: Organization -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "FullOnBaan Education",
-  "alternateName": "FullOnBaan",
-  "url": "https://training.fullonbaan.com/",
-  "logo": "https://training.fullonbaan.com/og-image.png",
-  "description": "India's most comprehensive Infor LN training provider offering eBooks, video courses, and combo packages across 14 modules.",
-  "foundingDate": "2015",
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "+91-6360593122",
-    "contactType": "customer service",
-    "email": "fullonbaan@gmail.com",
-    "availableLanguage": ["English", "Hindi"],
-    "areaServed": "Worldwide"
-  },
-  "sameAs": [
-    "https://linkedin.com/company/fullonbaan/",
-    "https://www.facebook.com/p/FullonBaaN-100067220493183/",
-    "https://www.instagram.com/fullonbaan/",
-    "https://www.youtube.com/channel/UCYT7snIHzheVwSx4M7DFuVA",
-    "https://www.fullonbaan.com/"
-  ]
-}
-</script>
-
+<!-- JSON-LD Structured Data: WebSite (Organization is defined site-wide in base.njk) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -54,6 +26,80 @@ pageId: "home"
     {"@type": "ListItem", "position": 2, "name": "Infor LN Course Catalog", "item": "https://training.fullonbaan.com/catalog/"},
     {"@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://training.fullonbaan.com/pricing/"},
     {"@type": "ListItem", "position": 4, "name": "Contact", "item": "https://training.fullonbaan.com/contact/"}
+  ]
+}
+</script>
+
+<!-- JSON-LD Structured Data: FAQPage (marks up the on-page FAQ) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What formats are Infor LN training materials available in?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FullOnBaan offers Infor LN training in three formats: eBooks (PDF format for self-paced reading), video courses (structured video tutorials with screen recordings), and combo packages (eBook + video course bundle at a discounted price). You can also purchase the Full eBook Library covering all 14 Infor LN modules at a special bundle price of ₹8,999."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I get lifetime access to Infor LN eBooks and video courses?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Once purchased, you have lifetime access to all Infor LN course materials and future updates. There are no recurring fees or subscription charges."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer a money-back guarantee on Infor LN training?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Every purchase is backed by our 7-Day Money-Back Guarantee — if a product isn't the right fit, you can request a refund within 7 days of purchase. See our Cancellation & Refund Policy for full details. You can also download a free preview chapter for any Infor LN module before buying."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does FullOnBaan provide support for Infor LN training?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Our Infor LN support team is available via email (fullonbaan@gmail.com), WhatsApp (+91 63605 93122), and phone. Average response time is under 2 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What Infor LN modules does FullOnBaan cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FullOnBaan covers 14 Infor LN modules: Development (73 eBooks), Administration (37 eBooks), Finance (41 eBooks), Manufacturing (10 eBooks), Logistics (14 eBooks), Planning, Extensibility, BOD (11 eBooks), and ION (15 eBooks). That's over 200 eBooks in total."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much do Infor LN training eBooks and videos cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Individual Infor LN eBooks are priced at ₹999 (₹499 for specialty modules). Video courses are ₹3,999 each. The Full eBook Library (all 14 modules) is available at ₹8,999 and the Full Video Library (all 8 modules) at ₹18,999."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is the Infor LN training suitable for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FullOnBaan Infor LN training is designed for beginners exploring ERP systems, experienced consultants, finance analysts, system administrators, project managers, and anyone preparing for Infor LN roles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free preview of Infor LN training materials?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Every Infor LN module on FullOnBaan has a free preview PDF that you can download before purchasing. Click the \"Preview\" button on any course card."
+      }
+    }
   ]
 }
 </script>
