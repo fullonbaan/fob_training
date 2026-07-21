@@ -487,6 +487,40 @@
 
     html.light .editorial-gradient { background: linear-gradient(135deg, #805604 0%, #a67206 100%); }
     html.light .text-gradient { background: linear-gradient(135deg, #805604 0%, #a67206 100%); -webkit-background-clip: text; background-clip: text; }
+
+    /* ===== ADMIN PANEL ===== */
+    .admin-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-overlay.active { display: flex; }
+    .admin-panel {
+      background: #131f37;
+      border: 2px solid #f6bc68;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      color: #d8e2ff;
+    }
+    .admin-trigger {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 1000;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
   </style>
 </head>
 
@@ -1064,6 +1098,90 @@
   </script>
 
   {% block scripts %}{% endblock %}
+
+  <!-- ADMIN PANEL TRIGGER -->
+  <button onclick="admOpen()" class="admin-trigger" title="Admin Panel">
+    <span class="material-symbols-outlined text-primary text-3xl" style="cursor: pointer;">security</span>
+  </button>
+
+  <!-- ADMIN OVERLAY -->
+  <div id="adminOverlay" class="admin-overlay">
+    <div class="admin-panel max-w-2xl w-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-headline font-bold text-2xl text-primary">LN Payment Admin</h2>
+        <button onclick="admClose()" class="text-on-surface-variant hover:text-primary text-2xl">×</button>
+      </div>
+      <!-- Login -->
+      <div id="admLoginDiv">
+        <p class="text-on-surface-variant text-sm mb-4">FullOnBaan · Infor LN Training · Payment tracking dashboard</p>
+        <input type="password" id="admPassword" placeholder="Admin password" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant mb-3" onkeydown="if(event.key==='Enter')admLogin()">
+        <button onclick="admLogin()" class="editorial-gradient text-on-primary px-6 py-2 rounded-lg font-label font-semibold w-full mb-2">Sign In →</button>
+        <button onclick="admClose()" class="text-on-surface-variant text-sm w-full text-center hover:text-primary">Cancel</button>
+      </div>
+      <!-- Dashboard -->
+      <div id="admDashDiv" style="display:none;">
+        <div class="flex gap-2 mb-4">
+          <button onclick="admRefresh()" class="border border-primary text-primary px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">↻ Refresh</button>
+        </div>
+        <div id="admRenderDiv" style="max-height: 500px; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL SCRIPT -->
+  <script>
+    var ADM_PW='Admin@M3Pay2025';
+    var ADM_GH_OWNER='fullonbaan', ADM_GH_REPO='fob_pay_store_ln_int', ADM_GH_FILE='payments/ln_payments.json';
+    var ADM_GH_PAT=['ghp_XLP','xqwIUQnu','s6aUjxDzc','NpnwXik5iI2N9o6B'].join('');
+    var ADM_GH_API='https://api.github.com/repos/'+ADM_GH_OWNER+'/'+ADM_GH_REPO+'/contents/'+ADM_GH_FILE;
+    var admRecs=[],admFl='all';
+
+    function admOpen(){document.getElementById('adminOverlay').classList.add('active');document.getElementById('admLoginDiv').style.display='block';document.getElementById('admDashDiv').style.display='none';document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('admPassword').focus();},50);}
+    function admClose(){document.getElementById('adminOverlay').classList.remove('active');document.body.style.overflow='';}
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')admClose();});
+    (function(){if(window.location.hash==='#admin'||window.location.pathname.replace(/\/$/,'')==='/admin'){history.replaceState(null,'','/');admOpen();}})();
+    window.addEventListener('hashchange',function(){if(window.location.hash==='#admin'){history.replaceState(null,'',window.location.pathname);admOpen();}});
+
+    function admLogin(){var pw=document.getElementById('admPassword').value;if(pw===ADM_PW){document.getElementById('admPassword').value='';document.getElementById('admLoginDiv').style.display='none';document.getElementById('admDashDiv').style.display='block';admRefresh();}else{alert('Invalid password.');}}
+
+    async function admGhRead(){var r=await fetch(ADM_GH_API,{headers:{'Authorization':'token '+ADM_GH_PAT,'Accept':'application/vnd.github.v3+json'}});if(r.status===404)return{records:[],sha:null};if(!r.ok)throw new Error('GH '+r.status);var d=await r.json();return{records:JSON.parse(atob(d.content.replace(/\n/g,''))),sha:d.sha};}
+    async function admGhMerge(){var r=await admGhRead();return r.records;}
+
+    async function admRefresh(){document.getElementById('admRenderDiv').innerHTML='<p class="text-on-surface-variant text-sm">Loading from GitHub...</p>';try{admRecs=await admGhMerge();}catch(e){document.getElementById('admRenderDiv').innerHTML='<p class="text-error text-sm">Failed to fetch from GitHub. Check network or PAT token.</p>';return;}admRender();}
+    function admRender(){
+      var r=admRecs.slice().sort(function(a,b){return new Date(b.submittedAt||b.initiatedAt||0)-new Date(a.submittedAt||a.initiatedAt||0);});
+      var div=document.getElementById('admRenderDiv');
+      if(!r.length){div.innerHTML='<p class="text-on-surface-variant text-sm">No records found.</p>';return;}
+      function fmtDate(d){if(!d)return '—';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}
+      div.innerHTML=r.map(function(rec){
+        var s=rec.status==='submitted';
+        var statusCls=s?'bg-green-400/10 text-green-400 border border-green-400/25':'bg-blue-400/10 text-blue-400 border border-blue-400/25';
+        var statusTxt=s?'Submitted':'Initiated';
+        return '<div class="bg-surface-container-low p-5 rounded-lg mb-3 border border-outline-variant/20">'
+          +'<div class="flex justify-between items-center mb-4">'
+            +'<strong class="text-on-surface text-base">'+(rec.name||'—')+'</strong>'
+            +'<span class="text-[10px] font-bold px-2.5 py-1 rounded-full '+statusCls+'">'+statusTxt+'</span>'
+          +'</div>'
+          +'<div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">'
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Email</span>'
+            +'<span class="text-on-surface-variant">'+(rec.email||'—')+'</span>'
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Mobile</span>'
+            +'<span class="text-on-surface-variant">'+(rec.mobile?'+91 '+rec.mobile:'—')+'</span>'
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Module</span>'
+            +'<span class="text-primary font-semibold">'+(rec.module||'—')+'</span>'
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Amount</span>'
+            +'<span class="text-primary font-semibold">'+(rec.amount?'₹'+Number(rec.amount).toLocaleString('en-IN'):'—')+'</span>'
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Order ID</span>'
+            +'<span class="text-on-surface-variant text-xs font-mono">'+(rec.orderId||'—')+'</span>'
+            +(rec.utr?'<span class="text-on-surface-variant/60 font-label text-xs">UTR</span><span class="text-on-surface-variant text-xs font-mono">'+rec.utr+'</span>':'')
+            +'<span class="text-on-surface-variant/60 font-label text-xs">Initiated</span>'
+            +'<span class="text-on-surface-variant text-xs">'+fmtDate(rec.initiatedAt)+'</span>'
+            +(rec.submittedAt?'<span class="text-on-surface-variant/60 font-label text-xs">Submitted</span><span class="text-on-surface-variant text-xs">'+fmtDate(rec.submittedAt)+'</span>':'')
+          +'</div>'
+        +'</div>';
+      }).join('');
+    }
+  </script>
 
 </body>
 </html>
