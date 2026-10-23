@@ -1618,7 +1618,7 @@ pageId: "pricing"
     // ONE email to admin
     sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT CONFIRMED \u2014 RAZORPAY',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:emailAmt,cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Invoice No: '+invNo+'. Razorpay Payment ID: '+payId+'. Currency: '+paidCurrency},'service_2qtgzr5','FOB_Razorpay_Success');
     // ONE email to customer
-    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:emailAmt,cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. Tax invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: fullonbaan@gmail.com'},'service_2qtgzr5','FOB_Razorpay_Success');
+    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:emailAmt,cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. Tax invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: support@fullonbaan.com'},'service_2qtgzr5','FOB_Razorpay_Success');
   };
 
   /* ── Payment Failure ─────────────────────────────────────────────────── */
@@ -1953,11 +1953,11 @@ pageId: "pricing"
     doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(NAVY[0],NAVY[1],NAVY[2]);doc.text('Terms & Conditions',PAD,tcY+2);
     doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]);doc.setLineWidth(0.6);doc.line(PAD,tcY+6,W-PAD,tcY+6);
     doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GREY[0],GREY[1],GREY[2]);
-    doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact fullonbaan@gmail.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   www.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
+    doc.text(['* This is a computer-generated tax invoice for a digital product (Training Material).','* SAC Code 998431 — Online content delivery services.','* For queries or disputes, contact support@fullonbaan.com within 7 days of purchase.','* WhatsApp: +91 63605 93122   |   www.fullonbaan.com'],PAD,tcY+20,{lineHeightFactor:1.75});
     doc.setFillColor(NAVY[0],NAVY[1],NAVY[2]);doc.rect(0,H-38,W,38,'F');
     doc.setFillColor(GOLD[0],GOLD[1],GOLD[2]);doc.rect(0,H-42,W,4,'F');
     doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(GOLD2[0],GOLD2[1],GOLD2[2]);
-    doc.text('www.fullonbaan.com   •   fullonbaan@gmail.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
+    doc.text('www.fullonbaan.com   •   support@fullonbaan.com   •   +91 63605 93122',W/2,H-16,{align:'center'});
     return doc;
   }
 
@@ -1965,7 +1965,7 @@ pageId: "pricing"
     var d=invData||currentInvData;
     if(!d){alert('Invoice not available. Please contact support.');return;}
     try{var doc=generateGSTInvoice(d);doc.save('Invoice-'+d.invNo+'.pdf');}
-    catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact fullonbaan@gmail.com.');}
+    catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact support@fullonbaan.com.');}
   };
 
   /* ══════════════════════════════════════════════════════════════════════
