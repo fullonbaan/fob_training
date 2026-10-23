@@ -1,7 +1,8 @@
 ---
 layout: base.njk
-title: "Infor LN eBooks & Video Courses — 200+ Training Materials"
-description: "Download Infor LN eBooks & video courses — Development, Finance, Manufacturing, Logistics, ION & BOD. 200+ materials, 10+ years ERP expertise."
+eleventyComputed:
+  title: "Infor LN eBooks & Video Courses — {{ library.ebookTotal }} eBooks"
+  description: "Download Infor LN eBooks & video courses — Development, Finance, Manufacturing, Logistics, ION, BOD, OS, API & DOM. {{ library.ebookTotal }} eBooks, {{ library.videoCourses }} video courses, 10+ years ERP expertise."
 canonical: "/"
 pageId: "home"
 ---
@@ -41,7 +42,7 @@ pageId: "home"
       "name": "What formats are Infor LN training materials available in?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "FullOnBaan offers Infor LN training in three formats: eBooks (PDF format for self-paced reading), video courses (structured video tutorials with screen recordings), and combo packages (eBook + video course bundle at a discounted price). You can also purchase the Full eBook Library covering all 14 Infor LN modules at a special bundle price of ₹8,999."
+        "text": "FullOnBaan offers Infor LN training in three formats: eBooks (PDF format for self-paced reading), video courses (structured video tutorials with screen recordings), and combo packages (eBook + video course bundle at a discounted price). You can also purchase the Full eBook Library covering all {{ library.ebookProducts }} eBook products ({{ library.ebookTotal }} eBooks) at a special bundle price of ₹8,999."
       }
     },
     {
@@ -73,7 +74,7 @@ pageId: "home"
       "name": "What Infor LN modules does FullOnBaan cover?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "FullOnBaan covers 14 Infor LN modules: Development (73 eBooks), Administration (37 eBooks), Finance (41 eBooks), Manufacturing (10 eBooks), Logistics (14 eBooks), Planning, Extensibility, BOD (11 eBooks), and ION (15 eBooks). That's over 200 eBooks in total."
+        "text": "FullOnBaan offers {{ library.ebookSummary }}: {% for e in library.ebooks %}{{ e.name | safe }} ({{ e.count }}){% if not loop.last %}, {% endif %}{% endfor %}. The Full eBook Library includes every one of them."
       }
     },
     {
@@ -81,7 +82,7 @@ pageId: "home"
       "name": "How much do Infor LN training eBooks and videos cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Individual Infor LN eBooks are priced at ₹999 (₹499 for specialty modules). Video courses are ₹3,999 each. The Full eBook Library (all 14 modules) is available at ₹8,999 and the Full Video Library (all 8 modules) at ₹18,999."
+        "text": "Individual Infor LN eBooks are priced at ₹999 (₹499 for specialty modules). Video courses are ₹3,999 each. The Full eBook Library (all {{ library.ebookProducts }} eBook products, {{ library.ebookTotal }} eBooks) is available at ₹8,999 and the Full Video Library (all {{ library.videoCourses }} video courses) at ₹18,999."
       }
     },
     {
@@ -113,7 +114,7 @@ pageId: "home"
     <h1 class="font-headline font-bold text-5xl md:text-7xl leading-tight mb-6">
       Infor LN <span class="text-gradient">eBooks & Video Courses</span>
     </h1>
-    <p class="text-on-surface-variant text-xl mb-10 max-w-2xl mx-auto">Master Infor LN Development, Finance, Manufacturing, Administration & Logistics with 200+ professionally crafted eBooks and step-by-step video courses by FullOnBaan.</p>
+    <p class="text-on-surface-variant text-xl mb-10 max-w-2xl mx-auto">Master Infor LN Development, Finance, Manufacturing, Administration & Logistics with {{ library.ebookTotal }} professionally crafted eBooks and step-by-step video courses by FullOnBaan.</p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
       <a href="/catalog/" class="editorial-gradient text-on-primary px-8 py-3 rounded-lg font-label font-600 hover:shadow-lg transition">Explore Catalog</a>
       <a href="/pricing/" class="border border-primary text-primary px-8 py-3 rounded-lg font-label font-600 hover:bg-primary hover:text-on-primary transition">View Pricing</a>
@@ -226,8 +227,8 @@ pageId: "home"
     <h2 class="font-headline text-3xl md:text-4xl font-extrabold tracking-tight text-on-surface mb-8 text-center">Why Choose FullOnBaan for <span class="text-primary italic">Infor LN Training</span>?</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
       <article class="bg-surface-container rounded-xl border border-surface-container-high p-6">
-        <h3 class="font-headline text-xl font-bold text-primary mb-3">200+ Infor LN eBooks Across 14 Modules</h3>
-        <p class="text-on-surface-variant text-sm leading-relaxed">Our Infor LN training library is the most comprehensive collection available online. With over 200 professionally authored eBooks spanning Development (73 eBooks), Finance (41 eBooks), Administration (37 eBooks), ION (15 eBooks), BOD (11 eBooks), Manufacturing, Logistics, Planning, and Extensibility — every aspect of the Infor LN ERP platform is covered in depth.</p>
+        <h3 class="font-headline text-xl font-bold text-primary mb-3">{{ library.ebookTotal }} Infor LN eBooks Across {{ library.ebookProducts }} Products</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Our Infor LN training library is the most comprehensive collection available online. With {{ library.ebookTotal }} professionally authored eBooks spanning {{ library.ebookProducts }} products — {% for e in library.ebooks %}{{ e.name }}{% if not loop.last %}, {% endif %}{% endfor %} — every aspect of the Infor LN ERP platform is covered in depth.</p>
       </article>
       <article class="bg-surface-container rounded-xl border border-surface-container-high p-6">
         <h3 class="font-headline text-xl font-bold text-primary mb-3">Step-by-Step Video Courses for Infor LN</h3>
@@ -243,8 +244,8 @@ pageId: "home"
       </article>
     </div>
     <div class="bg-surface-container rounded-xl border border-primary/30 p-6 text-center">
-      <h3 class="font-headline text-lg font-bold text-on-surface mb-2">Best Value: Full Infor LN eBook Library — All 14 Modules for just <span data-inr="8999">₹8,999</span></h3>
-      <p class="text-on-surface-variant text-sm mb-4">Get lifetime access to the entire FullOnBaan Infor LN eBook collection at one unbeatable price. No subscriptions, no recurring fees.</p>
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-2">Best Value: Full Infor LN eBook Library — All {{ library.ebookProducts }} eBook Products ({{ library.ebookTotal }} eBooks) for just <span data-inr="8999">₹8,999</span></h3>
+      <p class="text-on-surface-variant text-sm mb-4">Get lifetime access to every FullOnBaan eBook — including the Infor LN API, Infor DOM, Infor OS, Infor IDM, Cloud Migration and AI &amp; GenAI kits — at one unbeatable price. No subscriptions, no recurring fees.</p>
       <a href="/pricing/" class="editorial-gradient text-on-primary px-8 py-3 rounded-lg font-label font-600 inline-block">View Pricing & Buy Now</a>
     </div>
   </div>
@@ -323,7 +324,7 @@ pageId: "home"
         </button>
         <div class="accordion-content bg-surface-container-high">
           <div class="px-6 pb-6 text-on-surface-variant">
-            <p>FullOnBaan offers Infor LN training in three formats: eBooks (PDF format for self-paced reading), video courses (structured video tutorials with screen recordings), and combo packages (eBook + video course bundle at a discounted price). You can also purchase the Full eBook Library covering all 14 Infor LN modules at a special bundle price of <span data-inr="8999">₹8,999</span>.</p>
+            <p>FullOnBaan offers Infor LN training in three formats: eBooks (PDF format for self-paced reading), video courses (structured video tutorials with screen recordings), and combo packages (eBook + video course bundle at a discounted price). You can also purchase the Full eBook Library covering all {{ library.ebookProducts }} eBook products ({{ library.ebookTotal }} eBooks) at a special bundle price of <span data-inr="8999">₹8,999</span>.</p>
           </div>
         </div>
       </div>
@@ -367,7 +368,7 @@ pageId: "home"
         </button>
         <div class="accordion-content bg-surface-container-high">
           <div class="px-6 pb-6 text-on-surface-variant">
-            <p>FullOnBaan covers 14 Infor LN modules: Development (73 eBooks), Administration (37 eBooks), Finance (41 eBooks), Manufacturing (10 eBooks), Logistics (14 eBooks), Planning, Extensibility, BOD (11 eBooks), and ION (15 eBooks). That's over 200 eBooks in total.</p>
+            <p>FullOnBaan offers {{ library.ebookSummary }}: {% for e in library.ebooks %}{{ e.name }} ({{ e.count }}){% if not loop.last %}, {% endif %}{% endfor %}. The Full eBook Library includes every one of them.</p>
           </div>
         </div>
       </div>
@@ -378,7 +379,7 @@ pageId: "home"
         </button>
         <div class="accordion-content bg-surface-container-high">
           <div class="px-6 pb-6 text-on-surface-variant">
-            <p>Individual Infor LN eBooks are priced at <span data-inr="999">₹999</span> (<span data-inr="499">₹499</span> for specialty modules). Video courses are <span data-inr="3999">₹3,999</span> each. The Full eBook Library (all 14 modules) is available at <span data-inr="8999">₹8,999</span> and the Full Video Library (all 8 modules) at <span data-inr="18999">₹18,999</span>.</p>
+            <p>Individual Infor LN eBooks are priced at <span data-inr="999">₹999</span> (<span data-inr="499">₹499</span> for specialty modules). Video courses are <span data-inr="3999">₹3,999</span> each. The Full eBook Library (all {{ library.ebookProducts }} eBook products, {{ library.ebookTotal }} eBooks) is available at <span data-inr="8999">₹8,999</span> and the Full Video Library (all {{ library.videoCourses }} video courses) at <span data-inr="18999">₹18,999</span>.</p>
           </div>
         </div>
       </div>
