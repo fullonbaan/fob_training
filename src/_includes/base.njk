@@ -67,6 +67,17 @@
     var EMAILJS_PUBLIC_KEY = '3U-YZo2UCV_RG5Gjo';
     var EMAILJS_SERVICE_ID = 'service_t9cqgtn';
     var EMAILJS_TEMPLATE_ID = 'template_ezdle7f';
+    /* Site-wide sale (src/_data/sale.js). Checked against the visitor's clock on every page view. */
+    var FOB_SALE = {{ {enabled: sale.enabled, name: sale.name, percent: sale.percent, startsMs: sale.startsMs, endsMs: sale.endsMs, endsLabel: sale.endsLabel, products: sale.products} | dump | safe }};
+    function fobSaleActive(){ var n = Date.now(); return !!(FOB_SALE.enabled && n >= FOB_SALE.startsMs && n <= FOB_SALE.endsMs); }
+    /* Sale pricing for ONE product key, in the given currency, or null if that product isn't on sale.
+       Sale price is rounded DOWN so the discount is never less than advertised. */
+    function fobSaleFor(key, currency){
+      var cfg = FOB_SALE.products && FOB_SALE.products[key];
+      if (!cfg || !fobSaleActive()) return null;
+      var was = convertPrice(cfg.was, currency);
+      return { was: was, now: Math.floor(was * (100 - FOB_SALE.percent) / 100) };
+    }
   </script>
 
   <!-- JSON-LD: Organization (site-wide) -->
@@ -368,14 +379,23 @@
       box-shadow: 0 10px 30px rgba(246, 188, 104, 0.15);
     }
 
-    @keyframes promoSlideDown {
-      0%   { opacity:0; transform: translateY(-100%); }
-      100% { opacity:1; transform: translateY(0); }
+    /* ── Site-wide sale banner (sticky, above the nav) ── */
+    .sale-bar {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px 12px;
+      padding: 7px 16px; text-align: center;
+      background: linear-gradient(90deg, #7c2d12 0%, #c2410c 35%, #d97706 65%, #7c2d12 100%);
+      color: #fff7ed; font-family: "Inter", sans-serif; font-size: 13px; line-height: 1.35;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
     }
-    @media (max-width: 640px) {
-      #stickyPromo { left: 50%; transform: translateX(-50%); bottom: 80px; }
-      #stickyPromo > div { width: 240px; }
-    }
+    .sale-bar strong { font-weight: 800; letter-spacing: 0.02em; color: #ffffff; }
+    .sale-bar .sale-sub { color: #ffedd5; }
+    .sale-bar .sale-count { font-variant-numeric: tabular-nums; background: rgba(0,0,0,0.22); border-radius: 999px; padding: 1px 9px; font-weight: 700; font-size: 12px; }
+    .sale-bar a { background: #fff7ed; color: #7c2d12; font-weight: 800; border-radius: 999px; padding: 3px 12px; font-size: 12px; text-decoration: none; white-space: nowrap; }
+    .sale-bar a:hover { background: #ffffff; }
+    @media (max-width: 640px) { .sale-bar { font-size: 12px; padding: 6px 10px; } .sale-bar .sale-sub { display: none; } }
+    /* List price shown struck-through next to the sale price */
+    .sale-was { text-decoration: line-through; opacity: 0.55; font-size: 0.68em; font-weight: 500; margin-right: 0.35em; -webkit-text-fill-color: currentColor; }
+    .sale-tag { display: inline-block; font-family: "Inter", sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: linear-gradient(90deg, #c2410c, #d97706); border-radius: 999px; padding: 3px 10px; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -501,8 +521,21 @@
 
 <body class="bg-surface text-on-surface smooth-scroll" itemscope itemtype="https://schema.org/WebPage">
 
+  <!-- STICKY TOP: sale banner + navigation -->
+  <div id="siteTop" class="sticky top-0 z-50">
+  {% if sale.live %}
+  <div id="saleBar" class="sale-bar" role="region" aria-label="{{ sale.name }}" data-sale-only>
+    <span aria-hidden="true">🪔</span>
+    <strong>{{ sale.name }}: Flat {{ sale.percent }}% off</strong>
+    <span class="sale-sub">{{ sale.bannerText }}</span>
+    <span>Ends {{ sale.endsLabel }}</span>
+    <span id="saleCountdown" class="sale-count"></span>
+    <a href="/pricing/">Shop now &rarr;</a>
+  </div>
+  {% endif %}
+
   <!-- NAVIGATION -->
-  <nav class="glass-nav sticky top-0 z-50 border-b border-surface-container-high">
+  <nav class="glass-nav border-b border-surface-container-high">
     <div class="w-full px-6 lg:px-10">
       <div class="flex justify-between items-center h-16">
         <a href="/" class="font-headline font-bold text-2xl text-primary shrink-0">FullOnBaan Education</a>
@@ -588,6 +621,7 @@
       </div>
     </div>
   </nav>
+  </div>
 
   <!-- PAGE CONTENT -->
   {{ content | safe }}
@@ -802,7 +836,7 @@
       pln_combo:{name:'Infor LN Planning — Combo (eBook + Videos)',price:4499},
       whs_combo:{name:'Infor LN Warehousing — Combo (eBook + Videos)',price:4499},
       ext_combo:{name:'Infor Extensibility — Combo (eBook + Videos)',price:4499},
-      full_ebook_library:{name:'{{ library.ebookLibraryName }}',price:8999},
+      full_ebook_library:{name:'{{ library.ebookLibraryName }}',price:12999},
       full_video_library:{name:'{{ library.videoLibraryName }}',price:18999},
     };
 
@@ -834,16 +868,22 @@
       if (d) d.value = currency;
       if (m) m.value = currency;
 
-      // Update GUIDES prices for payment flow
+      // Update GUIDES prices for payment flow (sale price while a sale is live — this is what Razorpay charges)
       Object.keys(GUIDES).forEach(function(k){
-        GUIDES[k].price = convertPrice(GUIDES_INR[k], currency);
+        var s = fobSaleFor(k, currency);
+        GUIDES[k].listPrice = s ? s.was : convertPrice(GUIDES_INR[k], currency);
+        GUIDES[k].price = s ? s.now : GUIDES[k].listPrice;
       });
 
-      // Update all price elements with data-inr
+      // Update all price elements with data-inr. Elements with data-sale="<product key>" show
+      // the struck-through original and the sale price while that product is on sale.
       document.querySelectorAll('[data-inr]').forEach(function(el){
-        var inr = parseInt(el.getAttribute('data-inr'));
-        var converted = convertPrice(inr, currency);
-        el.textContent = formatPrice(converted, currency);
+        var s = el.getAttribute('data-sale') ? fobSaleFor(el.getAttribute('data-sale'), currency) : null;
+        if (s) {
+          el.innerHTML = '<span class="sale-was">' + formatPrice(s.was, currency) + '</span>' + formatPrice(s.now, currency);
+        } else {
+          el.textContent = formatPrice(convertPrice(parseInt(el.getAttribute('data-inr')), currency), currency);
+        }
       });
 
       // Update Compare Plans footer note
@@ -860,7 +900,7 @@
           if (!opt.value) return;
           var g = GUIDES[opt.value];
           if (g) {
-            var label = g.name + ' (' + formatPrice(g.price, currency) + ')';
+            var label = g.name + ' (' + formatPrice(g.price, currency) + (g.listPrice && g.listPrice !== g.price ? ', was ' + formatPrice(g.listPrice, currency) : '') + ')';
             opt.textContent = label;
           }
         });
@@ -902,6 +942,24 @@
       } catch(e){}
       return 'USD';
     }
+    /* Sale banner countdown; removes every [data-sale-only] element once the sale is over */
+    (function(){
+      function tick(){
+        if (!fobSaleActive()) {
+          document.querySelectorAll('[data-sale-only]').forEach(function(el){ el.remove(); });
+          return false;
+        }
+        var el = document.getElementById('saleCountdown');
+        if (el) {
+          var s = Math.max(0, Math.floor((FOB_SALE.endsMs - Date.now()) / 1000));
+          var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+          el.textContent = (d ? d + 'd ' : '') + h + 'h ' + m + 'm left';
+        }
+        return true;
+      }
+      document.addEventListener('DOMContentLoaded', function(){ if (tick()) setInterval(tick, 30000); });
+    })();
+
     document.addEventListener('DOMContentLoaded', function(){
       var initial = detectInitialCurrency();
       if(typeof switchCurrency === 'function' && CURRENCY_RATES && CURRENCY_RATES[initial]){
