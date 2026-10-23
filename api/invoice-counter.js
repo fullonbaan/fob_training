@@ -1,9 +1,10 @@
 // api/invoice-counter.js — Sequential GST invoice number generator
 // GET            → atomically increments counter and returns next FOB#######
-// POST {counter} → sets counter to a specific value (used by admin migration).
+// POST {counter} → sets counter to a specific value — ADMIN ONLY (x-admin-key header).
 // Storage: fob_pay_store_ln_int / payments/invoice_counter.json
 
 const https = require('https');
+const { requireAdmin } = require('./_auth');
 
 const GH_OWNER = 'fullonbaan';
 const GH_REPO  = 'fob_pay_store_ln_int';
@@ -71,7 +72,7 @@ async function writeCounter(value, sha) {
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -91,6 +92,7 @@ module.exports = async function handler(req, res) {
 
   // ── POST { counter: N }: set counter to a specific value (migration) ──
   if (req.method === 'POST') {
+    if (!requireAdmin(req, res)) return;
     try {
       const newCounter = parseInt(req.body && req.body.counter, 10);
       if (!Number.isFinite(newCounter) || newCounter < 0) {

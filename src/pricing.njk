@@ -1252,7 +1252,11 @@ pageId: "pricing"
 
   /* ── Payments API config (secure proxy — no PAT in client code) ──────── */
   var ADM_API = '/api/payments';
-  var ADM_PW  = 'Admin@M3Pay2025';
+  /* Admin password is verified server-side (Vercel env ADMIN_PASSWORD) — never stored in page code */
+  var ADM_KEY = '';
+  function admHdr(h){h=h||{};if(ADM_KEY)h['x-admin-key']=ADM_KEY;return h;}
+  /* Older versions cached EVERY customer's record in the visitor's browser — wipe that cache */
+  try{localStorage.removeItem('training_payments');}catch(e){}
 
   /* ── Invoice number — sequential via /api/invoice-counter (FOB#######) ── */
   async function genInvoiceNoGH() {
@@ -1270,19 +1274,17 @@ pageId: "pricing"
 
   /* ── Payment record storage via proxy ───────────────────────────────── */
   async function ghRead(){
-    var r=await fetch(ADM_API);
+    var r=await fetch(ADM_API,{headers:admHdr(),cache:'no-store'});
     if(!r.ok)throw new Error('API '+r.status);
     var d=await r.json();
     return{records:d.records||[],sha:d.sha};
   }
+  /* Saves ONE order; the server merges it in. Other customers' records never reach the browser. */
   async function ghUpsert(rec){
     try{
-      var gh=await ghRead();
-      var i=gh.records.findIndex(function(x){return x.orderId===rec.orderId;});
-      if(i>=0)gh.records[i]=Object.assign({},gh.records[i],rec);else gh.records.push(rec);
-      await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records,sha:gh.sha,message:'trpay:'+rec.status+' '+rec.orderId})});
-      localStorage.setItem('training_payments',JSON.stringify(gh.records));
-    }catch(e){console.warn('API upsert failed:',e);}
+      var w=await fetch(ADM_API,{method:'POST',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({record:rec})});
+      if(!w.ok){var t='';try{t=(await w.json()).error||'';}catch(e){}throw new Error('API '+w.status+(t?': '+t:''));}
+    }catch(e){console.warn('API upsert failed:',e);if(ADM_KEY)throw e;}
   }
 
   /* ── Called when Razorpay opens (record initiated state) ─────────────── */
@@ -1311,19 +1313,19 @@ pageId: "pricing"
       invoiceNo:invNo,invDate:fmtD(today),dueDate:fmtD(new Date(today.getTime()+15*24*60*60*1000)),
       initiatedAt:new Date().toISOString(),confirmedAt:null,paymentId:null
     };
-    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
     var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
     if(i>=0)lo[i]=Object.assign({},lo[i],rec);else lo.push(rec);
-    localStorage.setItem('training_payments',JSON.stringify(lo));
+    localStorage.setItem('fob_my_orders',JSON.stringify(lo));
     ghUpsert(rec);
   }
 
   /* ── Called after successful payment ────────────────────────────────── */
   function payConfirmed(txnRefVal, payId, invNo) {
-    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
     var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
     var upd={status:'confirmed',paymentId:payId,invoiceNo:invNo,confirmedAt:new Date().toISOString()};
-    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('training_payments',JSON.stringify(lo));ghUpsert(lo[i]);}
+    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('fob_my_orders',JSON.stringify(lo));ghUpsert(lo[i]);}
     else{ghUpsert(Object.assign({
       orderId:txnRefVal,name:userData.name||'—',email:userData.email||'—',
       mobile:userData.mobile||'—',mobileCode:userData.mobileCode||'+91',
@@ -1342,10 +1344,10 @@ pageId: "pricing"
 
   /* ── Called after failed payment ─────────────────────────────────────── */
   function payFailed(txnRefVal) {
-    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
     var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
     var upd={status:'failed',failedAt:new Date().toISOString()};
-    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('training_payments',JSON.stringify(lo));ghUpsert(lo[i]);}
+    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('fob_my_orders',JSON.stringify(lo));ghUpsert(lo[i]);}
   }
 
   // ======================
@@ -2120,9 +2122,18 @@ pageId: "pricing"
   function admClose(){document.getElementById('adm-overlay').style.display='none';document.body.style.overflow='';}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')admClose();});
 
-  function admLogin(){
+  async function admLogin(){
     var pw=document.getElementById('adm-pw').value;
-    if(pw===ADM_PW){
+    if(!pw)return;
+    var ok=false;
+    try{
+      var r=await fetch(ADM_API,{headers:{'x-admin-key':pw},cache:'no-store'});
+      if(r.ok)ok=true;
+      else if(r.status!==401){var t='';try{t=(await r.json()).error||'';}catch(e){}alert('Admin login failed: '+(t||('API '+r.status)));return;}
+    }catch(e){alert('Admin login failed: '+e.message);return;}
+    if(ok){
+      ADM_KEY=pw;
+      document.getElementById('adm-err').style.display='none';
       document.getElementById('adm-pw').value='';
       document.getElementById('adm-login').style.display='none';
       document.getElementById('adm-dash').style.display='flex';
@@ -2136,10 +2147,9 @@ pageId: "pricing"
     var gh=[];
     try{var r=await ghRead();gh=r.records;admSync('ok','Synced');}
     catch(e){admSync('err','Offline');}
-    var lo=JSON.parse(localStorage.getItem('training_payments')||'[]');
+    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
     var m=gh.slice();
     lo.forEach(function(l){if(!m.find(function(x){return x.orderId===l.orderId;}))m.push(l);});
-    localStorage.setItem('training_payments',JSON.stringify(m));
     return m;
   }
 
@@ -2147,7 +2157,7 @@ pageId: "pricing"
     document.getElementById('alist').innerHTML='<div style="text-align:center;color:rgba(212,196,178,0.4);padding:40px;">⏳ Syncing with GitHub…</div>';
     admSync('spin','Syncing…');
     try{admRecs=await admGhMerge();}
-    catch(e){admRecs=JSON.parse(localStorage.getItem('training_payments')||'[]');admSync('err','Offline');}
+    catch(e){admRecs=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');admSync('err','Offline');}
     admStats();admRender();
   }
 
@@ -2266,7 +2276,7 @@ pageId: "pricing"
       var idx = (gh.records||[]).findIndex(function(x){return x.orderId===orderId;});
       if(idx < 0){ admToast('Record not on server. Refreshing list.'); admRefresh(); return; }
       gh.records.splice(idx, 1);
-      var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
+      var w = await fetch(ADM_API,{method:'PUT',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
       if(!w.ok) throw new Error('GitHub write failed: '+w.status);
       admRecs = admRecs.filter(function(x){return x.orderId!==orderId;});
       admStats(); admRender();
@@ -2307,10 +2317,10 @@ pageId: "pricing"
           changed++;
         }
       });
-      var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:allRecs,sha:gh.sha,message:'invoice-migration: renumbered '+confirmedRecs.length+' confirmed invoices (changed '+changed+')'})});
+      var w = await fetch(ADM_API,{method:'PUT',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({records:allRecs,sha:gh.sha,message:'invoice-migration: renumbered '+confirmedRecs.length+' confirmed invoices (changed '+changed+')'})});
       if(!w.ok){throw new Error('GitHub write failed: '+w.status);}
       try {
-        await fetch('/api/invoice-counter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({counter: confirmedRecs.length})});
+        await fetch('/api/invoice-counter',{method:'POST',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({counter: confirmedRecs.length})});
       } catch(e){ console.warn('Counter set failed, but records updated:', e); }
       admToast('✅ Renumbered '+confirmedRecs.length+' invoice(s)');
       alert('✅ Renumbered ' + confirmedRecs.length + ' confirmed invoice(s).\nNext payment will be FOB' + String(confirmedRecs.length+1).padStart(7,'0') + '.');

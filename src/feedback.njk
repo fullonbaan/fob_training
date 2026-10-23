@@ -1,0 +1,228 @@
+---
+layout: base.njk
+title: "Training Material Feedback — Infor LN eBooks & Video Courses | FullOnBaan"
+description: "Share your feedback on FullOnBaan Infor LN eBooks and video courses, and read what other learners say about each training material."
+canonical: "/feedback/"
+pageId: "feedback"
+---
+
+<style>
+  .fb-stars { display: inline-flex; flex-direction: row-reverse; gap: 4px; }
+  .fb-stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .fb-stars label { font-size: 2rem; line-height: 1; cursor: pointer; color: #3b4661; transition: color .15s, transform .15s; }
+  .fb-stars label:hover, .fb-stars label:hover ~ label,
+  .fb-stars input:checked ~ label { color: #f6bc68; }
+  .fb-stars label:hover { transform: scale(1.12); }
+  .fb-stars input:focus-visible + label { outline: 2px solid #f6bc68; outline-offset: 2px; border-radius: 4px; }
+  html.light .fb-stars label { color: #d6d0c4; }
+  html.light .fb-stars label:hover, html.light .fb-stars label:hover ~ label,
+  html.light .fb-stars input:checked ~ label { color: #805604; }
+  .fb-bar { height: 8px; border-radius: 999px; background: var(--color-surface-container-high); overflow: hidden; }
+  .fb-bar > span { display: block; height: 100%; background: var(--color-primary); border-radius: 999px; }
+  .fb-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .fb-new { animation: fbIn .6s ease-out; border-color: rgba(246,188,104,.6) !important; }
+  @keyframes fbIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .fb-comment { white-space: pre-line; overflow-wrap: anywhere; }
+</style>
+
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <span class="text-xs font-label uppercase tracking-widest text-primary font-semibold">Learner Feedback</span>
+      <h1 class="font-headline font-bold text-3xl md:text-4xl text-on-surface mt-3">How did the <span class="text-primary italic">training material</span> work for you?</h1>
+      <p class="text-on-surface-variant text-sm mt-3 max-w-xl mx-auto">Tell us what helped, what was unclear, and what you'd like covered next. Every review is published below and read by the FullOnBaan team.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+
+      <!-- FORM -->
+      <div class="lg:col-span-2 contact-card rounded-2xl lg:sticky lg:top-24">
+        <h2 class="font-headline font-bold text-xl text-on-surface mb-1">Leave your feedback</h2>
+        <p class="text-on-surface-variant text-xs mb-5">Fields marked * are required. Your email is never shown publicly.</p>
+        <form id="fbForm" novalidate class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input type="text" id="fbName" maxlength="80" placeholder="Your name *" autocomplete="name" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+            <input type="text" id="fbRole" maxlength="100" placeholder="Role / company (optional)" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+          </div>
+          <input type="email" id="fbEmail" maxlength="120" placeholder="Email (optional, private)" autocomplete="email" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <select id="fbMaterial" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg">
+              <option value="" selected>Training material *</option>
+              {% for m in materials.list %}<option>{{ m }}</option>{% endfor %}
+            </select>
+            <select id="fbFormat" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg">
+              <option value="" selected>Format (optional)</option>
+              {% for f in materials.formats %}<option>{{ f }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-1">Your rating *</p>
+            <div class="fb-stars" role="radiogroup" aria-label="Rating">
+              <input type="radio" name="fbRating" id="fbR5" value="5"><label for="fbR5" title="Excellent">★</label>
+              <input type="radio" name="fbRating" id="fbR4" value="4"><label for="fbR4" title="Good">★</label>
+              <input type="radio" name="fbRating" id="fbR3" value="3"><label for="fbR3" title="Average">★</label>
+              <input type="radio" name="fbRating" id="fbR2" value="2"><label for="fbR2" title="Poor">★</label>
+              <input type="radio" name="fbRating" id="fbR1" value="1"><label for="fbR1" title="Very poor">★</label>
+            </div>
+          </div>
+          <textarea id="fbComment" rows="5" maxlength="2000" placeholder="What did you find useful? What could be better? *" class="w-full bg-surface border border-surface-container-high text-on-surface p-3 rounded-lg placeholder-on-surface-variant"></textarea>
+          <div class="fb-hp" aria-hidden="true"><label>Website <input type="text" id="fbWebsite" tabindex="-1" autocomplete="off"></label></div>
+          <p id="fbMsg" class="text-sm hidden" role="status"></p>
+          <button type="submit" id="fbSubmit" class="editorial-gradient text-on-primary px-6 py-3 rounded-xl font-label font-bold w-full flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl transition-all cursor-pointer disabled:opacity-60">
+            <span class="material-symbols-outlined">rate_review</span><span id="fbSubmitTxt">Submit feedback</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- SUMMARY + LIST -->
+      <div class="lg:col-span-3">
+        <div class="contact-card rounded-2xl mb-6">
+          <div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+            <div class="text-center sm:pr-6 sm:border-r border-surface-container-high">
+              <div id="fbAvg" class="font-headline font-bold text-5xl text-primary">–</div>
+              <div id="fbAvgStars" class="text-primary text-lg tracking-wider">☆☆☆☆☆</div>
+              <div id="fbCount" class="text-on-surface-variant text-xs mt-1">Loading…</div>
+            </div>
+            <div id="fbDist" class="flex-1 space-y-1.5"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 items-center justify-between mb-5">
+          <h2 class="font-headline font-bold text-xl text-on-surface">All feedback</h2>
+          <div class="flex gap-2 flex-wrap">
+            <select id="fbFilter" class="bg-surface border border-surface-container-high text-on-surface px-3 py-2 rounded-lg text-sm">
+              <option value="">All materials</option>
+              {% for m in materials.list %}<option>{{ m }}</option>{% endfor %}
+            </select>
+            <select id="fbSort" class="bg-surface border border-surface-container-high text-on-surface px-3 py-2 rounded-lg text-sm">
+              <option value="new">Newest first</option>
+              <option value="old">Oldest first</option>
+              <option value="high">Highest rated</option>
+              <option value="low">Lowest rated</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="fbList" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <p class="text-on-surface-variant text-sm">Loading feedback…</p>
+        </div>
+        <div class="text-center mt-6">
+          <button id="fbMore" class="hidden border border-primary text-primary px-5 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">Show more</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var API = '/api/feedback', PAGE = 12;
+  var all = [], shown = PAGE, newId = null;
+
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function stars(n){ n = Math.round(n); return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
+  function initials(name){ return String(name).trim().split(/\s+/).slice(0,2).map(function(w){ return w.charAt(0).toUpperCase(); }).join('') || '?'; }
+  function fmtDate(d){ var dt = new Date(d); return isNaN(dt) ? '' : dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); }
+
+  function summary(){
+    var n = all.length, sum = 0, dist = [0,0,0,0,0];
+    all.forEach(function(f){ sum += f.rating; dist[f.rating - 1]++; });
+    var avg = n ? sum / n : 0;
+    document.getElementById('fbAvg').textContent = n ? avg.toFixed(1) : '–';
+    document.getElementById('fbAvgStars').textContent = stars(avg);
+    document.getElementById('fbCount').textContent = n + (n === 1 ? ' review' : ' reviews');
+    var html = '';
+    for (var s = 5; s >= 1; s--) {
+      var pct = n ? Math.round(dist[s-1] / n * 100) : 0;
+      html += '<div class="flex items-center gap-3 text-xs text-on-surface-variant"><span class="w-6 text-right">' + s + '★</span><div class="fb-bar flex-1"><span style="width:' + pct + '%"></span></div><span class="w-8">' + dist[s-1] + '</span></div>';
+    }
+    document.getElementById('fbDist').innerHTML = html;
+  }
+
+  function card(f){
+    var meta = [f.material, f.format].filter(Boolean).map(esc).join(' · ');
+    return '<article class="testimonial-card' + (f.id === newId ? ' fb-new' : '') + '">' +
+      '<div class="flex items-start gap-3 mb-4">' +
+        '<div class="w-10 h-10 rounded-full editorial-gradient flex items-center justify-center flex-shrink-0"><span class="text-on-primary font-bold text-sm">' + esc(initials(f.name)) + '</span></div>' +
+        '<div class="flex-1 min-w-0"><h3 class="font-bold text-on-surface text-sm leading-tight">' + esc(f.name) + '</h3>' +
+          (f.role ? '<p class="text-[11px] text-on-surface-variant mt-0.5">' + esc(f.role) + '</p>' : '') + '</div>' +
+        '<span class="text-[10px] text-on-surface-variant/70 flex-shrink-0">' + fmtDate(f.createdAt) + '</span>' +
+      '</div>' +
+      '<p class="text-[11px] font-label uppercase tracking-wider text-primary mb-2">' + meta + '</p>' +
+      '<div class="relative pl-4 border-l-2 border-primary/30"><p class="fb-comment text-sm text-on-surface-variant leading-relaxed">' + esc(f.comment) + '</p></div>' +
+      '<div class="mt-4 text-primary text-sm" aria-label="' + f.rating + ' out of 5">' + stars(f.rating) + '</div>' +
+    '</article>';
+  }
+
+  function render(){
+    var mat = document.getElementById('fbFilter').value, sort = document.getElementById('fbSort').value;
+    var r = all.filter(function(f){ return !mat || f.material === mat; });
+    r.sort(function(a, b){
+      if (sort === 'high') return b.rating - a.rating || new Date(b.createdAt) - new Date(a.createdAt);
+      if (sort === 'low')  return a.rating - b.rating || new Date(b.createdAt) - new Date(a.createdAt);
+      if (sort === 'old')  return new Date(a.createdAt) - new Date(b.createdAt);
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+    var list = document.getElementById('fbList');
+    list.innerHTML = r.length ? r.slice(0, shown).map(card).join('')
+      : '<p class="text-on-surface-variant text-sm md:col-span-2">' + (all.length ? 'No feedback for this material yet.' : 'No feedback yet — be the first to share yours.') + '</p>';
+    document.getElementById('fbMore').classList.toggle('hidden', r.length <= shown);
+  }
+
+  function load(){
+    fetch(API, { cache: 'no-store' }).then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(d){ all = d.feedback || []; summary(); render(); })
+      .catch(function(){
+        document.getElementById('fbCount').textContent = '';
+        document.getElementById('fbList').innerHTML = '<p class="text-error text-sm md:col-span-2">Could not load feedback right now. Please refresh in a moment.</p>';
+      });
+  }
+
+  function msg(text, ok){
+    var el = document.getElementById('fbMsg');
+    el.textContent = text; el.className = 'text-sm ' + (ok ? 'text-green-400' : 'text-error');
+  }
+
+  document.getElementById('fbFilter').addEventListener('change', function(){ shown = PAGE; render(); });
+  document.getElementById('fbSort').addEventListener('change', function(){ shown = PAGE; render(); });
+  document.getElementById('fbMore').addEventListener('click', function(){ shown += PAGE; render(); });
+
+  document.getElementById('fbForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var rated = document.querySelector('input[name="fbRating"]:checked');
+    var body = {
+      name: document.getElementById('fbName').value.trim(),
+      role: document.getElementById('fbRole').value.trim(),
+      email: document.getElementById('fbEmail').value.trim(),
+      material: document.getElementById('fbMaterial').value,
+      format: document.getElementById('fbFormat').value,
+      rating: rated ? Number(rated.value) : 0,
+      comment: document.getElementById('fbComment').value.trim(),
+      website: document.getElementById('fbWebsite').value
+    };
+    if (!body.name) return msg('Please enter your name.');
+    if (!body.material) return msg('Please choose the training material.');
+    if (!body.rating) return msg('Please pick a star rating.');
+    if (body.comment.length < 10) return msg('Please write at least a sentence of feedback.');
+
+    var btn = document.getElementById('fbSubmit');
+    btn.disabled = true; document.getElementById('fbSubmitTxt').textContent = 'Submitting…';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(d){ if (!r.ok) throw new Error(d.error || 'Submit failed'); return d; }); })
+      .then(function(d){
+        if (d.feedback) { newId = d.feedback.id; all.unshift(d.feedback); }
+        document.getElementById('fbForm').reset();
+        document.getElementById('fbFilter').value = ''; document.getElementById('fbSort').value = 'new'; shown = PAGE;
+        summary(); render();
+        msg('Thank you! Your feedback is now live below.', true);
+        if (window.innerWidth < 1024) document.getElementById('fbList').scrollIntoView({ behavior: 'smooth' });
+        if (typeof gtag === 'function') gtag('event', 'feedback_submit', { material: body.material, rating: body.rating });
+      })
+      .catch(function(err){ msg(err.message || 'Something went wrong. Please try again.'); })
+      .finally(function(){ btn.disabled = false; document.getElementById('fbSubmitTxt').textContent = 'Submit feedback'; });
+  });
+
+  load();
+})();
+</script>

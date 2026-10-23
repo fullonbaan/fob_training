@@ -542,6 +542,7 @@
           <a href="/catalog/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'catalog' %} active{% endif %}">Catalog</a>
           <a href="/pricing/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'pricing' %} active{% endif %}">Pricing</a>
           <a href="/testimonials/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'testimonials' %} active{% endif %}">Testimonials</a>
+          <a href="/feedback/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'feedback' %} active{% endif %}">Feedback</a>
           <a href="/videos/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'videos' %} active{% endif %}">Videos</a>
           <a href="/contact/" class="nav-link text-on-surface hover:text-primary{% if pageId == 'contact' %} active{% endif %}">Contact</a>
           <!-- Ecosystem Dropdown -->
@@ -597,6 +598,7 @@
           <a href="/catalog/" class="text-on-surface hover:text-primary">Catalog</a>
           <a href="/pricing/" class="text-on-surface hover:text-primary">Pricing</a>
           <a href="/testimonials/" class="text-on-surface hover:text-primary">Testimonials</a>
+          <a href="/feedback/" class="text-on-surface hover:text-primary">Feedback</a>
           <a href="/videos/" class="text-on-surface hover:text-primary">Videos</a>
           <a href="/contact/" class="text-on-surface hover:text-primary">Contact</a>
           <!-- Ecosystem links in mobile -->
@@ -650,6 +652,7 @@
             <a href="/catalog/" class="block hover:text-primary transition">Course Catalog</a>
             <a href="/pricing/" class="block hover:text-primary transition">Pricing</a>
             <a href="/testimonials/" class="block hover:text-primary transition">Testimonials</a>
+            <a href="/feedback/" class="block hover:text-primary transition">Feedback</a>
             <a href="/videos/" class="block hover:text-primary transition">Videos</a>
             <a href="/contact/" class="block hover:text-primary transition">Contact Us</a>
           </div>
@@ -776,7 +779,7 @@
   <div id="adminOverlay" class="admin-overlay">
     <div class="admin-panel max-w-2xl w-full">
       <div class="flex justify-between items-center mb-6">
-        <h2 class="font-headline font-bold text-2xl text-primary">LN Payment Admin</h2>
+        <h2 class="font-headline font-bold text-2xl text-primary">LN Training Admin</h2>
         <button onclick="admClose()" class="text-on-surface-variant hover:text-primary text-2xl">&times;</button>
       </div>
       <div id="admLoginDiv">
@@ -789,7 +792,9 @@
         <div class="flex gap-2 mb-4">
           <button onclick="admRefresh()" class="border border-primary text-primary px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">&circlearrowleft; Refresh</button>
           <button onclick="admMigrateInvoiceNos()" class="border border-yellow-400 text-yellow-400 px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-yellow-400/10" title="Renumber confirmed invoices to FOB####### sequence">&#x1F522; Renumber Invoices</button>
+          <button onclick="admFbToggle()" id="admFbBtn" class="border border-primary text-primary px-4 py-2 rounded-lg font-label font-semibold text-sm hover:bg-primary/10">&#x1F4AC; Feedback</button>
         </div>
+        <div id="admPayView">
         <div class="flex gap-2 mb-4 flex-wrap">
           <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold bg-primary/15 text-primary" data-status="all" data-active="1" onclick="admSetFilter('all',event)">All</button>
           <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="initiated" onclick="admSetFilter('initiated',event)">Initiated</button>
@@ -798,6 +803,39 @@
           <button class="adm-fchip border border-primary/30 px-3 py-1.5 rounded-full font-label text-xs font-semibold text-on-surface-variant" data-status="failed" onclick="admSetFilter('failed',event)">Failed</button>
         </div>
         <div id="admRenderDiv" style="max-height: 500px; overflow-y: auto;"></div>
+        </div>
+        <div id="admFbView" style="display:none;">
+          <div class="border border-primary/25 rounded-xl p-4 mb-4">
+            <p class="font-label text-xs uppercase tracking-widest text-primary font-semibold mb-3">Add feedback</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+              <input id="admFbName" maxlength="80" placeholder="Learner name *" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm placeholder-on-surface-variant">
+              <input id="admFbRole" maxlength="100" placeholder="Role / company" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm placeholder-on-surface-variant">
+              <select id="admFbMaterial" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm">
+                <option value="">Training material *</option>
+                {% for m in materials.list %}<option>{{ m }}</option>{% endfor %}
+              </select>
+              <select id="admFbFormat" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm">
+                <option value="">Format</option>
+                {% for f in materials.formats %}<option>{{ f }}</option>{% endfor %}
+              </select>
+              <select id="admFbRating" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm">
+                <option value="5">★★★★★ 5</option><option value="4">★★★★☆ 4</option><option value="3">★★★☆☆ 3</option><option value="2">★★☆☆☆ 2</option><option value="1">★☆☆☆☆ 1</option>
+              </select>
+              <input id="admFbDate" type="date" title="Feedback date (leave blank for today)" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm">
+            </div>
+            <input id="admFbEmail" maxlength="120" placeholder="Email (private, optional)" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm placeholder-on-surface-variant mb-2">
+            <textarea id="admFbComment" rows="3" maxlength="2000" placeholder="Feedback text *" class="w-full bg-surface border border-surface-container-high text-on-surface p-2 rounded-lg text-sm placeholder-on-surface-variant mb-2"></textarea>
+            <div class="flex items-center gap-3">
+              <button onclick="admFbAdd()" id="admFbAddBtn" class="editorial-gradient text-on-primary px-4 py-2 rounded-lg font-label font-semibold text-sm">Add feedback</button>
+              <span id="admFbMsg" class="text-xs"></span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <p id="admFbCount" class="text-on-surface-variant text-xs"></p>
+            <a href="/feedback/" target="_blank" class="text-primary text-xs hover:underline">Open public page &#8599;</a>
+          </div>
+          <div id="admFbList" style="max-height: 420px; overflow-y: auto;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1036,7 +1074,9 @@
       }
     });
 
-    var ADM_PW='Admin@M3Pay2025';
+    /* Admin password is verified server-side (Vercel env ADMIN_PASSWORD) — never stored in page code */
+    var ADM_KEY='';
+    function admHdr(h){h=h||{};if(ADM_KEY)h['x-admin-key']=ADM_KEY;return h;}
     var ADM_API='/api/payments';
     var admRecs=[],admFl='all';
     // Logo placeholder — pricing.njk overrides with actual base64 when loaded on that page
@@ -1351,7 +1391,7 @@
         var idx = (gh.records||[]).findIndex(function(x){return x.orderId===orderId;});
         if(idx < 0){ alert('Record not on server. Refreshing list.'); admRefresh(); return; }
         gh.records.splice(idx, 1);
-        var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
+        var w = await fetch(ADM_API,{method:'PUT',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({records:gh.records, sha:gh.sha, message:'admin: delete '+orderId})});
         if(!w.ok) throw new Error('GitHub write failed: '+w.status);
         admRecs = admRecs.filter(function(x){return x.orderId!==orderId;});
         admRender();
@@ -1393,11 +1433,11 @@
           }
         });
         /* Persist updated records */
-        var w = await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:allRecs,sha:gh.sha,message:'invoice-migration: renumbered '+confirmedRecs.length+' confirmed invoices (changed '+changed+')'})});
+        var w = await fetch(ADM_API,{method:'PUT',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({records:allRecs,sha:gh.sha,message:'invoice-migration: renumbered '+confirmedRecs.length+' confirmed invoices (changed '+changed+')'})});
         if(!w.ok){throw new Error('GitHub write failed: '+w.status);}
         /* Reset the counter so the next confirmed payment continues the sequence */
         try {
-          await fetch('/api/invoice-counter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({counter: confirmedRecs.length})});
+          await fetch('/api/invoice-counter',{method:'POST',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({counter: confirmedRecs.length})});
         } catch(e){ console.warn('Counter set failed, but records updated:', e); }
         alert('✅ Renumbered ' + confirmedRecs.length + ' confirmed invoice(s).\nNext payment will be FOB' + String(confirmedRecs.length+1).padStart(7,'0') + '.');
         admRefresh();
@@ -1518,17 +1558,76 @@
     });
 
     function admOpen(){document.getElementById('adminOverlay').classList.add('active');document.getElementById('admLoginDiv').style.display='block';document.getElementById('admDashDiv').style.display='none';document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('admPassword').focus();},50);}
+    /* ── Admin: Training-material feedback (stored via /api/feedback → GitHub) ── */
+    var ADM_FB_API='/api/feedback',admFbOn=false;
+    function admFbEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    function admFbToggle(){
+      admFbOn=!admFbOn;
+      document.getElementById('admFbView').style.display=admFbOn?'block':'none';
+      document.getElementById('admPayView').style.display=admFbOn?'none':'block';
+      document.getElementById('admFbBtn').innerHTML=admFbOn?'&#x1F4B3; Payments':'&#x1F4AC; Feedback';
+      if(admFbOn)admFbLoad();
+    }
+    async function admFbLoad(){
+      var list=document.getElementById('admFbList');
+      list.innerHTML='<p class="text-on-surface-variant text-sm">Loading feedback...</p>';
+      try{
+        var r=await fetch(ADM_FB_API,{headers:{'x-admin-key':ADM_KEY},cache:'no-store'});
+        if(!r.ok)throw new Error('API '+r.status);
+        var items=(await r.json()).feedback||[];
+        document.getElementById('admFbCount').textContent=items.length+' feedback entries';
+        if(!items.length){list.innerHTML='<p class="text-on-surface-variant text-sm">No feedback yet.</p>';return;}
+        list.innerHTML=items.map(function(f){
+          var d=new Date(f.createdAt);
+          return '<div class="border border-surface-container-high rounded-lg p-3 mb-2">'+
+            '<div class="flex justify-between gap-2 items-start">'+
+              '<div class="min-w-0"><p class="text-on-surface text-sm font-semibold">'+admFbEsc(f.name)+' <span class="text-primary">'+'★'.repeat(f.rating)+'</span></p>'+
+              '<p class="text-on-surface-variant text-[11px]">'+admFbEsc([f.material,f.format,f.role].filter(Boolean).join(' · '))+'</p>'+
+              '<p class="text-on-surface-variant text-[11px]">'+(isNaN(d)?'':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}))+' · '+admFbEsc(f.source||'learner')+(f.email?' · '+admFbEsc(f.email):'')+'</p></div>'+
+              '<button onclick="admFbDelete(\''+admFbEsc(f.id)+'\')" class="text-error text-xs border border-error/40 rounded px-2 py-1 hover:bg-error/10 flex-shrink-0">Delete</button>'+
+            '</div>'+
+            '<p class="text-on-surface-variant text-xs mt-2" style="white-space:pre-line">'+admFbEsc(f.comment)+'</p>'+
+          '</div>';
+        }).join('');
+      }catch(e){list.innerHTML='<p class="text-error text-sm">Failed to load feedback. '+admFbEsc(e.message)+'</p>';}
+    }
+    async function admFbAdd(){
+      var g=function(id){return document.getElementById(id).value.trim();};
+      var msg=document.getElementById('admFbMsg'),btn=document.getElementById('admFbAddBtn');
+      var body={name:g('admFbName'),role:g('admFbRole'),material:g('admFbMaterial'),format:g('admFbFormat'),rating:Number(g('admFbRating')),email:g('admFbEmail'),comment:g('admFbComment')};
+      if(g('admFbDate'))body.createdAt=g('admFbDate')+'T12:00:00+05:30';
+      if(!body.name||!body.material||body.comment.length<10){msg.className='text-xs text-error';msg.textContent='Name, material and feedback (10+ chars) are required.';return;}
+      btn.disabled=true;msg.className='text-xs text-on-surface-variant';msg.textContent='Saving...';
+      try{
+        var r=await fetch(ADM_FB_API,{method:'POST',headers:{'Content-Type':'application/json','x-admin-key':ADM_KEY},body:JSON.stringify(body)});
+        var d=await r.json();if(!r.ok)throw new Error(d.error||('API '+r.status));
+        ['admFbName','admFbRole','admFbMaterial','admFbFormat','admFbEmail','admFbComment','admFbDate'].forEach(function(id){document.getElementById(id).value='';});
+        document.getElementById('admFbRating').value='5';
+        msg.className='text-xs text-green-400';msg.textContent='Added — now live on /feedback/.';
+        admFbLoad();
+      }catch(e){msg.className='text-xs text-error';msg.textContent=e.message;}
+      finally{btn.disabled=false;}
+    }
+    async function admFbDelete(id){
+      if(!confirm('Delete this feedback permanently?'))return;
+      try{
+        var r=await fetch(ADM_FB_API+'?id='+encodeURIComponent(id),{method:'DELETE',headers:{'x-admin-key':ADM_KEY}});
+        if(!r.ok){var d={};try{d=await r.json();}catch(e){}throw new Error(d.error||('API '+r.status));}
+        admFbLoad();
+      }catch(e){alert('Delete failed: '+e.message);}
+    }
     function admClose(){document.getElementById('adminOverlay').classList.remove('active');document.body.style.overflow='';}
     document.addEventListener('keydown',function(e){if(e.key==='Escape')admClose();});
     (function(){if(window.location.hash==='#admin'||window.location.pathname.replace(/\/$/,'')==='/admin'){history.replaceState(null,'','/');admOpen();}})();
     window.addEventListener('hashchange',function(){if(window.location.hash==='#admin'){history.replaceState(null,'',window.location.pathname);admOpen();}});
 
-    function admLogin(){var pw=document.getElementById('admPassword').value;if(pw===ADM_PW){document.getElementById('admPassword').value='';document.getElementById('admLoginDiv').style.display='none';document.getElementById('admDashDiv').style.display='block';admRefresh();}else{alert('Invalid password.');}}
+    async function admLogin(){var pw=document.getElementById('admPassword').value;if(!pw)return;try{var r=await fetch(ADM_API,{headers:{'x-admin-key':pw},cache:'no-store'});if(r.status===401){alert('Invalid password.');return;}if(!r.ok){var t='';try{t=(await r.json()).error||'';}catch(e){}alert('Admin login failed: '+(t||('API '+r.status)));return;}}catch(e){alert('Admin login failed: '+e.message);return;}ADM_KEY=pw;document.getElementById('admPassword').value='';document.getElementById('admLoginDiv').style.display='none';document.getElementById('admDashDiv').style.display='block';admRefresh();}
 
     function repairModule(raw,amount){if(!raw)return raw;var validNames=[];for(var k in GUIDES)validNames.push(GUIDES[k].name);if(validNames.indexOf(raw)>=0)return raw;var cleaned=raw.replace(/[^\x20-\x7E]/g,' ').replace(/\s+/g,' ').trim();var best=null;for(var key in GUIDES){var g=GUIDES[key];var words=g.name.replace(/[^\w\s]/g,'').split(/\s+/).filter(function(w){return w.length>2;});var allMatch=words.every(function(w){return cleaned.indexOf(w)>=0;});if(allMatch&&amount&&g.price===Number(amount)){return g.name;}if(allMatch&&!best){best=g.name;}}return best||raw;}
     function repairRecords(recs){return recs.map(function(rec){if(rec.module){rec.module=repairModule(rec.module,rec.amount);}return rec;});}
-    async function admGhRead(){var r=await fetch(ADM_API);if(!r.ok){var t='';try{t=(await r.json()).error||'';}catch(e){}throw new Error('API '+r.status+(t?': '+t:''));}var d=await r.json();return{records:repairRecords(d.records||[]),sha:d.sha};}
-    async function admGhUpsert(rec){try{var gh=await admGhRead();var i=gh.records.findIndex(function(x){return x.orderId===rec.orderId;});if(i>=0)gh.records[i]=Object.assign({},gh.records[i],rec);else gh.records.push(rec);var w=await fetch(ADM_API,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({records:gh.records,sha:gh.sha,message:'lnpay:'+rec.status+' '+rec.orderId})});if(!w.ok)throw new Error('API write '+w.status);}catch(e){console.warn('GitHub sync error:',e);}}
+    async function admGhRead(){var r=await fetch(ADM_API,{headers:admHdr(),cache:'no-store'});if(!r.ok){var t='';try{t=(await r.json()).error||'';}catch(e){}throw new Error('API '+r.status+(t?': '+t:''));}var d=await r.json();return{records:repairRecords(d.records||[]),sha:d.sha};}
+    /* Saves ONE order server-side (merge happens on the server; other customers' records never reach the browser) */
+    async function admGhUpsert(rec){try{var w=await fetch(ADM_API,{method:'POST',headers:admHdr({'Content-Type':'application/json'}),body:JSON.stringify({record:rec})});if(!w.ok){var t='';try{t=(await w.json()).error||'';}catch(e){}throw new Error('API write '+w.status+(t?': '+t:''));}}catch(e){console.warn('GitHub sync error:',e);if(ADM_KEY)throw e;}}
     async function admGhMerge(){var r=await admGhRead();return r.records;}
     window.lnPayInitiated=function(txnRefVal,userDataVal,selDescVal,selAmountVal){var rec={orderId:txnRefVal,status:'initiated',name:userDataVal.name,email:userDataVal.email,mobile:userDataVal.mobile,module:selDescVal,amount:selAmountVal,initiatedAt:new Date().toISOString(),submittedAt:null,utr:null};admGhUpsert(rec);};
     window.lnPaySubmitted=function(txnRefVal,utrVal){var upd={orderId:txnRefVal,status:'submitted',utr:utrVal,submittedAt:new Date().toISOString()};admGhUpsert(upd);};
