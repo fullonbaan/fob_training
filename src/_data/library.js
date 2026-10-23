@@ -13,8 +13,6 @@ const ebooks = [
   { key: 'bod_ebook',        name: 'Infor BOD',                         count: 11 },
   { key: 'ion_ebook',        name: 'Infor ION',                         count: 15 },
   { key: 'ext_ebook',        name: 'Infor Extensibility',               count: 6 },
-  { key: 'fin_intercompany', name: 'Finance Intercompany Setup',        count: 1 },
-  { key: 'fin_integration',  name: 'Financial Integration (LN 10.5)',   count: 1 },
   { key: 'mst_ebook',        name: 'Infor LN Multisite',                count: 5 },
   { key: 'infor_os',         name: 'Infor OS',                          count: 11 },
   { key: 'idm_ebook',        name: 'Infor IDM',                         count: 6 },
@@ -24,7 +22,7 @@ const ebooks = [
   { key: 'ai_genai',         name: 'AI Agents & GenAI in Infor LN',     count: 7, extra: '+ Excel tool' }
 ];
 
-// What the Full Video Library (₹18,999) contains
+// What the Full Video Library (₹34,999) contains
 const videos = [
   { key: 'dev_video', name: 'Infor LN Development' },
   { key: 'adm_video', name: 'Infor LN Administration' },

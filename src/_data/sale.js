@@ -17,8 +17,10 @@ const sale = {
   endsLabel: '10 Nov 2026',
   bannerText: 'on the Full eBook Library & Full Video Library',
   products: {
-    full_ebook_library: { was: 12999 },       // ₹12,999 → ₹6,499
-    full_video_library: { was: 31992 }        // ₹31,992 → ₹15,996
+    // `was` = original INR price. `fixed` = an exact sale price for a currency, used instead of
+    // the computed 50% (other currencies are computed from their own original price).
+    full_ebook_library: { was: 15999, fixed: { USD: 199, EUR: 199 } },   // ₹15,999 → ₹7,999 · $400 → $199 · €400 → €199
+    full_video_library: { was: 34999, fixed: { USD: 399, EUR: 399 } }    // ₹34,999 → ₹17,499 · $800 → $399 · €800 → €399
   }
 };
 
