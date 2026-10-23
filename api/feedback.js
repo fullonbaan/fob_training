@@ -3,8 +3,8 @@
 //   GET                         → all feedback (newest first, emails stripped)
 //   POST   {name, material, rating, comment, ...}
 //                               → learner submission, published immediately
-//   POST   + header x-admin-key → admin-added entry (may set createdAt / source)
-//   DELETE ?id=…  + x-admin-key → remove an entry (spam / duplicates)
+//   POST   + admin session      → admin-added entry (may set createdAt / source)
+//   DELETE ?id=…  + admin session → remove an entry (spam / duplicates)
 //
 // Storage: fullonbaan/fob_pay_store_ln_int → feedback/training_feedback.json
 // Needs GITHUB_PAT (already set for payments) and ADMIN_PASSWORD (see api/_auth.js).
@@ -92,7 +92,7 @@ function publicView(f) {
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -134,7 +134,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'DELETE') {
-      if (!isAdmin(req)) return res.status(401).json({ error: 'Admin key required.' });
+      if (!isAdmin(req)) return res.status(401).json({ error: 'Admin sign-in required.' });
       const id = clean((req.query && req.query.id) || '', 40);
       if (!id) return res.status(400).json({ error: 'Missing id.' });
       const found = await mutate(items => {

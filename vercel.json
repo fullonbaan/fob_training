@@ -1,7 +1,11 @@
 {
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "_site",
+  "functions": {
+    "api/admin.js": { "includeFiles": "{admin/**,src/_data/materials.js}" }
+  },
   "rewrites": [
-    { "source": "/admin", "destination": "/" }
+    { "source": "/admin", "destination": "/api/admin" },
+    { "source": "/admin/", "destination": "/api/admin" }
   ]
 }

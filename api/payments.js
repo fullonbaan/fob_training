@@ -4,7 +4,7 @@
 //   PUT  {records, sha, message} admin only → replace the whole list (delete, renumber)
 //   POST {record}               checkout   → create / update ONE order; returns nothing
 //                                           about other customers
-//        + x-admin-key          admin      → full merge of any field (billing edits)
+//        + admin session cookie admin     → full merge of any field (billing edits)
 //
 // Public callers can only touch their own order (by orderId), only with known fields,
 // and can't change who paid / how much once the order exists, or edit a confirmed order.
@@ -96,7 +96,7 @@ function pick(src, fields) {
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  'https://training.fullonbaan.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
