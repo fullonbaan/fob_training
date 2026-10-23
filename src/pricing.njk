@@ -321,6 +321,20 @@ pageId: "pricing"
       html.light .combo-row { background: linear-gradient(135deg, rgba(128,86,4,0.06) 0%, rgba(128,86,4,0.02) 100%); border-color: rgba(128,86,4,0.1); }
       html.light .combo-row:hover { background: linear-gradient(135deg, rgba(128,86,4,0.1) 0%, rgba(128,86,4,0.03) 100%); border-color: rgba(128,86,4,0.18); }
       html.light .bundle-card::before { background: linear-gradient(90deg, transparent, #805604, #a67206, #805604, transparent); }
+      /* Full eBook / Full Video Library cards — dark default + light-mode variants */
+      .bundle-card--ebook { background: linear-gradient(160deg, rgba(246,188,104,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(246,188,104,0.2); }
+      .bundle-card--video { background: linear-gradient(160deg, rgba(129,140,248,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(129,140,248,0.2); }
+      html.light .bundle-card--ebook { background: linear-gradient(160deg, rgba(128,86,4,0.08) 0%, #ffffff 35%, #faf6ee 100%); border-color: rgba(128,86,4,0.25); }
+      html.light .bundle-card--video { background: linear-gradient(160deg, rgba(99,102,241,0.08) 0%, #ffffff 35%, #f4f4ff 100%); border-color: rgba(99,102,241,0.28); }
+      html.light .bundle-card--ebook h3, html.light .bundle-card--ebook .font-headline[data-inr="8999"] { background: linear-gradient(135deg, #805604, #a67206) !important; -webkit-background-clip: text !important; background-clip: text !important; }
+      html.light .bundle-card--video h3, html.light .bundle-card--video .font-headline[data-inr="18999"] { background: linear-gradient(135deg, #4338ca, #6366f1) !important; -webkit-background-clip: text !important; background-clip: text !important; }
+      html.light .bundle-card .font-label.rounded-full { color: #4e4539 !important; }
+      html.light .bundle-card details { color: #4e4539 !important; }
+      html.light .bundle-card details li span[style] { color: rgba(78,69,57,0.65) !important; }
+      html.light .bundle-card--ebook details summary { color: #805604 !important; }
+      html.light .bundle-card--video details summary { color: #4338ca !important; }
+      html.light .bundle-card .price-pill { background: rgba(22,163,74,0.1) !important; color: #15803d !important; border-color: rgba(22,163,74,0.25) !important; }
+      html.light .bundle-card .text-xs.font-bold.rounded-full { background: rgba(22,163,74,0.1) !important; color: #15803d !important; border-color: rgba(22,163,74,0.3) !important; }
       html.light .bundle-card:hover { box-shadow: 0 24px 60px rgba(0,0,0,.1), 0 0 50px rgba(128,86,4,0.04); }
       html.light .filter-tab { border-color: rgba(128,86,4,0.1); background: rgba(128,86,4,0.03); color: rgba(28,27,24,0.45); }
       html.light .filter-tab:hover { color: rgba(28,27,24,0.7); border-color: rgba(128,86,4,0.2); background: rgba(128,86,4,0.06); }
@@ -516,7 +530,7 @@ pageId: "pricing"
     <!-- Mega Bundle Cards -->
     <div id="bundleSection" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
       <!-- Full eBook Library -->
-      <div class="bundle-card" style="background: linear-gradient(160deg, rgba(246,188,104,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(246,188,104,0.2);" data-category="bundle" onclick="selectModule('full_ebook_library', event)">
+      <div class="bundle-card bundle-card--ebook" data-category="bundle" onclick="selectModule('full_ebook_library', event)">
         <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
           <span class="material-symbols-outlined" style="font-size:inherit;color:#f6bc68;">library_books</span>
         </div>
@@ -545,7 +559,7 @@ pageId: "pricing"
         </details>
       </div>
       <!-- Full Video Library -->
-      <div class="bundle-card" style="background: linear-gradient(160deg, rgba(129,140,248,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(129,140,248,0.2);" data-category="bundle" onclick="selectModule('full_video_library', event)">
+      <div class="bundle-card bundle-card--video" data-category="bundle" onclick="selectModule('full_video_library', event)">
         <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
           <span class="material-symbols-outlined" style="font-size:inherit;color:#818cf8;">ondemand_video</span>
         </div>
@@ -600,7 +614,7 @@ pageId: "pricing"
               { label: "Free Preview Chapter", vals: ["✓","—","✓","✓","—"] },
               { label: "Lifetime Access", vals: ["✓","✓","✓","✓","✓"] },
               { label: "Free Future Updates", vals: ["✓","✓","✓","✓","✓"] },
-              { label: "7-Day Guarantee", vals: ["—","✓","✓","✓","✓"] },
+              { label: "7-Day Money-Back Guarantee", vals: ["✓","✓","✓","✓","✓"] },
               { label: "Certificate Exam", vals: ["✓","✓","✓","✓","✓"] },
               { label: "Products Covered", vals: ["1 eBook product","1 video course","1 eBook + 1 course","All " + library.ebookProducts + " eBook products","All " + library.videoCourses + " courses"] }
             ] %}
