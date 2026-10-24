@@ -34,13 +34,28 @@ const videos = [
   { key: 'ext_video', name: 'Infor Extensibility' }
 ];
 
+// Real counts from the R2 bucket (number of PDF eBooks per kit), written by scripts/r2-counts.js at
+// every build. A kit with no PDFs uploaded yet keeps the number typed above, so the site never says
+// "0 eBooks" while you are still uploading.
+const fallbackCounts = Object.fromEntries(ebooks.map(e => [e.key, e.count]));
+let r2 = null;
+try { r2 = require('./r2-counts.json'); } catch (e) { /* not generated (local build without R2) */ }
+const countSource = {};
+ebooks.forEach(e => {
+  const n = r2 && r2.counts && Number(r2.counts[e.key]);
+  if (n > 0) { e.count = n; countSource[e.key] = 'r2'; } else countSource[e.key] = 'manual';
+});
+
 const ebookTotal = ebooks.reduce((s, e) => s + e.count, 0);
 
 module.exports = {
   byKey: Object.fromEntries(ebooks.map(e => [e.key, e])), // e.g. library.byKey.dev_ebook.count
   ebooks,                          // every eBook product; ALL are included in the Full eBook Library
   videos,                          // every video course; ALL are included in the Full Video Library
-  ebookTotal,                      // 351
+  ebookTotal,                      // total eBooks (bucket counts where available)
+  fallbackCounts,                  // the numbers typed above (used when a kit has no PDFs in the bucket yet)
+  countSource,                     // { dev_ebook: 'r2' | 'manual', … }
+  countsGeneratedAt: r2 ? r2.generatedAt : null,
   ebookProducts: ebooks.length,    // 19
   videoCourses: videos.length,     // 8
   // ready-made phrases so the wording is identical everywhere

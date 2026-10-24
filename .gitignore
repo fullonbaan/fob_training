@@ -3,3 +3,4 @@ _site/
 rzp-key prod.csv
 rzp-key test.csv
 *.csv
+src/_data/r2-counts.json

@@ -205,3 +205,12 @@ The admin page now shows R2's own reason under the token box. What each one mean
 
 Also check: the bucket `fob-training-ebooks` exists; `R2_ACCOUNT_ID` is the 32-character Account ID from the R2 overview page.
 For an EU-jurisdiction bucket set `R2_JURISDICTION=eu`. **After changing env vars, redeploy** — Vercel only picks them up on a new deployment.
+
+## 9. eBook counts on the site come from the bucket
+- **Every deploy:** `npm run build` first runs `scripts/r2-counts.js`, which counts the **PDF** files in each kit
+  folder (sub-folders included, hidden `_` items skipped) and writes `src/_data/r2-counts.json` (generated, not committed).
+  `src/_data/library.js` uses those numbers everywhere: catalog, pricing, home page, product names, invoices.
+- **Between deploys:** `/catalog/` refreshes its numbers from `/api/catalog-counts` (counts only, cached 5 minutes).
+- Scripts, examples and Excel files are not counted as eBooks.
+- A kit with **no PDFs uploaded yet** keeps the number typed in `src/_data/library.js`, so the site never shows "0 eBooks".
+- Without R2 settings (e.g. a local build) the step is skipped and the typed numbers are used.
