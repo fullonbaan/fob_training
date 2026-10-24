@@ -835,13 +835,14 @@ pageId: "pricing"
           <div id="step4" class="step" style="display:none">
             <div class="text-center py-8">
               <span class="text-5xl mb-4 block">✅</span>
-              <h3 class="font-headline text-2xl font-bold text-primary mb-2">Payment Submitted!</h3>
+              <h3 class="font-headline text-2xl font-bold text-primary mb-2">Payment Successful!</h3>
               <p class="text-on-surface-variant mb-4">A confirmation will be sent to <strong id="tyEmail" class="text-on-surface"></strong></p>
               <div id="tyOrderBox" class="bg-surface-container-low border border-outline-variant/20 rounded-xl p-4 text-left text-sm text-on-surface-variant leading-relaxed mb-4"></div>
-              <button onclick="downloadInvoice()" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm mb-4 shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
+              <div id="tyAccess" class="bg-primary/5 border border-primary/20 rounded-xl p-4 text-left text-sm text-on-surface-variant leading-relaxed mb-4"></div>
+              <button onclick="downloadInvoice()" id="tyInvBtn" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm mb-4 shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
                 <span class="material-symbols-outlined text-base">receipt_long</span> Download GST Invoice
               </button>
-              <p id="tyDeliveryMsg" class="text-xs text-on-surface-variant">Your digital guide will be delivered to <strong id="tyDeliveryEmail" class="text-on-surface"></strong> within minutes. Please check your inbox and spam/junk folder.</p>
+              <p id="tyDeliveryMsg" class="text-xs text-on-surface-variant">A confirmation email with your tax invoice details is on its way. Please check your inbox and spam/junk folder.</p>
             </div>
           </div>
 
@@ -993,13 +994,14 @@ pageId: "pricing"
 {% block scripts %}
 <script>
   /* ─────────────────────────────────────────────────────────────────────────
-     FullOnBaan Training — Razorpay Payment Integration
-     Live key: rzp_live_Sd3yvlDYShR9ll
-     GitHub store: fob_pay_store_ln_intv / payments/training_payments.json
+     FullOnBaan Training — Razorpay Payment Integration (server-side orders)
+     The SERVER (/api/checkout) creates the Razorpay order at the catalogue price, verifies the
+     payment, unlocks eBooks in the Members Library, numbers the GST invoice and sends the emails.
+     Prices: src/_data/products.js · Sale: src/_data/sale.js · Setup: MEMBERS_SETUP.md
   ───────────────────────────────────────────────────────────────────────── */
 
   /* ── Razorpay Key (LIVE) ─────────────────────────────────────────────── */
-  var RZP_KEY_ID = 'rzp_live_Sd3yvlDYShR9ll'; // PRODUCTION
+  var RZP_KEY_ID = 'rzp_live_Sd3yvlDYShR9ll'; // fallback only — the key id actually used comes from the server (env RAZORPAY_KEY_ID)
   /* NOTE: key_secret MUST NEVER appear in front-end code.
      Use it only on a server-side endpoint for signature verification.      */
 
@@ -1115,101 +1117,11 @@ pageId: "pricing"
     document.getElementById('gstinFields').style.display = on?'block':'none';
   };
 
-  /* ── Invoice helpers ─────────────────────────────────────────────────── */
-  var pendingInvNo   = null;
+  /* ── Invoice data for the GST-invoice PDF (filled from the SERVER after it verifies the payment) ── */
   var currentInvData = null;
-
-  /* ── Payments API config (secure proxy — no PAT in client code) ──────── */
-  var ADM_API = '/api/payments';
-  /* Admin tools live at /admin (server-authenticated) — nothing admin-related ships on this page */
-  /* Older versions cached EVERY customer's record in the visitor's browser — wipe that cache */
-  try{localStorage.removeItem('training_payments');}catch(e){}
-
-  /* ── Invoice number — sequential via /api/invoice-counter (FOB#######) ── */
-  async function genInvoiceNoGH() {
-    try {
-      var r = await fetch('/api/invoice-counter');
-      if (r.ok) {
-        var d = await r.json();
-        return d.invoiceNo;
-      }
-    } catch(e) {
-      console.warn('Invoice counter API error — using timestamp fallback:', e);
-    }
-    return 'FOB' + Date.now(); // fallback only if API is down
-  }
-
-  /* ── Payment record storage via proxy ───────────────────────────────── */
-  /* Saves ONE order; the server merges it in. Other customers' records never reach the browser. */
-  async function ghUpsert(rec){
-    try{
-      var w=await fetch(ADM_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({record:rec})});
-      if(!w.ok){var t='';try{t=(await w.json()).error||'';}catch(e){}throw new Error('API '+w.status+(t?': '+t:''));}
-    }catch(e){console.warn('API upsert failed:',e);}
-  }
-
-  /* ── Called when Razorpay opens (record initiated state) ─────────────── */
-  async function payInitiated(txnRefVal, userDataVal, descVal, gd, currency, invNo) {
-    var fmtD=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
-    var today=new Date();
-    var rec={
-      orderId:txnRefVal,status:'initiated',
-      name:userDataVal.name,email:userDataVal.email,
-      mobile:userDataVal.mobile,mobileCode:userDataVal.mobileCode||'+91',
-      module:descVal,currency:currency||'INR',
-      baseAmt:gd.base,gstAmt:gd.gst,totalAmt:gd.total,
-      cgstAmt:gd.cgst||0, sgstAmt:gd.sgst||0, igstAmt:gd.igst||0, taxType:gd.taxType||'NONE',
-      /* Billing & GST fields — captured for the admin panel and the tax invoice */
-      billCompany:userDataVal.billCompany||'',
-      billLine1:userDataVal.billLine1||'',
-      billLine2:userDataVal.billLine2||'',
-      billCity:userDataVal.billCity||'',
-      billPincode:userDataVal.billPincode||'',
-      billStateCode:userDataVal.billStateCode||'',
-      billStateName:userDataVal.billStateName||'',
-      billCountry:userDataVal.billCountry||'IN',
-      gstin:userDataVal.gstin||'',
-      gstLegalName:userDataVal.gstLegalName||'',
-      placeOfSupply:userDataVal.billStateName?(userDataVal.billStateName+(userDataVal.billStateCode?' ('+userDataVal.billStateCode+')':'')):'',
-      invoiceNo:invNo,invDate:fmtD(today),dueDate:fmtD(new Date(today.getTime()+15*24*60*60*1000)),
-      initiatedAt:new Date().toISOString(),confirmedAt:null,paymentId:null
-    };
-    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
-    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
-    if(i>=0)lo[i]=Object.assign({},lo[i],rec);else lo.push(rec);
-    localStorage.setItem('fob_my_orders',JSON.stringify(lo));
-    ghUpsert(rec);
-  }
-
-  /* ── Called after successful payment ────────────────────────────────── */
-  function payConfirmed(txnRefVal, payId, invNo) {
-    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
-    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
-    var upd={status:'confirmed',paymentId:payId,invoiceNo:invNo,confirmedAt:new Date().toISOString()};
-    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('fob_my_orders',JSON.stringify(lo));ghUpsert(lo[i]);}
-    else{ghUpsert(Object.assign({
-      orderId:txnRefVal,name:userData.name||'—',email:userData.email||'—',
-      mobile:userData.mobile||'—',mobileCode:userData.mobileCode||'+91',
-      module:selDesc,currency:selCurr||'INR',
-      baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,
-      cgstAmt:selGD.cgst||0,sgstAmt:selGD.sgst||0,igstAmt:selGD.igst||0,taxType:selGD.taxType||'NONE',
-      billCompany:userData.billCompany||'',billLine1:userData.billLine1||'',billLine2:userData.billLine2||'',
-      billCity:userData.billCity||'',billPincode:userData.billPincode||'',
-      billStateCode:userData.billStateCode||'',billStateName:userData.billStateName||'',
-      billCountry:userData.billCountry||'IN',
-      gstin:userData.gstin||'',gstLegalName:userData.gstLegalName||'',
-      placeOfSupply:userData.billStateName?(userData.billStateName+(userData.billStateCode?' ('+userData.billStateCode+')':'')):'',
-      initiatedAt:null
-    },upd));}
-  }
-
-  /* ── Called after failed payment ─────────────────────────────────────── */
-  function payFailed(txnRefVal) {
-    var lo=JSON.parse(localStorage.getItem('fob_my_orders')||'[]');
-    var i=lo.findIndex(function(x){return x.orderId===txnRefVal;});
-    var upd={status:'failed',failedAt:new Date().toISOString()};
-    if(i>=0){lo[i]=Object.assign({},lo[i],upd);localStorage.setItem('fob_my_orders',JSON.stringify(lo));ghUpsert(lo[i]);}
-  }
+  /* Orders, invoice numbers and emails are handled by the server (/api/checkout) — never by this page.
+     Older versions cached orders in the visitor's browser — wipe that cache. */
+  try{localStorage.removeItem('training_payments');localStorage.removeItem('fob_my_orders');}catch(e){}
 
   // ======================
   // FILTER & CARD SELECTION
@@ -1268,43 +1180,7 @@ pageId: "pricing"
   // ======================
   // PRODUCT DATA  (prices are BASE prices — excl. 18% GST)
   // ======================
-  var GUIDES = {
-    dev_ebook:          {name:'Infor LN Development — eBook',                           price:1999},
-    adm_ebook:          {name:'Infor LN Administration — eBook',                        price:1999},
-    fin_ebook:          {name:'Infor LN Finance — eBook',                               price:1999},
-    mfg_ebook:          {name:'Infor LN Manufacturing — eBook',                         price:1999},
-    log_ebook:          {name:'Infor LN Logistics — eBook',                             price:1999},
-    pln_ebook:          {name:'Infor LN Planning — eBook',                              price:1999},
-    whs_ebook:          {name:'Infor LN Warehousing — eBook',                           price:1999},
-    ext_ebook:          {name:'Infor Extensibility — eBook',                            price:1999},
-    bod_ebook:          {name:'Infor BOD — eBook',                                      price:1999},
-    ion_ebook:          {name:'Infor ION — eBook',                                      price:1999},
-    mst_ebook:          {name:'Infor LN Multisite — eBook',                             price:1999},
-    infor_os:           {name:'Infor OS — {{ library.byKey.infor_os.count }} eBook{% if library.byKey.infor_os.count != 1 %}s{% endif %}',                                  price:1999},
-    idm_ebook:          {name:'Infor IDM — {{ library.byKey.idm_ebook.count }} eBook{% if library.byKey.idm_ebook.count != 1 %}s{% endif %}',                                   price:1999},
-    ln_api_ebook:       {name:'Infor LN API — {{ library.byKey.ln_api_ebook.count }} eBook{% if library.byKey.ln_api_ebook.count != 1 %}s{% endif %}',                              price:2499},
-    dom_ebook:          {name:'Infor DOM — {{ library.byKey.dom_ebook.count }} eBook{% if library.byKey.dom_ebook.count != 1 %}s{% endif %}',                                 price:1999},
-    cloud_migration:    {name:'Cloud Migration & Upgrade Strategy — {{ library.byKey.cloud_migration.count }} eBook{% if library.byKey.cloud_migration.count != 1 %}s{% endif %} + Excel', price:2499},
-    ai_genai:           {name:'AI Agents & GenAI in Infor LN — {{ library.byKey.ai_genai.count }} eBook{% if library.byKey.ai_genai.count != 1 %}s{% endif %} + Excel',      price:2499},
-    dev_video:          {name:'Infor LN Development — Video Course',                   price:4999},
-    adm_video:          {name:'Infor LN Administration — Video Course',                price:4999},
-    fin_video:          {name:'Infor LN Finance — Video Course',                       price:4999},
-    mfg_video:          {name:'Infor LN Manufacturing — Video Course',                 price:4999},
-    log_video:          {name:'Infor LN Logistics — Video Course',                     price:4999},
-    pln_video:          {name:'Infor LN Planning — Video Course',                      price:4999},
-    whs_video:          {name:'Infor LN Warehousing — Video Course',                   price:4999},
-    ext_video:          {name:'Infor Extensibility — Video Course',                    price:4999},
-    dev_combo:          {name:'Infor LN Development — Combo (eBook + Video)',          price:5999},
-    adm_combo:          {name:'Infor LN Administration — Combo (eBook + Video)',       price:5999},
-    fin_combo:          {name:'Infor LN Finance — Combo (eBook + Video)',              price:5999},
-    mfg_combo:          {name:'Infor LN Manufacturing — Combo (eBook + Video)',        price:5999},
-    log_combo:          {name:'Infor LN Logistics — Combo (eBook + Video)',            price:5999},
-    pln_combo:          {name:'Infor LN Planning — Combo (eBook + Video)',             price:5999},
-    whs_combo:          {name:'Infor LN Warehousing — Combo (eBook + Video)',           price:5999},
-    ext_combo:          {name:'Infor Extensibility — Combo (eBook + Video)',           price:5999},
-    full_ebook_library: {name:'{{ library.ebookLibraryName }}', price:15999},
-    full_video_library: {name:'{{ library.videoLibraryName }}', price:34999},
-  };
+  var GUIDES = {{ products.clientGuides | dump | safe }};   /* src/_data/products.js — same list the server charges from */
 
   // ======================
   // PAYMENT STATE
@@ -1482,165 +1358,178 @@ pageId: "pricing"
       billStateCode:billStateCd, billStateName:billStateName,
       gstin:billGstin, gstLegalName:billLegalName
     };
-    txnRef='FOBT'+Date.now();
-    successFired=false; failureFired=false;
-
-    // Capture active currency NOW so it's available to payInitiated
+    successFired=false; failureFired=false; abandonSent=false;
     var activeCurr=selCurr||getActiveCurrency();
-
-    /* Invoice number is intentionally NOT generated here. It is generated and
-       persisted only after a successful payment so the counter only increments
-       on confirmed transactions. */
-    pendingInvNo = null;
-    payInitiated(txnRef, userData, selDesc, selGD, activeCurr, '');
 
     // Google Ads: begin_checkout
     if(typeof gtag!=='undefined'){gtag('event','begin_checkout',{value:selGD.total,currency:activeCurr,items:[{item_name:selDesc,price:selGD.total,quantity:1}]});}
 
-    var rzpOptions={
-      key: RZP_KEY_ID,
-      amount: Math.round(selGD.total * 100),   // smallest unit: paise for INR, cents for USD/EUR
-      currency: activeCurr,                     // ← correct currency flows to Razorpay
-      name: 'FullOnBaan',
-      description: selDesc,
-      image: 'https://training.fullonbaan.com/og-image.png',
-      prefill: {name:name, email:email, contact:mobile?(mobileCode+mobile):email},
-      /* Razorpay caps notes at 15 keys — consolidate billing into fewer fields. */
-      notes: (function(){
-        var addr = [userData.billLine1, userData.billLine2].filter(function(p){return !!p;}).join(' | ');
-        var stateLine = userData.billStateName
-          ? (userData.billStateName + (userData.billStateCode?' ('+userData.billStateCode+')':''))
-          : '';
-        var taxSplit = '';
-        if(selGD.taxType==='CGST_SGST') taxSplit = 'CGST '+(selGD.cgst||0)+' + SGST '+(selGD.sgst||0);
-        else if(selGD.taxType==='IGST')  taxSplit = 'IGST '+(selGD.igst||selGD.gst||0);
-        else                              taxSplit = 'NONE';
-        var n = {
-          order_ref:    txnRef,
-          module:       selDesc,
-          currency:     activeCurr,
-          base_amt:     selGD.base,
-          gst_amt:      selGD.gst,
-          total_amt:    selGD.total,
-          tax_type:     selGD.taxType||'NONE',
-          tax_split:    taxSplit,
-          bill_company: userData.billCompany||'',
-          bill_addr:    addr,
-          bill_city:    userData.billCity||'',
-          bill_state:   stateLine,
-          bill_pin:     userData.billPincode||'',
-          bill_country: userData.billCountry||'IN',
-          gstin:        userData.gstin ? (userData.gstin + (userData.gstLegalName?' / '+userData.gstLegalName:'')) : ''
-        };
-        /* Razorpay also rejects empty-string values silently — strip them. */
-        Object.keys(n).forEach(function(k){ if(n[k]==='' || n[k]==null) delete n[k]; });
-        return n;
-      })(),
-      theme: {color:'#A8782A'},
-      handler: function(response){
-        var payId=response.razorpay_payment_id;
-        // Google Ads: conversion
-        if(typeof gtag!=='undefined'){gtag('event','conversion',{send_to:'AW-18000254476/-yvYCLiW240cEIysmIdD',value:selGD.total,currency:activeCurr,transaction_id:txnRef});}
-        onPaymentSuccess(payId);
-      },
-      modal:{
-        ondismiss: function(){
-          // User closed Razorpay without paying — return to step2 silently
-          showStep('step2');
-        }
-      }
-    };
-    var rzp=new Razorpay(rzpOptions);
-    rzp.on('payment.failed',function(response){
-      console.warn('Razorpay payment failed:',response.error);
-      onPaymentFailure(response.error);
-    });
+    /* Billing summary for the Razorpay dashboard (the server adds the order/product/customer notes). */
+    var clientNotes=(function(){
+      var n={
+        bill_company: userData.billCompany||'',
+        bill_addr:    [userData.billLine1, userData.billLine2].filter(function(p){return !!p;}).join(' | '),
+        bill_city:    userData.billCity||'',
+        bill_state:   userData.billStateName ? (userData.billStateName+(userData.billStateCode?' ('+userData.billStateCode+')':'')) : '',
+        bill_pin:     userData.billPincode||'',
+        bill_country: userData.billCountry||'IN',
+        gstin:        userData.gstin ? (userData.gstin+(userData.gstLegalName?' / '+userData.gstLegalName:'')) : ''
+      };
+      Object.keys(n).forEach(function(k){ if(n[k]==='' || n[k]==null) delete n[k]; });
+      return n;
+    })();
+
+    var payBtn=document.getElementById('rzpPayBtn');
+    if(payBtn) payBtn.disabled=true;
     showStep('step3');
-    rzp.open();
+
+    /* 1. Our server creates the Razorpay order at the catalogue price (the browser never sets the amount). */
+    fetch('/api/checkout?action=order',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
+      body:JSON.stringify({product:selKey,currency:activeCurr,
+        customer:{name:name,email:email,mobile:mobile,mobileCode:mobileCode},
+        billing:userData, notes:clientNotes})})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok||!d.orderId)throw new Error(d.error||('Could not start the payment (HTTP '+r.status+').'));return d;});})
+      .then(function(d){
+        txnRef=d.orderRef; selDesc=d.productName||selDesc; selCurr=d.currency;
+        var q=d.quote||{};
+        selGD={base:q.base,gst:q.gst,total:q.total,cgst:q.cgst||0,sgst:q.sgst||0,igst:q.igst||0,taxType:q.taxType||'NONE',hasGST:d.currency==='INR'};
+        selDelivers=d.delivers||{ebooks:false,video:true};
+        var rzp=new Razorpay({
+          key: d.keyId||RZP_KEY_ID,
+          order_id: d.orderId,
+          amount: d.amount,                         // set by the server, in paise / cents
+          currency: d.currency,
+          name: 'FullOnBaan',
+          description: selDesc,
+          image: 'https://training.fullonbaan.com/og-image.png',
+          prefill: {name:name, email:email, contact:mobile?(mobileCode+mobile):''},
+          notes: {order_ref: d.orderRef},
+          theme: {color:'#A8782A'},
+          handler: function(response){
+            if(typeof gtag!=='undefined'){gtag('event','conversion',{send_to:'AW-18000254476/-yvYCLiW240cEIysmIdD',value:selGD.total,currency:d.currency,transaction_id:txnRef});}
+            onPaymentSuccess(response);
+          },
+          modal:{
+            ondismiss: function(){
+              // Closed without paying — back to step 2; tell the server once (admin alert only).
+              if(payBtn) payBtn.disabled=false;
+              if(!successFired && !failureFired){ fobEvent('abandon'); showStep('step2'); }
+            }
+          }
+        });
+        rzp.on('payment.failed',function(response){
+          console.warn('Razorpay payment failed:',response.error);
+          onPaymentFailure(response.error);
+        });
+        rzp.open();
+      })
+      .catch(function(e){
+        if(payBtn) payBtn.disabled=false;
+        showStep('step2');
+        err.textContent=e.message||'Could not start the payment. Please try again.';
+      });
   };
 
-  /* ── Payment Success ──────────────────────────────────────────────────── */
-  window.onPaymentSuccess = async function(payId){
+  /* ── Payment Success: the server verifies the signature, unlocks eBooks, numbers the invoice ── */
+  function escH(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  window.onPaymentSuccess = function(resp){
     if(successFired) return; successFired=true;
-    /* Counter only increments on confirmed payments — generate the invoice number now */
-    var invNo;
-    try {
-      invNo = await genInvoiceNoGH();
-    } catch(e) {
-      console.warn('Invoice counter API failed, using timestamp fallback:', e);
-      invNo = 'FOB' + Date.now();
-    }
-    pendingInvNo = null;
-    var today=new Date();
-    var fmt=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
-    var invDate=fmt(today);
-    var dueDate=fmt(new Date(today.getTime()+15*24*60*60*1000));
-
-    var paidCurrency=selCurr||'INR';
-    currentInvData={
-      invNo:invNo,invDate:invDate,dueDate:dueDate,
-      name:userData.name,email:userData.email,
-      mobile:userData.mobile||'',mobileCode:userData.mobileCode||'+91',
-      module:selDesc,currency:paidCurrency,
-      baseAmt:selGD.base,gstAmt:selGD.gst,totalAmt:selGD.total,
-      cgstAmt:selGD.cgst||0,sgstAmt:selGD.sgst||0,igstAmt:selGD.igst||0,taxType:selGD.taxType||'NONE',
-      billCompany:userData.billCompany||'',
-      billLine1:userData.billLine1||'',billLine2:userData.billLine2||'',
-      billCity:userData.billCity||'',billPincode:userData.billPincode||'',
-      billStateCode:userData.billStateCode||'',billStateName:userData.billStateName||'',
-      billCountry:userData.billCountry||'IN',
-      gstin:userData.gstin||'',gstLegalName:userData.gstLegalName||'',
-      placeOfSupply:userData.billStateName?(userData.billStateName+(userData.billStateCode?' ('+userData.billStateCode+')':'')):'',
-      paymentId:payId,orderRef:txnRef
-    };
-
-    // Update GitHub record
-    payConfirmed(txnRef, payId, invNo);
-
-    // Populate success screen
-    document.getElementById('tyEmail').textContent=userData.email;
-    document.getElementById('tyDeliveryEmail').textContent=userData.email;
+    var payId=(resp&&resp.razorpay_payment_id)||'';
     var paidCurr=selCurr||'INR';
+    currentInvData=null;
+    var invBtn=document.getElementById('tyInvBtn'); if(invBtn){invBtn.disabled=true;invBtn.style.opacity='.5';}
+    document.getElementById('tyEmail').textContent=userData.email;
+    var gstLabel=selGD.taxType==='CGST_SGST'?'CGST 9% + SGST 9%':'IGST 18%';
     var amtDetail=paidCurr==='INR'
-      ? '<br><strong>Base Amount:</strong> '+formatAmt(selGD.base,paidCurr)+' &nbsp;+&nbsp; <strong>IGST 18%:</strong> '+formatAmt(selGD.gst,paidCurr)+'<br><strong>Total Paid:</strong> '+formatAmt(selGD.total,paidCurr)
+      ? '<br><strong>Base Amount:</strong> '+formatAmt(selGD.base,paidCurr)+' &nbsp;+&nbsp; <strong>'+gstLabel+':</strong> '+formatAmt(selGD.gst,paidCurr)+'<br><strong>Total Paid:</strong> '+formatAmt(selGD.total,paidCurr)
       : '<br><strong>Total Paid:</strong> '+formatAmt(selGD.total,paidCurr);
     document.getElementById('tyOrderBox').innerHTML=
-      '<strong>Invoice No:</strong> '+invNo+
-      '<br><strong>Order Ref:</strong> '+txnRef+
-      '<br><strong>Payment ID:</strong> '+payId+
-      '<br><strong>Module:</strong> '+selDesc+
+      '<strong>Invoice No:</strong> <span id="tyInvNo">generating&#8230;</span>'+
+      '<br><strong>Order Ref:</strong> '+escH(txnRef)+
+      '<br><strong>Payment ID:</strong> '+escH(payId)+
+      '<br><strong>Module:</strong> '+escH(selDesc)+
       amtDetail+
-      '<br><strong>Name:</strong> '+userData.name+
-      '<br><strong>Email:</strong> '+userData.email;
+      '<br><strong>Name:</strong> '+escH(userData.name)+
+      '<br><strong>Email:</strong> '+escH(userData.email);
+    var box=document.getElementById('tyAccess');
+    box.innerHTML='<span style="opacity:.75">&#9203; Confirming your payment&#8230;</span>';
     showStep('step4');
 
-    var emailAmt=formatAmt(selGD.total,paidCurrency);
-    // ONE email to admin
-    sendEmail({to_email:'fullonbaan@gmail.com',subject:'New Training Order \u2014 '+selDesc,status:'PAYMENT CONFIRMED \u2014 RAZORPAY',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:emailAmt,cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Invoice No: '+invNo+'. Razorpay Payment ID: '+payId+'. Currency: '+paidCurrency},'service_2qtgzr5','FOB_Razorpay_Success');
-    // ONE email to customer
-    sendEmail({to_email:userData.email,subject:'Your FullonBaan Tax Invoice \u2014 '+invNo,status:'PAYMENT CONFIRMED',order_ref:txnRef,utr_number:payId,guide:selDesc,amount:emailAmt,cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Thank you! Your Razorpay payment (ID: '+payId+') was successful. Invoice No: '+invNo+'. Tax invoice is attached / downloadable from the confirmation page. Your training material will be delivered within 24 hours. For support: support@fullonbaan.com'},'service_2qtgzr5','FOB_Razorpay_Success');
+    var manual='&#x1F4E7; Your payment is received. Your confirmation'+(selDelivers&&selDelivers.ebooks?' and Members Library access code':'')+
+      ' will be emailed to <strong>'+escH(userData.email)+'</strong> shortly. Questions? WhatsApp +91 63605 93122.';
+    if(!resp||!resp.razorpay_order_id||!resp.razorpay_signature){ box.innerHTML=manual; return; }
+    var tries=0;
+    (function attempt(){
+      tries++;
+      fetch('/api/checkout?action=verify',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
+        body:JSON.stringify({razorpay_order_id:resp.razorpay_order_id,razorpay_payment_id:resp.razorpay_payment_id,razorpay_signature:resp.razorpay_signature})})
+        .then(function(r){return r.json().catch(function(){return {};}).then(function(d){d._s=r.status;return d;});})
+        .then(function(d){
+          if(d.ok){
+            var tin=document.getElementById('tyInvNo');
+            if(d.invoice&&d.invoice.invNo){
+              currentInvData=d.invoice;
+              if(tin)tin.textContent=d.invoice.invNo;
+              if(invBtn){invBtn.disabled=false;invBtn.style.opacity='';}
+            } else if(tin) tin.textContent='will be emailed to you';
+            box.innerHTML=accessHtml(d);
+            return;
+          }
+          if((d._s>=500||d._s===409)&&tries<4){ setTimeout(attempt, 2500*tries); return; }
+          box.innerHTML=manual;
+        })
+        .catch(function(){ if(tries<4) setTimeout(attempt,2500*tries); else box.innerHTML=manual; });
+    })();
   };
+
+  function accessHtml(d){
+    var html='';
+    if(d.access){
+      html+='<div style="font-weight:700;color:#f6bc68;margin-bottom:6px;">&#x1F513; Your eBooks are ready in the Members Library</div>';
+      if(d.code){
+        html+='Sign in with <strong>'+escH(d.email)+'</strong> and your access code:'+
+          '<div style="font-family:ui-monospace,Consolas,monospace;font-size:20px;font-weight:700;letter-spacing:.12em;color:#f6bc68;margin:10px 0;padding:10px;border:1px dashed rgba(246,188,104,.5);border-radius:8px;text-align:center;">'+escH(d.code)+'</div>'+
+          'We\'ve emailed this code to you too &#8212; keep it private.';
+      } else {
+        html+='Added to the library for <strong>'+escH(d.email)+'</strong>. Sign in with your existing access code (or request a new one on the sign-in page).';
+      }
+      html+='<div style="margin-top:12px;"><a href="/members/?email='+encodeURIComponent(d.email)+'" class="inline-flex items-center gap-2 editorial-gradient text-on-primary px-5 py-2.5 rounded-lg font-bold text-sm">Open my library &#8594;</a></div>';
+      if(d.video) html+='<div style="margin-top:12px;font-size:12px;opacity:.85">&#x1F3AC; Your <strong>video lectures</strong> will be delivered to '+escH(d.email)+' within 24 hours.</div>';
+    } else {
+      html+='<div style="font-weight:700;color:#f6bc68;margin-bottom:6px;">&#x1F3AC; Order confirmed</div>'+
+        'Your video course access will be delivered to <strong>'+escH(d.email)+'</strong> within 24 hours. Please check your inbox and spam/junk folder.';
+    }
+    return html;
+  }
 
   /* ── Payment Failure ─────────────────────────────────────────────────── */
   window.onPaymentFailure=function(errObj){
     if(failureFired)return; failureFired=true;
-    payFailed(txnRef);
-    var errMsg=errObj?(' Reason: '+(errObj.description||errObj.reason||'Unknown')):'';
+    var reason=errObj?(errObj.description||errObj.reason||''):'';
+    fobEvent('failed', reason);
     var failMobCode=userData.mobileCode||'+91';
     document.getElementById('failContact').textContent=userData.email+(userData.mobile?' / '+failMobCode+' '+userData.mobile:'');
     var failCurr=selCurr||'INR';
     document.getElementById('failOrderBox').innerHTML=
-      '<strong>Module:</strong> '+selDesc+
+      '<strong>Module:</strong> '+escH(selDesc)+
       '<br><strong>Amount:</strong> '+formatAmt(selGD.total,failCurr)+(failCurr==='INR'?' (incl. GST)':'')+
-      '<br><strong>Order Ref:</strong> '+txnRef+
-      '<br><strong>Name:</strong> '+userData.name+
-      '<br><strong>Email:</strong> '+userData.email;
+      '<br><strong>Order Ref:</strong> '+escH(txnRef)+
+      '<br><strong>Name:</strong> '+escH(userData.name)+
+      '<br><strong>Email:</strong> '+escH(userData.email)+
+      (reason?'<br><strong>Reason:</strong> '+escH(reason):'');
     showStep('step5');
-    // ONE email to admin only on failure
-    sendEmail({to_email:'fullonbaan@gmail.com',subject:'Payment Failed \u2014 '+selDesc,status:'PAYMENT FAILED',order_ref:txnRef||'N/A',guide:selDesc,amount:formatAmt(selGD.total,failCurr),cust_name:userData.name,cust_email:userData.email,cust_mobile:userData.mobileDisplay||userData.mobile,message:'Razorpay payment failed.'+errMsg+' Order Ref: '+txnRef+'. Currency: '+failCurr},'service_2qtgzr5','FOB_Razorpay_Failure');
   };
 
-  window.retryPayment=function(){successFired=false;failureFired=false;showStep('step2');};
+  /* Tell the server about a failed / abandoned checkout. It emails ONLY the admin, once per order. */
+  var abandonSent=false, selDelivers=null;
+  function fobEvent(type, reason){
+    if(!txnRef)return;
+    if(type==='abandon'){ if(abandonSent)return; abandonSent=true; }
+    var body=JSON.stringify({type:type,orderRef:txnRef,reason:reason||''});
+    fetch('/api/checkout?action=event',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:body,keepalive:true}).catch(function(){});
+  }
+
+  window.retryPayment=function(){successFired=false;failureFired=false;var b=document.getElementById('rzpPayBtn');if(b)b.disabled=false;showStep('step2');};
 
   /* ── Country Code Picker ─────────────────────────────────────────────── */
   var CC_DATA = [
@@ -1754,10 +1643,7 @@ pageId: "pricing"
   });
 
   /* ── Email helper ────────────────────────────────────────────────────── */
-  function sendEmail(params,svcId,tplId){
-    if(!EMAILJS_PUBLIC_KEY||EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){console.warn('EmailJS not configured.');return;}
-    fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:svcId||EMAILJS_SERVICE_ID,template_id:tplId||EMAILJS_TEMPLATE_ID,user_id:EMAILJS_PUBLIC_KEY,template_params:{to_email:params.to_email||'',subject:params.subject||'',status:params.status||'',order_ref:params.order_ref||'',utr_number:params.utr_number||'',guide:params.guide||'',amount:params.amount||'',cust_name:params.cust_name||'',cust_email:params.cust_email||'',cust_mobile:params.cust_mobile||'',message:params.message||''}})}).then(function(r){if(r.ok)console.log('Email sent');else console.warn('Email failed',r.status);}).catch(function(e){console.warn('EmailJS error',e);});
-  }
+  /* Payment emails (tax invoice to the customer, order alert to you) are sent by the SERVER. */
 
   /* ── Number-to-Words (Indian or international) ────────────────────────── */
   function numToWords(n,currency){
@@ -1963,7 +1849,7 @@ pageId: "pricing"
 
   window.downloadInvoice=function(invData){
     var d=invData||currentInvData;
-    if(!d){alert('Invoice not available. Please contact support.');return;}
+    if(!d){alert('Your invoice is still being generated — please wait a few seconds and try again. Its number will also be in your confirmation email.');return;}
     try{var doc=generateGSTInvoice(d);doc.save('Invoice-'+d.invNo+'.pdf');}
     catch(e){console.error('Invoice generation failed',e);alert('Could not generate invoice. Please contact support@fullonbaan.com.');}
   };

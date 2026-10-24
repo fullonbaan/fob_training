@@ -575,6 +575,7 @@
             <option value="USD">🇺🇸 USD</option>
             <option value="EUR">🇪🇺 EUR</option>
           </select>
+          <a href="/members/" title="Members Library — read the eBooks you bought" class="nav-link whitespace-nowrap flex items-center gap-1 text-on-surface hover:text-primary"><span class="material-symbols-outlined" style="font-size:18px">local_library</span>Member Login</a>
           <a href="/catalog/" class="editorial-gradient text-on-primary px-6 py-2 rounded-lg font-label font-600">Get Started</a>
         </div>
         <div class="md:hidden hamburger" id="hamburgerBtn">
@@ -604,6 +605,7 @@
           <a href="/feedback/" class="text-on-surface hover:text-primary">Feedback</a>
           <a href="/videos/" class="text-on-surface hover:text-primary">Videos</a>
           <a href="/contact/" class="text-on-surface hover:text-primary">Contact</a>
+          <a href="/members/" class="text-on-surface hover:text-primary flex items-center gap-1.5"><span class="material-symbols-outlined" style="font-size:18px">local_library</span>Member Login</a>
           <!-- Ecosystem links in mobile -->
           <div class="border-t border-surface-container-high pt-3 mt-1">
             <p class="font-label text-[10px] uppercase tracking-widest text-primary font-semibold mb-2">FOB Ecosystem</p>
@@ -658,6 +660,7 @@
             <a href="/testimonials/" class="block hover:text-primary transition">Live Training Reviews</a>
             <a href="/feedback/" class="block hover:text-primary transition">Feedback</a>
             <a href="/videos/" class="block hover:text-primary transition">Videos</a>
+            <a href="/members/" class="block hover:text-primary transition">Member Login — eBook Library</a>
             <a href="/contact/" class="block hover:text-primary transition">Contact Us</a>
           </div>
         </div>
@@ -801,50 +804,15 @@
     }
 
     // Product catalogue (used by the currency switcher)
-    var GUIDES = {
-      dev_ebook:{name:'Infor LN Development — eBook',price:1999},
-      adm_ebook:{name:'Infor LN Administration — eBook',price:1999},
-      fin_ebook:{name:'Infor LN Finance — eBook',price:1999},
-      mfg_ebook:{name:'Infor LN Manufacturing — eBook',price:1999},
-      log_ebook:{name:'Infor LN Logistics — eBook',price:1999},
-      pln_ebook:{name:'Infor LN Planning — eBook',price:1999},
-      whs_ebook:{name:'Infor LN Warehousing — eBook',price:1999},
-      ext_ebook:{name:'Infor Extensibility — eBook',price:1999},
-      bod_ebook:{name:'Infor BOD — eBook',price:1999},
-      ion_ebook:{name:'Infor ION — eBook',price:1999},
-      mst_ebook:{name:'Infor LN Multisite — eBook',price:1999},
-      infor_os:{name:'Infor OS — {{ library.byKey.infor_os.count }} eBook{% if library.byKey.infor_os.count != 1 %}s{% endif %}',price:1999},
-      idm_ebook:{name:'Infor IDM — {{ library.byKey.idm_ebook.count }} eBook{% if library.byKey.idm_ebook.count != 1 %}s{% endif %}',price:1999},
-      ln_api_ebook:{name:'Infor LN API — {{ library.byKey.ln_api_ebook.count }} eBook{% if library.byKey.ln_api_ebook.count != 1 %}s{% endif %}',price:2499},
-      dom_ebook:{name:'Infor DOM — {{ library.byKey.dom_ebook.count }} eBook{% if library.byKey.dom_ebook.count != 1 %}s{% endif %}',price:1999},
-      cloud_migration:{name:'Cloud Migration & Upgrade Strategy — {{ library.byKey.cloud_migration.count }} eBook{% if library.byKey.cloud_migration.count != 1 %}s{% endif %} + Excel Tool',price:2499},
-      ai_genai:{name:'AI Agents & GenAI in Infor LN — {{ library.byKey.ai_genai.count }} eBook{% if library.byKey.ai_genai.count != 1 %}s{% endif %} + Excel Tool',price:2499},
-      dev_video:{name:'Infor LN Development — Video Course',price:4999},
-      adm_video:{name:'Infor LN Administration — Video Course',price:4999},
-      fin_video:{name:'Infor LN Finance — Video Course',price:4999},
-      mfg_video:{name:'Infor LN Manufacturing — Video Course',price:4999},
-      log_video:{name:'Infor LN Logistics — Video Course',price:4999},
-      pln_video:{name:'Infor LN Planning — Video Course',price:4999},
-      whs_video:{name:'Infor LN Warehousing — Video Course',price:4999},
-      ext_video:{name:'Infor Extensibility — Video Course',price:4999},
-      dev_combo:{name:'Infor LN Development — Combo (eBook + Videos)',price:5999},
-      adm_combo:{name:'Infor LN Administration — Combo (eBook + Videos)',price:5999},
-      fin_combo:{name:'Infor LN Finance — Combo (eBook + Videos)',price:5999},
-      mfg_combo:{name:'Infor LN Manufacturing — Combo (eBook + Videos)',price:5999},
-      log_combo:{name:'Infor LN Logistics — Combo (eBook + Videos)',price:5999},
-      pln_combo:{name:'Infor LN Planning — Combo (eBook + Videos)',price:5999},
-      whs_combo:{name:'Infor LN Warehousing — Combo (eBook + Videos)',price:5999},
-      ext_combo:{name:'Infor Extensibility — Combo (eBook + Videos)',price:5999},
-      full_ebook_library:{name:'{{ library.ebookLibraryName }}',price:15999},
-      full_video_library:{name:'{{ library.videoLibraryName }}',price:34999},
-    };
+    /* Products & BASE prices (INR, excl. GST) — rendered from src/_data/products.js, the same list the server charges from */
+    var GUIDES = {{ products.clientGuides | dump | safe }};
 
     // Currency conversion
-    var CURRENCY_RATES = { INR:{symbol:'₹',rate:1}, USD:{symbol:'$',rate:85}, EUR:{symbol:'€',rate:92} };
+    var CURRENCY_RATES = {{ products.CURRENCY_RATES | dump | safe }};
     var GUIDES_INR = {}; // store original INR prices
     Object.keys(GUIDES).forEach(function(k){ GUIDES_INR[k] = GUIDES[k].price; });
 
-    var FIXED_PRICES = { 4999:{USD:80,EUR:80}, 5999:{USD:100,EUR:100}, 15999:{USD:400,EUR:400}, 34999:{USD:800,EUR:800}, 499:{USD:10,EUR:9}, 999:{USD:20,EUR:20}, 1999:{USD:40,EUR:40}, 2499:{USD:40,EUR:40}, 3488:{USD:45,EUR:40}, 3999:{USD:59,EUR:55}, 4000:{USD:60,EUR:55}, 4499:{USD:65,EUR:60}, 4488:{USD:39,EUR:36}, 6999:{USD:99,EUR:95}, 7999:{USD:109,EUR:99}, 8999:{USD:119,EUR:109}, 11487:{USD:159,EUR:149}, 12999:{USD:179,EUR:169}, 12793:{USD:165,EUR:149}, 12994:{USD:160,EUR:149}, 14999:{USD:199,EUR:189}, 18999:{USD:245,EUR:225}, 19199:{USD:249,EUR:229}, 27993:{USD:359,EUR:339}, 31992:{USD:419,EUR:389} };
+    var FIXED_PRICES = {{ products.FIXED_PRICES | dump | safe }};
 
     function convertPrice(inrAmount, currency) {
       if (currency === 'INR') return inrAmount;

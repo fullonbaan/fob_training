@@ -6,7 +6,8 @@
     "build:css": "node node_modules/@tailwindcss/cli/dist/index.mjs --input src/styles/input.css --output src/styles/output.css --content 'src/**/*.njk' --minify",
     "build:11ty": "node node_modules/@11ty/eleventy/cmd.cjs",
     "build": "npm run build:css && npm run build:11ty",
-    "dev": "node node_modules/@11ty/eleventy/cmd.cjs --serve"
+    "dev": "node node_modules/@11ty/eleventy/cmd.cjs --serve",
+    "test": "npm run build && node tests/api.test.js && node tests/adapters.test.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0"
@@ -14,6 +15,11 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.2.2",
     "luxon": "^3.7.2",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.2",
+    "aws4fetch": "1.0.20",
+    "pdf-lib": "1.17.1"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
