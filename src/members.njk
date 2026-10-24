@@ -104,6 +104,28 @@ eleventyExcludeFromCollections: true
     .sec-title{display:flex;align-items:baseline;gap:10px;margin:26px 0 14px;padding-bottom:8px;border-bottom:1px dashed var(--gold-line);font-family:'Noto Serif',serif;font-weight:700;font-size:17px;color:var(--ink)}
     .sec-title:first-of-type{margin-top:4px}
     .sec-title b{font-family:'DM Mono',monospace;font-weight:500;font-size:11px;color:var(--gold);letter-spacing:.06em}
+    .libtools{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .libtools .jump{flex:1;min-width:0}
+    .search{flex:0 0 260px;width:260px;padding:8px 12px;font-size:13px;border-radius:999px}
+    .cat-head{position:relative}
+    .tree-bar{margin-left:auto;display:flex;gap:8px;align-items:center;color:var(--ink-lt);font-size:12px}
+    .linkbtn.sm{font-size:12px}
+    details.folder{margin:12px 0;border:1px solid var(--border);border-radius:14px;background:rgba(10,22,48,.45)}
+    details.folder[open]{border-color:var(--gold-line)}
+    details.folder>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;user-select:none}
+    details.folder>summary::-webkit-details-marker{display:none}
+    details.folder>summary:hover{background:var(--gold-faint)}
+    .fic{flex:0 0 22px;height:18px;position:relative;border-radius:3px;background:linear-gradient(180deg,#f6bc68,#ba8738)}
+    .fic::before{content:'';position:absolute;left:0;top:-4px;width:10px;height:5px;border-radius:2px 2px 0 0;background:#f6bc68}
+    details.folder[open]>summary .fic{background:linear-gradient(180deg,#ffd89e,#f6bc68)}
+    .fname{font-family:'Noto Serif',serif;font-weight:700;font-size:16px;color:var(--ink)}
+    details.folder>summary b{margin-left:auto;font-family:'DM Mono',monospace;font-weight:500;font-size:11px;color:var(--gold);letter-spacing:.04em;white-space:nowrap}
+    details.folder>summary::after{content:'›';font-size:20px;line-height:1;color:var(--gold);transition:transform .2s;margin-left:6px}
+    details.folder[open]>summary::after{transform:rotate(90deg)}
+    .folder-body{padding:4px 16px 16px;border-top:1px dashed var(--border)}
+    .folder-body>.shelf{margin-top:14px}
+    .folder-body details.folder{background:rgba(6,15,30,.5)}
+    @media(max-width:860px){.search{flex:1 1 100%;width:auto}.tree-bar{margin-left:0;width:100%}details.folder>summary{padding:11px 12px}.folder-body{padding:4px 10px 12px}}
     .flist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-top:12px}
     .frow{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
     .frow:hover{border-color:var(--gold-line)}
@@ -196,7 +218,8 @@ eleventyExcludeFromCollections: true
         <button class="tab" data-t="Functional" aria-pressed="false">Functional</button>
         <button class="tab" data-t="Strategy" aria-pressed="false">Strategy</button>
       </div>
-      <nav class="jump" id="jump" aria-label="Jump to eBook kit"></nav>
+      <div class="libtools"><nav class="jump" id="jump" aria-label="Jump to eBook kit"></nav>
+        <input id="q" class="search" type="search" placeholder="Search your eBooks…" aria-label="Search your eBooks" autocomplete="off"></div>
     </div>
     <div id="shelves"></div>
     <section class="more" id="more" hidden>
@@ -214,7 +237,7 @@ eleventyExcludeFromCollections: true
   'use strict';
   var API = '/api/member';
   var $ = function(id){ return document.getElementById(id); };
-  var state = { lib:null, catalog:null, files:{}, track:'all' };
+  var state = { lib:null, catalog:null, files:{}, track:'all', q:'' };
   $('yr').textContent = new Date().getFullYear();
 
   var ERRORS = {
@@ -273,6 +296,8 @@ eleventyExcludeFromCollections: true
       .then(function(){ setTimeout(function(){ $('resendBtn').disabled = false; }, 4000); });
   });
 
+  var qt = null;
+  $('q').addEventListener('input', function(e){ clearTimeout(qt); qt = setTimeout(function(){ state.q = e.target.value.trim(); render(); }, 150); });
   $('logoutBtn').onclick = function(){ api('logout', {}).then(function(){ state.lib = null; show('auth'); }); };
 
   Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(t){
@@ -325,6 +350,51 @@ eleventyExcludeFromCollections: true
 
   function short(name){ return name.replace(/^Infor (LN )?/,''); }
 
+  // ── Folder tree: sections are the sub-folders of the kit in the bucket ──
+  function buildTree(list){
+    var root = { name:'', files:[], kids:{}, order:[], total:0 };
+    list.forEach(function(f){
+      var node = root; root.total++;
+      (f.section ? f.section.split(' / ') : []).forEach(function(seg){
+        if (!node.kids[seg]) { node.kids[seg] = { name:seg, files:[], kids:{}, order:[], total:0 }; node.order.push(seg); }
+        node = node.kids[seg]; node.total++;
+      });
+      node.files.push(f);
+    });
+    return root;
+  }
+  function filterTree(node, q){
+    q = q.toLowerCase();
+    var out = { name:node.name, files:node.files.filter(function(f){ return (f.title + ' ' + (f.section||'') + ' ' + (f.ext||'')).toLowerCase().indexOf(q) >= 0; }), kids:{}, order:[], total:0 };
+    out.total = out.files.length;
+    node.order.forEach(function(n){ var c = filterTree(node.kids[n], q); if (c) { out.kids[n] = c; out.order.push(n); out.total += c.total; } });
+    return out.total ? out : null;
+  }
+  var OPEN = {}; try { OPEN = JSON.parse(localStorage.getItem('fob_open') || '{}') || {}; } catch(_){}
+  function saveOpen(){ try { localStorage.setItem('fob_open', JSON.stringify(OPEN)); } catch(_){} }
+  function setAll(sec, k, open){
+    Array.prototype.forEach.call(sec.querySelectorAll('details.folder'), function(d){ d.open = open; OPEN[d.getAttribute('data-p')] = open; });
+    saveOpen();
+  }
+  function renderNode(parent, k, node, path, kitTotal){
+    var pdfs = node.files.filter(function(f){ return !f.ext || f.ext === 'pdf'; }), others = node.files.filter(function(f){ return f.ext && f.ext !== 'pdf'; });
+    if (pdfs.length) { var shelf = el('div','shelf'); pdfs.forEach(function(f){ shelf.appendChild(ebookCard(k, f)); }); parent.appendChild(shelf); }
+    if (others.length) { var ul = el('div','flist'); others.forEach(function(f){ ul.appendChild(fileRow(k, f)); }); parent.appendChild(ul); }
+    node.order.forEach(function(name){
+      var kid = node.kids[name], p = k + '/' + path + name;
+      var d = el('details','folder'); d.setAttribute('data-p', p);
+      // open: while searching; else what the member chose last time; else open small kits, fold big ones
+      d.open = state.q ? true : (p in OPEN ? OPEN[p] : kitTotal <= 12);
+      var sm = el('summary'); sm.appendChild(el('span','fic',''));
+      sm.appendChild(el('span','fname', name));
+      sm.appendChild(el('b',null, kid.total + (kid.total === 1 ? ' file' : ' files') + (kid.order.length ? ' · ' + kid.order.length + (kid.order.length === 1 ? ' folder' : ' folders') : '')));
+      d.appendChild(sm);
+      var body = el('div','folder-body'); renderNode(body, k, kid, path + name + '/', kitTotal); d.appendChild(body);
+      d.addEventListener('toggle', function(){ if (!state.q) { OPEN[p] = d.open; saveOpen(); } });
+      parent.appendChild(d);
+    });
+  }
+
   function render(){
     var lib = state.lib, cat = state.catalog, files = state.files || {};
     var shelves = $('shelves'), jump = $('jump'), more = $('moreGrid');
@@ -351,24 +421,22 @@ eleventyExcludeFromCollections: true
       head.appendChild(el('div','cat-badge', k));
       var tx = el('div'); tx.appendChild(el('div','eyebrow', b.track));
       tx.appendChild(el('h2','cat-name', b.name));
-      var nSec = list.reduce(function(a, f){ if (f.section && a.indexOf(f.section) < 0) a.push(f.section); return a; }, []).length;
-      tx.appendChild(el('div','cat-meta', list.length + (list.length === 1 ? ' file' : ' files') + (nSec ? ' · ' + nSec + (nSec === 1 ? ' section' : ' sections') : '')));
+      var nSec = list.reduce(function(a, f){ var t = (f.section || '').split(' / ')[0]; if (t && a.indexOf(t) < 0) a.push(t); return a; }, []).length;
+      tx.appendChild(el('div','cat-meta', list.length + (list.length === 1 ? ' file' : ' files') + (nSec ? ' in ' + nSec + (nSec === 1 ? ' folder' : ' folders') : '')));
       head.appendChild(tx); sec.appendChild(head);
       if (!list.length) sec.appendChild(el('div','soon','Your eBooks for this kit are being prepared and will appear here automatically — no need to sign in again.'));
       else {
-        // group by section (sub-folder); files in the kit's own folder come first, without a heading
-        var groups = [], at = {};
-        list.forEach(function(f){ var key = f.section || ''; if (!(key in at)) { at[key] = groups.length; groups.push({ name:key, files:[] }); } groups[at[key]].files.push(f); });
-        var multi = groups.length > 1 || (groups[0] && groups[0].name);
-        groups.forEach(function(gr){
-          if (multi && gr.name) {
-            var h = el('div','sec-title'); h.appendChild(el('span',null,gr.name)); h.appendChild(el('b',null,gr.files.length + (gr.files.length === 1 ? ' file' : ' files')));
-            sec.appendChild(h);
-          }
-          var pdfs = gr.files.filter(function(f){ return !f.ext || f.ext === 'pdf'; }), others = gr.files.filter(function(f){ return f.ext && f.ext !== 'pdf'; });
-          if (pdfs.length) { var shelf = el('div','shelf'); pdfs.forEach(function(f){ shelf.appendChild(ebookCard(k, f)); }); sec.appendChild(shelf); }
-          if (others.length) { var ul = el('div','flist'); others.forEach(function(f){ ul.appendChild(fileRow(k, f)); }); sec.appendChild(ul); }
-        });
+        var tree = buildTree(list), q = state.q;
+        var shown = q ? filterTree(tree, q) : tree;
+        if (tree.order.length) {
+          var bar = el('div','tree-bar');
+          var ex = el('button','linkbtn sm','Expand all'), co = el('button','linkbtn sm','Collapse all');
+          ex.type = co.type = 'button';
+          ex.onclick = function(){ setAll(sec, k, true); }; co.onclick = function(){ setAll(sec, k, false); };
+          bar.appendChild(ex); bar.appendChild(el('span',null,'·')); bar.appendChild(co); head.appendChild(bar);
+        }
+        if (!shown) sec.appendChild(el('div','soon','No files in this kit match “' + q + '”.'));
+        else renderNode(sec, k, shown, '', list.length);
       }
       shelves.appendChild(sec);
     });
