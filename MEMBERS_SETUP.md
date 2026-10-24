@@ -182,3 +182,16 @@ tests/                    offline test suite:  npm test
 ```
 ⚠ Change prices **only in `src/_data/products.js`** (and sales in `src/_data/sale.js`). The cards on
 catalog/home pages still show their own display prices — keep those in step when you change a price.
+
+## 8. Troubleshooting — "R2 … 403" on /members-admin
+The admin page now shows R2's own reason under the token box. What each one means:
+
+| R2 says | Fix |
+|---|---|
+| **AccessDenied** | The R2 API token isn't allowed on `fob-training-ebooks`. Most common cause: the interview site's R2 keys were reused — that token is limited to `fob-interview-ebooks`. Cloudflare → R2 → **Manage R2 API Tokens** → create a token with **Object Read & Write**, bucket **fob-training-ebooks** (or edit the existing token and add this bucket) → put its **Access Key ID** / **Secret Access Key** in Vercel. |
+| **SignatureDoesNotMatch** | `R2_SECRET_ACCESS_KEY` doesn't belong to `R2_ACCESS_KEY_ID` (a key from another token, or mistyped). |
+| **InvalidAccessKeyId** | `R2_ACCESS_KEY_ID` holds the wrong value — use the 32-character **Access Key ID** shown once when the token is created, not the token value itself. |
+| **NoSuchBucket** | `R2_BUCKET` misspelt, or `R2_ACCOUNT_ID` is a different Cloudflare account. |
+
+Also check: the bucket `fob-training-ebooks` exists; `R2_ACCOUNT_ID` is the 32-character Account ID from the R2 overview page.
+For an EU-jurisdiction bucket set `R2_JURISDICTION=eu`. **After changing env vars, redeploy** — Vercel only picks them up on a new deployment.

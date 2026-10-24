@@ -10,23 +10,56 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+// Env values are trimmed: a space or line break pasted into Vercel breaks the signature (→ 403).
+const E = (k) => String(process.env[k] || '').trim();
+const host = () => E('R2_ENDPOINT') ? E('R2_ENDPOINT').replace(/^https?:\/\//, '').replace(/\/+$/, '')
+  : E('R2_ACCOUNT_ID') + (E('R2_JURISDICTION') ? '.' + E('R2_JURISDICTION').toLowerCase() : '') + '.r2.cloudflarestorage.com';
+
 let _client = null;
 function client() {
   if (_client) return _client;
   const need = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET'];
-  const missing = need.filter(k => !process.env[k]);
+  const missing = need.filter(k => !E(k));
   if (missing.length) throw new Error('Storage not configured — missing env: ' + missing.join(', '));
-  _client = new AwsClient({
-    accessKeyId: process.env.R2_ACCESS_KEY_ID,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    service: 's3',
-    region: 'auto'
-  });
+  _client = new AwsClient({ accessKeyId: E('R2_ACCESS_KEY_ID'), secretAccessKey: E('R2_SECRET_ACCESS_KEY'), service: 's3', region: 'auto' });
   return _client;
 }
+function bucketUrl() { return 'https://' + host() + '/' + E('R2_BUCKET'); }
 function objUrl(key) {
   const enc = String(key).split('/').map(encodeURIComponent).join('/');
-  return 'https://' + process.env.R2_ACCOUNT_ID + '.r2.cloudflarestorage.com/' + process.env.R2_BUCKET + '/' + enc;
+  return bucketUrl() + '/' + enc;
+}
+
+// Turn an R2 error response into a message that says WHICH setting is wrong.
+const HINTS = {
+  SignatureDoesNotMatch: 'R2_SECRET_ACCESS_KEY does not match R2_ACCESS_KEY_ID (wrong value, or a space/line break was pasted with it).',
+  InvalidAccessKeyId: 'R2_ACCESS_KEY_ID is not a valid R2 key (use the "Access Key ID" shown when the R2 API token was created, not the token value).',
+  AccessDenied: 'This R2 API token is not allowed on bucket "' + '%B' + '". Create / edit the token with "Object Read & Write" and add this bucket (a token made for fob-interview-ebooks only works on that bucket).',
+  NoSuchBucket: 'Bucket "%B" does not exist in account R2_ACCOUNT_ID — check R2_BUCKET and R2_ACCOUNT_ID.',
+  Unauthorized: 'R2 rejected the credentials — check R2_ACCOUNT_ID, R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY.',
+  InvalidBucketName: 'R2_BUCKET is not a valid bucket name.'
+};
+async function r2Error(op, key, r) {
+  let text = ''; try { text = await r.text(); } catch (e) {}
+  const code = (text.match(/<Code>([^<]+)<\/Code>/) || [])[1] || '';
+  const msg = (text.match(/<Message>([^<]+)<\/Message>/) || [])[1] || '';
+  let hint = HINTS[code] || (r.status === 403 ? HINTS.AccessDenied : r.status === 401 ? HINTS.Unauthorized : '');
+  hint = hint.replace(/%B/g, E('R2_BUCKET'));
+  const err = new Error('R2 ' + op + (key ? ' ' + key : '') + ' → ' + r.status + (code ? ' ' + code : '') + (msg ? ' (' + msg + ')' : '') + (hint ? ' — ' + hint : ''));
+  err.status = r.status; err.code = code;
+  return err;
+}
+
+// Quick self-check of the storage settings (used by /members-admin).
+function configReport() {
+  const out = [];
+  if (!/^[0-9a-f]{32}$/i.test(E('R2_ACCOUNT_ID')) && !E('R2_ENDPOINT')) out.push('R2_ACCOUNT_ID should be the 32-character Cloudflare Account ID (R2 overview page, right side).');
+  if (E('R2_ACCESS_KEY_ID') && E('R2_ACCESS_KEY_ID').length !== 32) out.push('R2_ACCESS_KEY_ID is ' + E('R2_ACCESS_KEY_ID').length + ' characters; R2 Access Key IDs are 32.');
+  if (E('R2_SECRET_ACCESS_KEY') && E('R2_SECRET_ACCESS_KEY').length !== 64) out.push('R2_SECRET_ACCESS_KEY is ' + E('R2_SECRET_ACCESS_KEY').length + ' characters; R2 Secret Access Keys are 64.');
+  ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET'].forEach(k => {
+    const raw = process.env[k] || ''; if (raw !== raw.trim()) out.push(k + ' has spaces / line breaks around it (ignored now, but worth cleaning in Vercel).');
+  });
+  return { bucket: E('R2_BUCKET'), endpoint: host(), problems: out };
 }
 
 // ── Local test backend ───────────────────────────────────────────────
@@ -42,7 +75,7 @@ async function getObject(key) {
   }
   const r = await client().fetch(objUrl(key), { method: 'GET' });
   if (r.status === 404) return null;
-  if (!r.ok) throw new Error('R2 GET ' + key + ' → ' + r.status);
+  if (!r.ok) throw await r2Error('GET', key, r);
   return { body: Buffer.from(await r.arrayBuffer()), etag: r.headers.get('etag') };
 }
 
@@ -53,7 +86,7 @@ async function headObject(key) {
   }
   const r = await client().fetch(objUrl(key), { method: 'HEAD' });
   if (r.status === 404) return null;
-  if (!r.ok) throw new Error('R2 HEAD ' + key + ' → ' + r.status);
+  if (!r.ok) throw await r2Error('HEAD', key, r);
   return { etag: r.headers.get('etag'), size: Number(r.headers.get('content-length') || 0) };
 }
 
@@ -73,14 +106,14 @@ async function putObject(key, body, contentType, cond) {
   if (cond && cond.ifNoneMatch) headers['If-None-Match'] = cond.ifNoneMatch;
   const r = await client().fetch(objUrl(key), { method: 'PUT', headers, body: buf });
   if (r.status === 412) { console.warn('R2 PUT 412', key, JSON.stringify(cond)); return false; }
-  if (!r.ok) throw new Error('R2 PUT ' + key + ' → ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  if (!r.ok) throw await r2Error('PUT', key, r);
   return true;
 }
 
 async function deleteObject(key) {
   if (LOCAL) { if (fs.existsSync(lp(key))) fs.unlinkSync(lp(key)); return; }
   const r = await client().fetch(objUrl(key), { method: 'DELETE' });
-  if (!r.ok && r.status !== 404) throw new Error('R2 DELETE ' + key + ' → ' + r.status);
+  if (!r.ok && r.status !== 404) throw await r2Error('DELETE', key, r);
 }
 
 function xmlDecode(s) {
@@ -106,11 +139,11 @@ async function listObjects(prefix) {
   }
   const items = []; let token = null;
   do {
-    const u = new URL('https://' + process.env.R2_ACCOUNT_ID + '.r2.cloudflarestorage.com/' + process.env.R2_BUCKET);
+    const u = new URL(bucketUrl());
     u.searchParams.set('list-type', '2'); u.searchParams.set('prefix', prefix);
     if (token) u.searchParams.set('continuation-token', token);
     const r = await client().fetch(u.toString());
-    if (!r.ok) throw new Error('R2 LIST → ' + r.status);
+    if (!r.ok) throw await r2Error('LIST', prefix, r);
     const xml = await r.text();
     (xml.match(/<Contents>[\s\S]*?<\/Contents>/g) || []).forEach(c => {
       const k = c.match(/<Key>([^<]*)<\/Key>/), s = c.match(/<Size>(\d+)<\/Size>/), d = c.match(/<LastModified>([^<]*)<\/LastModified>/);
@@ -124,9 +157,9 @@ async function listObjects(prefix) {
 // Server-side copy inside the bucket (no download/re-upload).
 async function copyObject(srcKey, dstKey) {
   if (LOCAL) { fs.mkdirSync(path.dirname(lp(dstKey)), { recursive: true }); fs.copyFileSync(lp(srcKey), lp(dstKey)); return; }
-  const src = '/' + process.env.R2_BUCKET + '/' + String(srcKey).split('/').map(encodeURIComponent).join('/');
+  const src = '/' + E('R2_BUCKET') + '/' + String(srcKey).split('/').map(encodeURIComponent).join('/');
   const r = await client().fetch(objUrl(dstKey), { method: 'PUT', headers: { 'x-amz-copy-source': src } });
-  if (!r.ok) throw new Error('R2 COPY ' + srcKey + ' → ' + dstKey + ': ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  if (!r.ok) throw await r2Error('COPY', srcKey + ' → ' + dstKey, r);
 }
 
 async function listKeys(prefix) { return (await listObjects(prefix)).map(o => o.key); }
@@ -170,4 +203,4 @@ function bareEtag(e) { return String(e || '').replace(/^W\//, '').replace(/"/g, 
 function quoteEtag(e) { return '"' + bareEtag(e) + '"'; }
 function sameEtag(a, b) { return !!bareEtag(a) && bareEtag(a) === bareEtag(b); }
 
-module.exports = { bareEtag, quoteEtag, sameEtag, getObject, headObject, putObject, deleteObject, copyObject, listKeys, listObjects, signedPutUrl, getJson, putJson, signedUrl };
+module.exports = { configReport, bareEtag, quoteEtag, sameEtag, getObject, headObject, putObject, deleteObject, copyObject, listKeys, listObjects, signedPutUrl, getJson, putJson, signedUrl };

@@ -174,6 +174,11 @@ module.exports = async function handler(req, res) {
     return H.send(res, 404, { error: 'Unknown action' });
   } catch (e) {
     console.error('member-admin error', action, e);
-    return H.send(res, 500, { error: e.message });
+    let msg = e.message;
+    if (/^(R2|Storage)/.test(msg)) {
+      const rep = r2.configReport();
+      msg += ' [bucket "' + rep.bucket + '" at ' + rep.endpoint + ']' + (rep.problems.length ? ' Also check: ' + rep.problems.join(' ') : '');
+    }
+    return H.send(res, 500, { error: msg, storage: /^(R2|Storage)/.test(e.message) });
   }
 };
