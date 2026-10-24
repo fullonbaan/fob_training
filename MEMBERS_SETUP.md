@@ -77,12 +77,22 @@ It makes these folders (safe to click again):
 
 **Upload each eBook once** — combos and the Full eBook Library read the same folders.
 
+**Sections (sub-folders) are supported**, to any depth — organise a kit however you like:
+```
+ebooks/dev/Training EBooks/01 - Core 4GL.pdf      → section "Training EBooks"
+ebooks/dev/DAL Examples/dal_hook.txt              → section "DAL Examples" (download)
+ebooks/dev/Script Examples/Batch/job.bc           → section "Script Examples / Batch"
+ebooks/dev/10.8 Version Docs/Release Notes.pdf    → section "10.8 Version Docs"
+```
+Buyers see one heading per section (sorted by folder name; a `01 - ` prefix on a folder sets the order and is hidden).
+PDFs show as book cards; scripts, examples and other files as compact download rows with their original file names.
+
 Rules (no code change ever needed):
 - Every file in a folder shows up straight away for everyone who owns that kit (including past buyers).
-- Allowed: **PDF** (read online + download, watermarked per buyer) and **Excel / Word / PowerPoint / ZIP**
-  (download only, served as-is — use this for the "+ Excel tool" kits).
+- Any file type: **PDF** = read online + download, watermarked per buyer; **everything else** (Excel, Word, ZIP, .bc/.txt scripts…) = download only, served as-is.
 - **Title shown = file name** without the extension. A leading number such as `01 - `, `2_` or `03) ` sets the order and is hidden.
-- Names starting with `_` are hidden (drafts). The `.keep` marker files are hidden too.
+- Files **and folders** whose name starts with `_` are hidden (drafts, `_thumbs`). `.keep`, `Thumbs.db`, `desktop.ini` are ignored.
+- A version number at the start is kept: `10.8 Version Docs` stays as is (only `01 - `, `2_`, `03) ` style prefixes are hidden).
 - **Replace** a file by uploading one with the same name — buyers get the new edition on their next open.
 - **Delete** a file to remove it from libraries.
 - Until a kit has files, its buyers see "Your eBooks for this kit are being prepared…".

@@ -5,7 +5,7 @@
 //   GET  ?action=get&email=…             one member (full record minus secrets)
 //   GET  ?action=files                   every eBook folder with the files currently in it
 //   POST ?action=init-folders            creates every ebooks/<code>/ folder in the bucket (safe to repeat)
-//   POST ?action=upload-url   {guide, filename}  → 15-min signed PUT link (browser uploads straight to R2)
+//   POST ?action=upload-url   {guide, filename, section?}  → 15-min signed PUT link (browser uploads straight to R2)
 //   POST ?action=delete-file  {guide, id}
 //   POST ?action=move-file    {guide, id, name}  → move/rename an ebook into ebooks/<guide>/<name>
 //   POST ?action=grant        {email, name, product | guides[], note, notify}
@@ -57,7 +57,7 @@ module.exports = async function handler(req, res) {
         const guides = Object.keys(catalog.EBOOKS).map(k => ({
           key: k, name: catalog.EBOOKS[k].name, track: catalog.EBOOKS[k].track, folder: library.ROOT + k + '/',
           product: catalog.EBOOKS[k].product,
-          ebooks: shelf[k].map(f => ({ id: f.id, title: f.title, file: f.file, ext: f.ext, size: f.size, updated: f.updated, legacy: f.legacy, thumbKey: f.thumbKey, thumbStale: f.thumbStale }))
+          ebooks: shelf[k].map(f => ({ id: f.id, title: f.title, file: f.file, dir: f.dir, section: f.section, ext: f.ext, size: f.size, updated: f.updated, legacy: f.legacy, thumbKey: f.thumbKey, thumbStale: f.thumbStale }))
         }));
         await Promise.all(guides.map(g => Promise.all(g.ebooks.map(async e => {
           e.thumb = e.thumbKey ? await r2.signedUrl(e.thumbKey, { ttl: 3600, contentType: null }) : null; delete e.thumbKey;
@@ -86,10 +86,12 @@ module.exports = async function handler(req, res) {
     if (action === 'upload-url') {
       if (!catalog.isEbook(b.guide)) return H.send(res, 400, { error: 'Unknown guide' });
       const name = library.safeFileName(b.filename);
-      if (!name) return H.send(res, 400, { error: 'Bad file name' });
-      const key = library.ROOT + b.guide + '/' + name;
+      if (!name) return H.send(res, 400, { error: 'Bad file name (it needs an extension such as .pdf)' });
+      const section = library.safeSection(b.section);
+      if (section === null) return H.send(res, 400, { error: 'Section folders cannot start with "_" or "."' });
+      const key = library.ROOT + b.guide + '/' + (section ? section + '/' : '') + name;
       const exists = !!(await r2.headObject(key));
-      return H.send(res, 200, { url: await r2.signedPutUrl(key, 900), key, id: key.slice(library.ROOT.length), title: library.titleFromFile(name), replaces: exists });
+      return H.send(res, 200, { url: await r2.signedPutUrl(key, 900), key, id: key.slice(library.ROOT.length), title: library.titleFromFile(name), section: section, replaces: exists });
     }
     // Thumbnails: the admin browser renders page 1 of the PDF and uploads a JPEG (or a custom image).
     if (action === 'thumb-src') {
@@ -107,7 +109,10 @@ module.exports = async function handler(req, res) {
       const src = library.keyForId(guide, b.id);
       const name = library.safeFileName(b.name);
       if (!src || !name) return H.send(res, 400, { error: 'Unknown ebook or bad name' });
-      const dst = library.ROOT + guide + '/' + name;
+      // Rename keeps the file in its current section folder (single-file layout moves into the kit folder).
+      const srcRel = src.slice(library.ROOT.length), cut = srcRel.lastIndexOf('/');
+      const dir = cut > 0 ? srcRel.slice(0, cut + 1) : guide + '/';
+      const dst = library.ROOT + dir + name;
       if (dst === src) return H.send(res, 200, { ok: true, id: src.slice(library.ROOT.length) });
       const from = await r2.headObject(src);
       if (!from) return H.send(res, 404, { error: 'Original file not found' });

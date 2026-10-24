@@ -101,6 +101,14 @@ eleventyExcludeFromCollections: true
     .eb-actions{display:flex;gap:6px;margin-top:auto;padding-top:8px}
     .eb-actions .btn{flex:1;padding:9px 6px;font-size:10.5px;letter-spacing:.06em}
     .soon{font-size:14px;color:var(--ink-lt);padding:18px;border:1px dashed var(--gold-line);border-radius:12px;background:var(--surface)}
+    .sec-title{display:flex;align-items:baseline;gap:10px;margin:26px 0 14px;padding-bottom:8px;border-bottom:1px dashed var(--gold-line);font-family:'Noto Serif',serif;font-weight:700;font-size:17px;color:var(--ink)}
+    .sec-title:first-of-type{margin-top:4px}
+    .sec-title b{font-family:'DM Mono',monospace;font-weight:500;font-size:11px;color:var(--gold);letter-spacing:.06em}
+    .flist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-top:12px}
+    .frow{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+    .frow:hover{border-color:var(--gold-line)}
+    .fext{flex:0 0 44px;height:44px;border-radius:9px;display:grid;place-items:center;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.22);color:#86efac;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em}
+    .fmid{flex:1;min-width:0}.fmid .eb-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .more{margin-top:40px;padding-top:30px;border-top:1px solid var(--gold-line)}
     footer{border-top:1px solid var(--border);padding:22px 32px;font-size:12px;color:var(--ink-lt);text-align:center}
     footer a{color:var(--ink-mid)}
@@ -134,7 +142,7 @@ eleventyExcludeFromCollections: true
         <p class="lede">Sign in with the email you used at checkout and the access code we emailed you after payment. Every eBook you've bought is here, ready to read online or download.</p>
         <ul class="points">
           <li><span class="ic">&#9670;</span><span><b>Only your eBooks.</b> Your library shows exactly what you purchased — combos and the Full eBook Library unlock every eBook inside them.</span></li>
-          <li><span class="ic">&#9670;</span><span><b>Read or download.</b> Open an eBook in your browser or save the PDF to keep. Excel tools download directly.</span></li>
+          <li><span class="ic">&#9670;</span><span><b>Read or download.</b> Open an eBook in your browser or save the PDF to keep. Examples, scripts and Excel tools download directly.</span></li>
           <li><span class="ic">&#9670;</span><span><b>Always up to date.</b> New editions appear here automatically — no need to buy again.</span></li>
           <li><span class="ic">&#9670;</span><span><b>Personal copy.</b> Each PDF is licensed to you and carries your name and email.</span></li>
         </ul>
@@ -276,7 +284,7 @@ eleventyExcludeFromCollections: true
   function el(tag, cls, text){ var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function fmtSize(b){ return b > 1048576 ? (b/1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b/1024)) + ' KB'; }
   function fileLink(g, id, mode){ return API + '?action=file&mode=' + mode + '&g=' + encodeURIComponent(g) + '&f=' + encodeURIComponent(id); }
-  var KIND = { pdf:'PDF', xlsx:'Excel', xlsm:'Excel', xls:'Excel', docx:'Word', pptx:'PowerPoint', zip:'ZIP' };
+  var KIND = { pdf:'PDF', xlsx:'Excel', xlsm:'Excel', xls:'Excel', csv:'CSV', docx:'Word', doc:'Word', pptx:'PowerPoint', ppt:'PowerPoint', zip:'ZIP', txt:'Text' };
   var ORDER = ['dev','adm','ext','bod','ion','os','idm','lnapi','dom','fin','mfg','log','whs','pln','mst','cloud','ai'];
   function sortKeys(keys){ return keys.sort(function(a,b){ var x=ORDER.indexOf(a), y=ORDER.indexOf(b); return (x<0?99:x)-(y<0?99:y); }); }
 
@@ -291,7 +299,7 @@ eleventyExcludeFromCollections: true
       img.onload = function(){ ph.remove(); }; img.onerror = function(){ img.remove(); };
       img.src = f.thumb; th.appendChild(img);
     }
-    th.appendChild(el('span','pages',(KIND[f.ext] || 'FILE') + ' · ' + fmtSize(f.size)));
+    th.appendChild(el('span','pages',(KIND[f.ext] || String(f.ext || 'file').toUpperCase()) + ' · ' + fmtSize(f.size)));
     card.appendChild(th);
     var body = el('div','eb-body');
     body.appendChild(el('div','eb-title', f.title));
@@ -302,6 +310,17 @@ eleventyExcludeFromCollections: true
     links.forEach(function(x){ x.addEventListener('click', function(){ f.opens++; sub.textContent = 'Opened ' + f.opens + ' of ' + lim; }); });
     body.appendChild(acts); card.appendChild(body);
     return card;
+  }
+
+  // Scripts, examples, spreadsheets: a compact row (they are downloads, not books)
+  function fileRow(g, f){
+    var lim = state.lib.limit, row = el('div','frow');
+    row.appendChild(el('span','fext', String(f.ext || 'file').toUpperCase().slice(0,5)));
+    var mid = el('div','fmid'); mid.appendChild(el('div','eb-title', f.title));
+    var sub = el('div','eb-sub', fmtSize(f.size) + ' · downloaded ' + f.opens + ' of ' + lim); mid.appendChild(sub); row.appendChild(mid);
+    var d = el('a','btn sm ghost','Download'); d.href = fileLink(g, f.id, 'download');
+    d.addEventListener('click', function(){ f.opens++; sub.textContent = fmtSize(f.size) + ' · downloaded ' + f.opens + ' of ' + lim; });
+    row.appendChild(d); return row;
   }
 
   function short(name){ return name.replace(/^Infor (LN )?/,''); }
@@ -332,10 +351,25 @@ eleventyExcludeFromCollections: true
       head.appendChild(el('div','cat-badge', k));
       var tx = el('div'); tx.appendChild(el('div','eyebrow', b.track));
       tx.appendChild(el('h2','cat-name', b.name));
-      tx.appendChild(el('div','cat-meta', list.length + (list.length === 1 ? ' file' : ' files')));
+      var nSec = list.reduce(function(a, f){ if (f.section && a.indexOf(f.section) < 0) a.push(f.section); return a; }, []).length;
+      tx.appendChild(el('div','cat-meta', list.length + (list.length === 1 ? ' file' : ' files') + (nSec ? ' · ' + nSec + (nSec === 1 ? ' section' : ' sections') : '')));
       head.appendChild(tx); sec.appendChild(head);
       if (!list.length) sec.appendChild(el('div','soon','Your eBooks for this kit are being prepared and will appear here automatically — no need to sign in again.'));
-      else { var shelf = el('div','shelf'); list.forEach(function(f){ shelf.appendChild(ebookCard(k, f)); }); sec.appendChild(shelf); }
+      else {
+        // group by section (sub-folder); files in the kit's own folder come first, without a heading
+        var groups = [], at = {};
+        list.forEach(function(f){ var key = f.section || ''; if (!(key in at)) { at[key] = groups.length; groups.push({ name:key, files:[] }); } groups[at[key]].files.push(f); });
+        var multi = groups.length > 1 || (groups[0] && groups[0].name);
+        groups.forEach(function(gr){
+          if (multi && gr.name) {
+            var h = el('div','sec-title'); h.appendChild(el('span',null,gr.name)); h.appendChild(el('b',null,gr.files.length + (gr.files.length === 1 ? ' file' : ' files')));
+            sec.appendChild(h);
+          }
+          var pdfs = gr.files.filter(function(f){ return !f.ext || f.ext === 'pdf'; }), others = gr.files.filter(function(f){ return f.ext && f.ext !== 'pdf'; });
+          if (pdfs.length) { var shelf = el('div','shelf'); pdfs.forEach(function(f){ shelf.appendChild(ebookCard(k, f)); }); sec.appendChild(shelf); }
+          if (others.length) { var ul = el('div','flist'); others.forEach(function(f){ ul.appendChild(fileRow(k, f)); }); sec.appendChild(ul); }
+        });
+      }
       shelves.appendChild(sec);
     });
     $('jump').hidden = mine.length < 2;

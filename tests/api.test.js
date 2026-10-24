@@ -385,6 +385,41 @@ function clientPricer(atMs) {
     assert.ok(/Max-Age=0/.test(lo.cookie));
   });
 
+  await test('kit organised in SECTION sub-folders: every file found, sections named & ordered, hidden/junk skipped', async () => {
+    const g = await req('POST', '/api/member-admin?action=grant', { email: 'sections@example.com', name: 'Sec Tion', guides: ['lnapi'], notify: false }, ADMIN);
+    const ck = (await req('POST', '/api/member?action=login', { email: 'sections@example.com', code: g.data.code })).cookie.split(';')[0];
+    const me = await req('GET', '/api/member?action=me', undefined, { Cookie: ck });
+    const f = me.data.files.lnapi;
+    assert.deepStrictEqual(f.map(x => [x.section, x.title, x.ext]), [
+      ['10.8 Version Docs', 'LN 10.8 Release Notes', 'pdf'],
+      ['DAL Examples', 'dal_hook_example', 'txt'],
+      ['Script Examples', 'report_script', 'bc'],
+      ['Script Examples / Batch', 'batch_job', 'bc'],
+      ['Training EBooks', 'API Basics', 'pdf'],
+      ['Training EBooks', 'BDE Calls', 'pdf']
+    ]);
+    assert.strictEqual(me.data.catalog.lnapi.count, 6);
+    // a PDF in a section reads online, watermarked
+    const pdfId = f.find(x => x.title === 'API Basics').id;
+    const v = await req('GET', '/api/member?action=file&mode=view&g=lnapi&f=' + encodeURIComponent(pdfId), undefined, { Cookie: ck });
+    assert.ok(v.headers.get('location').startsWith('/__local/stamped/'), v.headers.get('location'));
+    // a script downloads untouched under its original name
+    const sc = f.find(x => x.ext === 'bc' && x.section === 'Script Examples / Batch');
+    const d = await req('GET', '/api/member?action=file&mode=view&g=lnapi&f=' + encodeURIComponent(sc.id), undefined, { Cookie: ck });
+    assert.ok(d.headers.get('location').includes('Script%20Examples/Batch/02_batch_job.bc') && d.headers.get('location').includes('disp=attachment'), d.headers.get('location'));
+    // hidden folders refused even with a crafted id
+    assert.strictEqual((await req('GET', '/api/member?action=file&g=lnapi&f=' + encodeURIComponent('lnapi/_Drafts/secret.pdf'), undefined, { Cookie: ck })).headers.get('location'), '/members/?e=unknown');
+    // admin view shows the same files with their folders; upload into a section; rename stays in the section
+    const ad = (await req('GET', '/api/member-admin?action=files', undefined, ADMIN)).data.guides.find(x => x.key === 'lnapi');
+    assert.strictEqual(ad.ebooks.length, 6); assert.ok(ad.ebooks.some(e => e.dir === 'Script Examples/Batch'));
+    const u = await req('POST', '/api/member-admin?action=upload-url', { guide: 'lnapi', filename: '03 - Web Services.pdf', section: 'Training EBooks' }, ADMIN);
+    assert.strictEqual(u.data.key, 'ebooks/lnapi/Training EBooks/03 - Web Services.pdf');
+    assert.strictEqual((await req('POST', '/api/member-admin?action=upload-url', { guide: 'lnapi', filename: 'a.pdf', section: '_hidden' }, ADMIN)).status, 400);
+    assert.strictEqual((await req('POST', '/api/member-admin?action=upload-url', { guide: 'lnapi', filename: 'a.pdf', section: '../../members' }, ADMIN)).data.key, 'ebooks/lnapi/members/a.pdf', 'path traversal neutralised');
+    const mv = await req('POST', '/api/member-admin?action=move-file', { guide: 'lnapi', id: 'lnapi/Training EBooks/02 - BDE Calls.pdf', name: '02 - BDE Calls Explained.pdf' }, ADMIN);
+    assert.strictEqual(mv.data.id, 'lnapi/Training EBooks/02 - BDE Calls Explained.pdf');
+  });
+
   console.log('\n[7] Admin');
   await test('member-admin: no / wrong token → 401', async () => {
     assert.strictEqual((await req('GET', '/api/member-admin?action=list')).status, 401);
@@ -397,10 +432,10 @@ function clientPricer(atMs) {
     assert.strictEqual(f.data.products.length, 35);
     const i1 = await req('POST', '/api/member-admin?action=init-folders', {}, ADMIN);
     assert.strictEqual(i1.data.created.length, 17);
-    assert.ok(fs.existsSync(path.join(process.env.FOB_LOCAL_STORE, 'ebooks/lnapi/.keep')));
+    assert.ok(fs.existsSync(path.join(process.env.FOB_LOCAL_STORE, 'ebooks/idm/.keep')));
     const i2 = await req('POST', '/api/member-admin?action=init-folders', {}, ADMIN); assert.strictEqual(i2.data.created.length, 0);
     const f2 = await req('GET', '/api/member-admin?action=files', undefined, ADMIN);
-    assert.strictEqual(f2.data.guides.find(g => g.key === 'lnapi').ebooks.length, 0, '.keep not shown');
+    assert.strictEqual(f2.data.guides.find(g => g.key === 'idm').ebooks.length, 0, '.keep not shown');
   });
   await test('upload-url for PDF and xlsx; upload then appears for buyers; rename; delete', async () => {
     const u = await req('POST', '/api/member-admin?action=upload-url', { guide: 'ai', filename: '01 - GenAI Playbook.pdf' }, ADMIN);

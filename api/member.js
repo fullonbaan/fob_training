@@ -80,7 +80,7 @@ async function me(req, res) {
   const files = {};
   await Promise.all(lib.owned.map(async g => {
     files[g] = await Promise.all((shelf[g] || []).map(async f => ({
-      id: f.id, title: f.title, size: f.size, updated: f.updated, ext: f.ext, opens: (rec.downloads || {})[f.id] || 0,
+      id: f.id, title: f.title, section: f.section, size: f.size, updated: f.updated, ext: f.ext, opens: (rec.downloads || {})[f.id] || 0,
       thumb: f.thumbKey ? await r2.signedUrl(f.thumbKey, { ttl: 3600, contentType: null }) : null
     })));
   }));
@@ -146,7 +146,7 @@ async function file(req, res) {
     }
   }
   const parsed = library.parseKey(key);
-  const fname = 'FullOnBaan - ' + parsed.title + '.' + parsed.ext;
+  const fname = pdf ? 'FullOnBaan - ' + parsed.title + '.pdf' : parsed.file;    // scripts / tools keep their original file name
   const url = await r2.signedUrl(serveKey, { ttl: Number(process.env.LINK_TTL_SECONDS || 300), disposition: mode === 'download' ? 'attachment' : 'inline',
     filename: fname, contentType: library.contentType(key) });
   res.statusCode = 302;

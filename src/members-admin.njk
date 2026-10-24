@@ -43,6 +43,8 @@ eleventyExcludeFromCollections: true
     small{color:var(--ink-lt)} button.sm{padding:5px 10px;font-size:12px}
     .upl{display:inline-block;padding:8px 12px;border:1px dashed var(--gold);color:var(--gold);cursor:pointer;font-weight:600;font-size:13px;margin:0}
     .upst{font-size:12px;color:var(--ink-mid);margin-top:6px;word-break:break-word}
+    .sechead{font-size:12px;font-weight:700;color:var(--gold);margin:10px 0 2px;letter-spacing:.04em}
+    .secin{padding:6px 8px;font-size:12px;margin-bottom:6px}
     [hidden]{display:none!important}
   </style>
 </head>
@@ -117,15 +119,20 @@ eleventyExcludeFromCollections: true
   function mb(b){return b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';}
   function renderFiles(d,noAuto){
     var empty=d.guides.filter(function(g){return !g.ebooks.length;}).length;
-    $('files').innerHTML='<tr><th style="width:24%">Guide</th><th>Ebooks customers see (in this order)</th><th style="width:220px">Add ebooks</th></tr>'+d.guides.map(function(g){
+    $('files').innerHTML='<tr><th style="width:22%">eBook kit</th><th>Files customers see (in this order, grouped by section)</th><th style="width:230px">Add files</th></tr>'+d.guides.map(function(g){
+      var lastSec=null;
       var rows=g.ebooks.length?g.ebooks.map(function(f){
-        return '<div class="ebrow"><span class="ebth">'+(f.thumb?'<img src="'+esc(f.thumb)+'" alt="">':'<i>'+esc(String(f.ext||'pdf').toUpperCase())+'</i>')+'</span><span style="flex:1"><b>'+esc(f.title)+'</b><br><small>'+esc(f.legacy?'ebooks/'+f.file+' (old single-file location)':g.folder+f.file)+' · '+mb(f.size)+'</small></span>'+
+        var head='';
+        if((f.section||'')!==lastSec){ lastSec=f.section||''; if(lastSec||g.ebooks.some(function(x){return x.section;})) head='<div class="sechead">'+(lastSec?'&#128193; '+esc(lastSec):'Kit folder (no section)')+'</div>'; }
+        return head+'<div class="ebrow"><span class="ebth">'+(f.thumb?'<img src="'+esc(f.thumb)+'" alt="">':'<i>'+esc(String(f.ext||'pdf').toUpperCase())+'</i>')+'</span><span style="flex:1"><b>'+esc(f.title)+'</b><br><small>'+esc(f.legacy?'ebooks/'+f.file+' (old single-file location)':g.folder+(f.dir?f.dir+'/':'')+f.file)+' · '+mb(f.size)+'</small></span>'+
                (f.legacy?'<button class="sm" data-mv="'+esc(f.id)+'" data-g="'+esc(g.key)+'" data-n="'+esc(defaultName(g))+'">Move into folder</button> ':'<button class="ghost sm" data-rn="'+esc(f.id)+'" data-g="'+esc(g.key)+'" data-n="'+esc(f.file)+'">Rename</button> ')+
                '<label class="ghost sm btnlike" title="Use your own cover image">Thumbnail<input type="file" accept="image/*" data-th="'+esc(f.id)+'" data-g="'+esc(g.key)+'" hidden></label> '+
                '<button class="ghost sm" data-del="'+esc(f.id)+'" data-g="'+esc(g.key)+'" data-t="'+esc(f.title)+'">Delete</button></div>';
       }).join(''):'<span class="bad">No files yet — buyers see “being prepared”.</span>';
       return '<tr><td><b>'+esc(g.name)+'</b><br><small>'+esc(g.track)+' · folder <code>'+esc(g.folder)+'</code> · '+g.ebooks.length+' file'+(g.ebooks.length===1?'':'s')+'</small></td><td>'+rows+'</td>'+
-             '<td><label class="upl">+ Upload file(s)<input type="file" accept=".pdf,.xlsx,.xlsm,.xls,.docx,.pptx,.zip" multiple data-up="'+esc(g.key)+'" hidden></label><div class="upst" id="up-'+esc(g.key)+'"></div></td></tr>';
+             '<td><input class="secin" id="sec-'+esc(g.key)+'" list="secs-'+esc(g.key)+'" placeholder="Section (optional)" title="Sub-folder, e.g. Training EBooks — leave empty for the kit folder"><datalist id="secs-'+esc(g.key)+'">'+
+             g.ebooks.reduce(function(a,f){if(f.dir&&a.indexOf(f.dir)<0)a.push(f.dir);return a;},[]).map(function(x){return '<option value="'+esc(x)+'">';}).join('')+'</datalist>'+
+             '<label class="upl">+ Upload file(s)<input type="file" multiple data-up="'+esc(g.key)+'" hidden></label><div class="upst" id="up-'+esc(g.key)+'"></div></td></tr>';
     }).join('')+(empty?'<tr><td colspan="3" class="bad">'+empty+' kit(s) have no files yet.</td></tr>':'');
     var legacy=[];d.guides.forEach(function(g){g.ebooks.forEach(function(f){if(f.legacy)legacy.push({g:g,f:f});});});
     $('moveAll').hidden=!legacy.length; $('moveAll').textContent=legacy.length===1?'Move the 1 old single file into its kit folder':'Move all '+legacy.length+' old single files into their kit folders';
@@ -217,9 +224,9 @@ eleventyExcludeFromCollections: true
     var st=$('up-'+guide);
     for(var i=0;i<files.length;i++){
       var f=files[i];
-      if(!/\.(pdf|xlsx|xlsm|xls|docx|pptx|zip)$/i.test(f.name)){toast(f.name+' — only PDF, Excel, Word, PowerPoint or ZIP files');continue;}
+      if(!/\.[A-Za-z0-9]{1,8}$/.test(f.name)){toast(f.name+' — the file needs an extension (e.g. .pdf)');continue;}
       try{
-        var u=await call('upload-url',{guide:guide,filename:f.name});
+        var u=await call('upload-url',{guide:guide,filename:f.name,section:($('sec-'+guide)||{}).value||''});
         if(u.replaces&&!confirm('“'+u.title+'” already exists in this kit. Replace it with the new file?'))continue;
         await putFile(u.url,f,function(p){st.textContent=(i+1)+'/'+files.length+' · '+u.title+' · '+p+'%';});
         st.textContent='✔ '+u.title;
