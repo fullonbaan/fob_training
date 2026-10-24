@@ -10,6 +10,7 @@ eleventyExcludeFromCollections: true
   <title>Members Library | FullOnBaan Training</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script>(function(){try{if(localStorage.getItem('fob_theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,6 +135,31 @@ eleventyExcludeFromCollections: true
     .more{margin-top:40px;padding-top:30px;border-top:1px solid var(--gold-line)}
     footer{border-top:1px solid var(--border);padding:22px 32px;font-size:12px;color:var(--ink-lt);text-align:center}
     footer a{color:var(--ink-mid)}
+    /* ── Light theme (toggle in the top bar; shared with the main site via localStorage "fob_theme") ── */
+    html.light{
+      --gold:#a8782a; --gold-dk:#8a6220; --gold-faint:rgba(168,120,42,0.08); --gold-line:rgba(168,120,42,0.30);
+      --bg:#f5f1ea; --bg2:#fbf8f2; --surface:#ffffff; --surface-hi:#f3eee5; --ink:#1b2333; --ink-mid:rgba(27,35,51,0.76);
+      --ink-lt:rgba(27,35,51,0.55); --border:rgba(27,35,51,0.12); --err:#b91c1c; --ok:#15803d; color-scheme:light;
+    }
+    html.light .site-nav{background:rgba(251,248,242,.92)}
+    html.light .libbar{background:rgba(245,241,234,.95)}
+    html.light input{background:#fff}
+    html.light .tab[aria-pressed="true"]{color:#fff}
+    html.light .msg.err{background:#fdf0ef;color:#b91c1c}
+    html.light .msg.ok{background:#effaf3;color:#15803d}
+    html.light .eb:hover{box-shadow:0 12px 28px rgba(27,35,51,.12)}
+    html.light .book,html.light .eb,html.light .frow,html.light .card{box-shadow:0 1px 2px rgba(27,35,51,.05)}
+    html.light details.folder{background:#fff}
+    html.light .folder-body details.folder{background:#fbf8f2}
+    html.light .fext{background:rgba(21,128,61,.07);border-color:rgba(21,128,61,.25);color:#15803d}
+    html.light .video-note{background:rgba(79,70,229,.05);border-color:rgba(79,70,229,.18)}
+    html.light .cat-badge{background:linear-gradient(135deg,rgba(168,120,42,.14),rgba(168,120,42,.04))}
+    body,.site-nav,.libbar,.card,.eb,.book,.frow,details.folder,input{transition:background-color .25s,border-color .25s,color .25s}
+    .theme-btn{width:38px;height:38px;flex:0 0 38px;border-radius:999px;border:1px solid var(--gold-line);background:transparent;color:var(--gold);cursor:pointer;display:grid;place-items:center;padding:0}
+    .theme-btn:hover{background:var(--gold-faint);border-color:var(--gold)}
+    .theme-btn svg{width:18px;height:18px}
+    .theme-btn .i-sun{display:block}.theme-btn .i-moon{display:none}
+    html.light .theme-btn .i-sun{display:none}html.light .theme-btn .i-moon{display:block}
     [hidden]{display:none!important}
     @media(max-width:520px){.nav-brand{font-size:18px}.nav-brand span{display:none}.nav-inner{gap:10px}}
     @media(max-width:860px){.auth-wrap{grid-template-columns:1fr;gap:28px}.nav-inner,main{padding-left:16px;padding-right:16px}main{padding-top:28px}.card{padding:22px}.hide-sm{display:none}.points{display:none}.lede{font-size:14px}
@@ -147,6 +173,10 @@ eleventyExcludeFromCollections: true
     <div class="nav-right">
       <a class="nav-link hide-sm" href="/catalog/">Catalog</a>
       <a class="nav-link hide-sm" href="/contact/">Help</a>
+      <button class="theme-btn" id="themeBtn" type="button" title="Switch to light mode" aria-label="Switch to light mode">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg>
+      </button>
       <button class="btn sm ghost" id="logoutBtn" hidden>Sign out</button>
     </div>
   </div>
@@ -239,6 +269,19 @@ eleventyExcludeFromCollections: true
   var $ = function(id){ return document.getElementById(id); };
   var state = { lib:null, catalog:null, files:{}, track:'all', q:'' };
   $('yr').textContent = new Date().getFullYear();
+
+  // Light / dark toggle — same preference key as the main site, so the choice follows the member around.
+  function syncThemeBtn(){
+    var light = document.documentElement.classList.contains('light'), b = $('themeBtn');
+    var t = light ? 'Switch to dark mode' : 'Switch to light mode'; b.title = t; b.setAttribute('aria-label', t);
+  }
+  $('themeBtn').onclick = function(){
+    var light = document.documentElement.classList.toggle('light');
+    document.documentElement.classList.toggle('dark', !light);
+    try { localStorage.setItem('fob_theme', light ? 'light' : 'dark'); } catch(_){}
+    syncThemeBtn();
+  };
+  syncThemeBtn();
 
   var ERRORS = {
     login:'Your session has ended. Please sign in again.',
