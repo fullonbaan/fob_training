@@ -1,0 +1,243 @@
+---
+permalink: /referrals-admin/index.html
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral Partners Admin | FullOnBaan Training</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <style>
+    :root{--gold:#A8782A;--gold-lt:#f6bc68;--ink:#06132a;--ink-mid:#524B3E;--ink-lt:#8C8070;--bg:#F9F6F1;--surface:#fff;--border:#E8E2D9;--rust:#7B3210;--green:#2E7D4F;--amber:#A16207;--blue:#1D4ED8}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    header{background:var(--ink);color:var(--gold-lt);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    header b{font-family:Georgia,serif;font-size:18px} header a{color:#f6bc68;font-size:13px;margin-right:12px}
+    main{max-width:1240px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:18px}
+    .card{background:var(--surface);border:1px solid var(--border);padding:18px}
+    h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px}
+    h3{font-family:Georgia,serif;font-size:18px;margin-bottom:6px}
+    input,select,textarea{padding:9px 10px;border:1px solid var(--border);font:inherit;background:#fff;width:100%}
+    button{padding:9px 14px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+    button.ghost{background:#fff;color:var(--ink)} button.warn{background:var(--rust);border-color:var(--rust)} button.good{background:var(--green);border-color:var(--green)}
+    button.sm{padding:4px 9px;font-size:12px} button:disabled{opacity:.5;cursor:wait}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:150px}.row>button,.row>.fx{flex:0 0 auto}
+    label{font-size:12px;color:var(--ink-mid);display:block;margin-bottom:4px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{text-align:left;padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+    th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-lt)} td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+    tr.click{cursor:pointer} tr.click:hover,tr.sel{background:#FFFDF8}
+    .pill{display:inline-block;padding:1px 8px;border:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+    .st-review{color:var(--blue);border-color:#BFDBFE}.st-pending{color:var(--amber);border-color:#FDE68A}.st-approved{color:var(--green);border-color:#BBF7D0}.st-paid{color:var(--gold);border-color:#E9D5A8}.st-void{color:var(--ink-lt);text-decoration:line-through}.st-active{color:var(--green)}.st-disabled{color:var(--rust)}
+    .code{font:700 20px ui-monospace,Consolas,monospace;letter-spacing:.12em;color:var(--rust);background:#FFFDF8;border:1px dashed var(--gold);padding:10px;margin-top:8px;display:inline-block}
+    .mono{font-family:ui-monospace,Consolas,monospace}
+    .scroll{overflow-x:auto} small,.muted{color:var(--ink-lt);font-size:12px}
+    .ok{color:var(--green)} .bad{color:var(--rust)}
+    .note{background:#FFFDF8;border-left:3px solid var(--gold);padding:10px 12px;font-size:13px;color:var(--ink-mid)}
+    .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.filters button{background:#fff;color:var(--ink-mid);border-color:var(--border);padding:4px 10px;font-size:12px}.filters button.on{border-color:var(--ink);color:var(--ink)}
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.kpi{border:1px solid var(--border);padding:10px 12px}.kpi b{display:block;font:700 20px Georgia,serif}.kpi span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-lt)}
+    #toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:#fff;padding:12px 16px;max-width:380px;display:none;z-index:9}
+    main>*,#app>*{min-width:0}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+<header><b>FullOnBaan Training · Referral Partners</b><span><a href="/admin">Payments admin</a><a href="/members-admin">Members admin</a><a href="/partners" target="_blank">Partner dashboard ↗</a><button class="ghost sm" id="lockBtn" hidden>Lock</button></span></header>
+<main>
+  <section class="card" id="gate">
+    <h2>Admin token</h2>
+    <p style="margin-bottom:10px;color:var(--ink-mid)">Paste the <code>ADMIN_API_TOKEN</code> value from Vercel (kept only in this tab's memory) — or <a href="/admin">sign in to /admin</a> first and reload this page.</p>
+    <div class="row"><input id="tok" type="password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')" spellcheck="false" data-lpignore="true" data-1p-ignore="true"><button id="tokBtn">Unlock</button></div>
+    <div id="gateErr" class="bad" style="margin-top:10px" hidden></div>
+  </section>
+
+  <div id="app" hidden style="display:grid;gap:18px">
+    <section class="card">
+      <h2>Programme overview</h2>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section class="card" id="queueCard" hidden>
+      <h2>Needs your attention — offline sales reported by partners</h2>
+      <div class="scroll"><table id="queue"></table></div>
+    </section>
+
+    <section class="card">
+      <h2>Onboard a new sales partner</h2>
+      <div class="row">
+        <div><label>Full name *</label><input id="nName" maxlength="120"></div>
+        <div><label>Email * (their dashboard login)</label><input id="nEmail" type="email"></div>
+        <div><label>Mobile</label><input id="nMobile" maxlength="20" placeholder="+91 …"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div><label>Referral code (3–20 letters/digits)</label><div style="display:flex;gap:6px"><input id="nCode" class="mono" maxlength="20" style="text-transform:uppercase" placeholder="e.g. RAJ10"><button class="ghost sm" id="suggest" type="button">Suggest</button></div></div>
+        <div style="max-width:170px"><label>Commission % *</label><input id="nPct" type="number" min="0" max="60" step="0.5" value="10"></div>
+        <div><label>Payout details (UPI ID / bank, PAN)</label><input id="nPayout" maxlength="300"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div><label>Internal notes (not shown to the partner)</label><input id="nNotes" maxlength="500"></div>
+        <label class="fx" style="display:flex;gap:6px;align-items:center;margin:0 0 9px"><input type="checkbox" id="nNotify" checked style="width:auto"> Email welcome + access code</label>
+        <button id="nBtn">Onboard partner</button>
+      </div>
+      <p class="muted" style="margin-top:8px">Commission is calculated on the price <b>excluding GST</b>. Changing a partner’s % later applies to new sales only — every sale keeps the % it was made at.</p>
+      <div id="nOut" style="margin-top:10px"></div>
+    </section>
+
+    <section class="card">
+      <div class="row" style="margin-bottom:10px"><h2 style="margin:0">Partners <span id="pCount"></span></h2><input id="q" placeholder="Search name / email / code"><button class="ghost" id="refresh">Refresh</button></div>
+      <div class="scroll"><table id="partners"></table></div>
+    </section>
+
+    <section class="card" id="detail" hidden></section>
+
+    <section class="card">
+      <div class="row" style="margin-bottom:6px"><h2 style="margin:0">Commission ledger — all partners</h2><button class="ghost fx" id="csvAll">Download CSV</button></div>
+      <div class="filters" id="lFilters"></div>
+      <div class="scroll"><table id="ledger"></table></div>
+    </section>
+  </div>
+</main>
+<div id="toast"></div>
+{% raw %}
+<script>
+(function(){
+  'use strict';
+  var API='/api/referral', $=function(id){return document.getElementById(id);}, TOK='', DATA=null, SALES=[], SEL=null, LF='all';
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function toast(t){var n=$('toast');n.textContent=t;n.style.display='block';clearTimeout(n._t);n._t=setTimeout(function(){n.style.display='none';},4500);}
+  function money(a,c){var sym={INR:'₹',USD:'$',EUR:'€'}[c]||'';return sym+Number(a||0).toLocaleString(c==='INR'?'en-IN':'en-US',{minimumFractionDigits:Number(a||0)%1?2:0,maximumFractionDigits:2});}
+  function day(iso){return iso?new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';}
+  function call(action,body,q,probe){
+    var h=TOK?{'Authorization':'Bearer '+TOK}:{}; if(body)h['Content-Type']='application/json';
+    return fetch(API+'?action='+action+(q||''),{method:body?'POST':'GET',credentials:'same-origin',headers:h,body:body?JSON.stringify(body):undefined})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(r.status===401){if(!probe)lock();throw new Error('Not authorised — token rejected or /admin session expired');}if(!r.ok)throw new Error(d.error||r.status);return d;});});
+  }
+  var idle=null;
+  function touch(){clearTimeout(idle);if(TOK)idle=setTimeout(function(){lock('Locked after 20 minutes without activity');},20*60*1000);}
+  ['click','keydown'].forEach(function(ev){document.addEventListener(ev,function(){if(TOK)touch();},true);});
+  function lock(m){TOK='';$('app').hidden=true;$('gate').hidden=false;$('lockBtn').hidden=true;$('detail').hidden=true;if(m)toast(m);}
+  function open(viaTok){$('gate').hidden=true;$('app').hidden=false;$('lockBtn').hidden=!viaTok;touch();}
+  function unlock(t){TOK=t;reload().then(function(){$('tok').value='';open(true);}).catch(function(e){var g=$('gateErr');g.textContent=e.message;g.hidden=false;});}
+  $('tokBtn').onclick=function(){unlock($('tok').value.trim());};
+  $('tok').onkeydown=function(e){if(e.key==='Enter')unlock(this.value.trim());};
+  $('lockBtn').onclick=function(){lock();};
+  /* Signed in to /admin already? The session cookie works here too (no token needed). */
+  reload(true).then(function(){if(!TOK)open(false);}).catch(function(){});
+
+  function reload(probe){
+    return Promise.all([call('a-list',null,'',probe),call('a-sales',null,'',probe)]).then(function(r){DATA=r[0];SALES=r[1].sales;renderAll();});
+  }
+  function renderAll(){fillProducts();renderKpis();renderQueue();renderPartners();renderLedger();if(SEL)renderDetail(SEL);}
+  function sum(list,field,status){var o={};list.forEach(function(s){if(s.status==='void'||s.status==='review')return;if(status&&s.status!==status)return;o[s.currency]=(o[s.currency]||0)+Number(s[field]||0);});var k=Object.keys(o);return k.length?k.map(function(c){return money(o[c],c);}).join(' · '):money(0,'INR');}
+  function renderKpis(){
+    var act=DATA.partners.filter(function(p){return p.status==='active';}).length, clicks=DATA.partners.reduce(function(a,p){return a+(p.clicks||0);},0);
+    var orders=SALES.filter(function(s){return s.status!=='void'&&s.status!=='review';}).length;
+    $('kpis').innerHTML=[['Active partners',act+' / '+DATA.partners.length],['Clicks (unique)',clicks],['Referred sales',orders],['Sales excl. GST',sum(SALES,'base')],
+      ['Commission — in hold',sum(SALES,'commission','pending')],['Commission — payable',sum(SALES,'commission','approved')],['Commission — paid',sum(SALES,'commission','paid')]]
+      .map(function(k){return '<div class="kpi"><span>'+esc(k[0])+'</span><b>'+esc(k[1])+'</b></div>';}).join('');
+  }
+  function stl(s){return {review:'Review',pending:'In hold',approved:'Payable',paid:'Paid',void:'Void'}[s]||s;}
+  function saleRow(s,opts){
+    opts=opts||{};
+    var acts=[];
+    if(s.status==='review'||s.status==='pending')acts.push('<button class="good sm" data-op="approve" data-c="'+esc(s.code)+'" data-id="'+esc(s.id)+'">Approve</button>');
+    if(s.status!=='paid'&&s.status!=='void')acts.push('<button class="ghost sm" data-op="edit" data-c="'+esc(s.code)+'" data-id="'+esc(s.id)+'" data-b="'+esc(s.base)+'" data-p="'+esc(s.pct)+'">Edit</button>');
+    if(s.status!=='paid'&&s.status!=='void')acts.push('<button class="warn sm" data-op="void" data-c="'+esc(s.code)+'" data-id="'+esc(s.id)+'">'+(s.status==='review'?'Reject':'Void')+'</button>');
+    if(s.status==='paid'||s.status==='void')acts.push('<button class="ghost sm" data-op="reopen" data-c="'+esc(s.code)+'" data-id="'+esc(s.id)+'">Reopen</button>');
+    var sub=s.status==='pending'?'payable '+day(s.holdUntil):s.status==='paid'?day(s.paidAt)+' · '+s.payoutRef:s.status==='void'?s.voidReason:'';
+    return '<tr>'+(opts.check?'<td>'+(s.status==='approved'?'<input type="checkbox" class="pick" value="'+esc(s.id)+'" style="width:auto">':'')+'</td>':'')+
+      '<td style="white-space:nowrap">'+esc(day(s.at))+'</td>'+(opts.partner?'<td class="mono">'+esc(s.code)+'</td>':'')+
+      '<td>'+esc(s.product)+'<br><small>'+esc(s.kind==='order'?(s.orderRef+(s.invoiceNo?' · '+s.invoiceNo:'')):(s.kind==='claim'?'Partner claim':'Manual')+(s.orderRef?' · ref '+s.orderRef:''))+' · '+esc(s.customerName||'')+' '+esc(s.customerEmail||s.customer||'')+'</small>'+(s.note?'<br><small>“'+esc(s.note)+'”</small>':'')+'</td>'+
+      '<td class="n">'+esc(money(s.paid,s.currency))+'<br><small>excl. GST '+esc(money(s.base,s.currency))+'</small></td>'+
+      '<td class="n"><b>'+esc(money(s.commission,s.currency))+'</b><br><small>'+esc(s.pct)+'%</small></td>'+
+      '<td><span class="pill st-'+esc(s.status)+'">'+esc(stl(s.status))+'</span><br><small>'+esc(sub||'')+'</small></td><td style="white-space:nowrap">'+acts.join(' ')+'</td></tr>';
+  }
+  var HEAD=function(o){o=o||{};return '<tr>'+(o.check?'<th></th>':'')+'<th>Date</th>'+(o.partner?'<th>Partner</th>':'')+'<th>Product / order</th><th class="n">Paid</th><th class="n">Commission</th><th>Status</th><th></th></tr>';};
+  function renderQueue(){var q=SALES.filter(function(s){return s.status==='review';});$('queueCard').hidden=!q.length;$('queue').innerHTML=HEAD({partner:1})+q.map(function(s){return saleRow(s,{partner:1});}).join('');}
+  function renderLedger(){
+    var c={all:SALES.length};SALES.forEach(function(s){c[s.status]=(c[s.status]||0)+1;});
+    $('lFilters').innerHTML=['all','review','pending','approved','paid','void'].map(function(k){return '<button data-lf="'+k+'" class="'+(LF===k?'on':'')+'">'+(k==='all'?'All':stl(k))+' ('+(c[k]||0)+')</button>';}).join('');
+    var rows=SALES.filter(function(s){return LF==='all'||s.status===LF;});
+    $('ledger').innerHTML=rows.length?HEAD({partner:1})+rows.map(function(s){return saleRow(s,{partner:1});}).join(''):'<tr><td class="muted">No commission lines yet.</td></tr>';
+  }
+  $('lFilters').onclick=function(e){var b=e.target.closest('[data-lf]');if(b){LF=b.getAttribute('data-lf');renderLedger();}};
+  function renderPartners(){
+    var q=$('q').value.trim().toLowerCase();
+    var list=DATA.partners.filter(function(p){return !q||(p.name+' '+p.email+' '+p.code).toLowerCase().indexOf(q)>=0;});
+    $('pCount').textContent='('+DATA.partners.length+')';
+    $('partners').innerHTML='<tr><th>Code</th><th>Partner</th><th class="n">%</th><th>Status</th><th class="n">Clicks</th><th class="n">Orders</th><th class="n">Sales excl. GST</th><th class="n">In hold</th><th class="n">Payable</th><th class="n">Paid</th></tr>'+
+      (list.length?list.map(function(p){var t=p.totals.byCurrency, k=Object.keys(t);
+        var f=function(field){return k.length?k.map(function(c){return money(t[c][field]||0,c);}).join(' · '):'—';};
+        return '<tr class="click'+(SEL===p.code?' sel':'')+'" data-p="'+esc(p.code)+'"><td class="mono"><b>'+esc(p.code)+'</b></td><td>'+esc(p.name)+'<br><small>'+esc(p.email)+(p.mobile?' · '+esc(p.mobile):'')+'</small></td><td class="n">'+esc(p.commissionPct)+'%</td>'+
+          '<td><span class="pill st-'+esc(p.status)+'">'+esc(p.status)+'</span>'+(p.totals.review?'<br><small class="bad">'+p.totals.review+' to review</small>':'')+'</td><td class="n">'+p.clicks+'<br><small>'+p.clicksThisMonth+' this month</small></td><td class="n">'+p.totals.orders+'</td>'+
+          '<td class="n">'+f('base')+'</td><td class="n">'+f('pending')+'</td><td class="n"><b>'+f('approved')+'</b></td><td class="n">'+f('paid')+'</td></tr>';}).join(''):'<tr><td colspan="10" class="muted">No partners yet — onboard one above.</td></tr>');
+  }
+  $('q').oninput=renderPartners;
+  $('refresh').onclick=function(){reload().then(function(){toast('Refreshed');}).catch(function(e){toast(e.message);});};
+  $('partners').onclick=function(e){var tr=e.target.closest('tr[data-p]');if(!tr)return;SEL=tr.getAttribute('data-p');renderPartners();renderDetail(SEL);$('detail').scrollIntoView({behavior:'smooth',block:'start'});};
+
+  var PRODUCTS_HTML='';
+  function fillProducts(){PRODUCTS_HTML='<option value="">— other / custom —</option>'+DATA.products.map(function(p){return '<option value="'+esc(p.key)+'">'+esc(p.name)+'</option>';}).join('');}
+  function renderDetail(code){
+    var p=DATA.partners.filter(function(x){return x.code===code;})[0]; if(!p){$('detail').hidden=true;return;}
+    var mine=SALES.filter(function(s){return s.code===code;}), link=location.origin+'/?ref='+encodeURIComponent(p.code);
+    var payable=mine.filter(function(s){return s.status==='approved';});
+    $('detail').hidden=false;
+    $('detail').innerHTML='<div class="row" style="justify-content:space-between;align-items:start"><div><h3>'+esc(p.name)+' <span class="mono" style="color:var(--gold)">'+esc(p.code)+'</span></h3><small>'+esc(p.email)+' · joined '+esc(day(p.createdAt))+(p.lastLoginAt?' · last dashboard sign-in '+esc(day(p.lastLoginAt)):' · never signed in')+'</small><br><small>Link: <a href="'+esc(link)+'" target="_blank" class="mono">'+esc(link)+'</a></small></div><button class="ghost fx" id="dClose">Close</button></div>'+
+      '<h2 style="margin-top:16px">Profile &amp; commission</h2><div class="row"><div><label>Name</label><input id="eName" value="'+esc(p.name)+'"></div><div><label>Mobile</label><input id="eMobile" value="'+esc(p.mobile||'')+'"></div><div style="max-width:150px"><label>Commission %</label><input id="ePct" type="number" min="0" max="60" step="0.5" value="'+esc(p.commissionPct)+'"></div>'+
+      '<div style="max-width:150px"><label>Status</label><select id="eStatus"><option value="active"'+(p.status==='active'?' selected':'')+'>Active</option><option value="disabled"'+(p.status==='disabled'?' selected':'')+'>Disabled</option></select></div></div>'+
+      '<div class="row" style="margin-top:10px"><div><label>Payout details (shown to partner)</label><input id="ePayout" value="'+esc(p.payout||'')+'"></div><div><label>Internal notes</label><input id="eNotes" value="'+esc(p.notes||'')+'"></div><button id="eSave">Save</button><button class="ghost" id="eReset">New access code</button></div>'+
+      '<p class="muted" style="margin-top:6px">Rate history: '+esc((p.rateHistory||[]).map(function(r){return r.pct+'% from '+day(r.from);}).join(' → '))+'. Disabling stops new attributions and signs the partner out; existing lines stay.</p><div id="eOut"></div>'+
+      '<h2 style="margin-top:18px">Pay commission</h2><div class="note">Payable now: <b>'+esc(sum(payable,'commission'))+'</b> across '+payable.length+' line(s). Tick lines below (all payable lines are pre-ticked), pay the partner by UPI / bank, then record the reference.</div>'+
+      '<div class="row" style="margin-top:10px"><div><label>Payout reference (UTR / txn id) *</label><input id="poRef" maxlength="80"></div><button class="good" id="poBtn"'+(payable.length?'':' disabled')+'>Mark ticked lines paid</button></div>'+
+      '<h2 style="margin-top:18px">Add an offline sale for this partner</h2><div class="row"><div><label>Customer name</label><input id="mName"></div><div><label>Customer email</label><input id="mEmail" type="email"></div><div><label>Product</label><select id="mProduct">'+PRODUCTS_HTML+'</select></div></div>'+
+      '<div class="row" style="margin-top:10px"><div style="max-width:150px"><label>Amount paid</label><input id="mAmt" type="number" step="0.01"></div><div style="max-width:100px"><label>Currency</label><select id="mCur"><option>INR</option><option>USD</option><option>EUR</option></select></div><div style="max-width:160px"><label>Excl. GST (blank = auto)</label><input id="mBase" type="number" step="0.01"></div><div><label>Payment ref / invoice</label><input id="mRef"></div><button id="mBtn">Add (approved)</button></div>'+
+      '<h2 style="margin-top:18px">Sales &amp; commission ('+mine.length+')</h2><div class="scroll"><table id="dSales">'+(mine.length?HEAD({check:1})+mine.map(function(s){return saleRow(s,{check:1});}).join(''):'<tr><td class="muted">No sales yet.</td></tr>')+'</table></div>';
+    Array.prototype.forEach.call(document.querySelectorAll('#dSales .pick'),function(c){c.checked=true;});
+    $('dClose').onclick=function(){SEL=null;$('detail').hidden=true;renderPartners();};
+    $('eSave').onclick=function(){call('a-update',{code:code,name:$('eName').value,mobile:$('eMobile').value,commissionPct:$('ePct').value,status:$('eStatus').value,payout:$('ePayout').value,notes:$('eNotes').value}).then(function(){toast('Saved');return reload();}).catch(function(e){toast(e.message);});};
+    $('eReset').onclick=function(){if(!confirm('Issue a new dashboard access code for '+p.name+'? The old code stops working. It will be emailed to '+p.email+'.'))return;
+      call('a-reset-code',{code:code,notify:true}).then(function(d){$('eOut').innerHTML='<p style="margin-top:8px">New access code (emailed; shown once):</p><div class="code">'+esc(d.accessCode)+'</div>';}).catch(function(e){toast(e.message);});};
+    $('poBtn').onclick=function(){var ids=Array.prototype.map.call(document.querySelectorAll('#dSales .pick:checked'),function(c){return c.value;});
+      if(!ids.length)return toast('Tick at least one payable line');if(!$('poRef').value.trim())return toast('Enter the payout reference');
+      call('a-payout',{code:code,ids:ids,payoutRef:$('poRef').value.trim()}).then(function(d){toast(d.paid+' line(s) marked paid'+(d.skipped.length?' · '+d.skipped.length+' skipped':''));return reload();}).catch(function(e){toast(e.message);});};
+    $('mBtn').onclick=function(){call('a-manual',{code:code,customerName:$('mName').value,customerEmail:$('mEmail').value,productKey:$('mProduct').value,amount:$('mAmt').value,currency:$('mCur').value,base:$('mBase').value,paymentRef:$('mRef').value})
+      .then(function(){toast('Sale added');return reload();}).catch(function(e){toast(e.message);});};
+  }
+  // Line actions (queue, ledger and detail tables)
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-op]'); if(!b)return;
+    var op=b.getAttribute('data-op'), body={code:b.getAttribute('data-c'),id:b.getAttribute('data-id'),op:op};
+    if(op==='void'){var r=prompt('Reason (shown to the partner), e.g. "Refunded", "Payment not received":','Refunded');if(r===null)return;body.reason=r;}
+    if(op==='edit'){var nb=prompt('Sale value EXCLUDING GST:',b.getAttribute('data-b'));if(nb===null)return;var np=prompt('Commission % for this line:',b.getAttribute('data-p'));if(np===null)return;body.base=nb;body.pct=np;}
+    if(op==='reopen'&&!confirm('Reopen this line as payable? (Use this if a payout was reversed or a void was a mistake.)'))return;
+    b.disabled=true;
+    call('a-sale',body).then(function(){toast('Updated');return reload();}).catch(function(x){toast(x.message);b.disabled=false;});
+  });
+
+  // Onboarding
+  $('suggest').onclick=function(){var n=$('nName').value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,8)||'FOB';$('nCode').value=n+(Math.floor(Math.random()*90)+10);};
+  $('nBtn').onclick=function(){
+    var b=this;b.disabled=true;$('nOut').innerHTML='';
+    call('a-create',{name:$('nName').value.trim(),email:$('nEmail').value.trim(),mobile:$('nMobile').value.trim(),code:$('nCode').value.trim(),commissionPct:$('nPct').value,payout:$('nPayout').value.trim(),notes:$('nNotes').value.trim(),notify:$('nNotify').checked})
+      .then(function(d){
+        $('nOut').innerHTML='<div class="note"><b class="ok">'+esc(d.partner.name)+' is onboarded as '+esc(d.partner.code)+' at '+esc(d.partner.commissionPct)+'%.</b> '+(d.emailed?'Welcome email sent to '+esc(d.partner.email)+'.':'<span class="bad">No email sent — share these details yourself.</span>')+
+          '<br>Referral link: <span class="mono">'+esc(d.link)+'</span><br>Dashboard: <span class="mono">'+esc(location.origin)+'/partners</span> · access code (shown once):<br><div class="code">'+esc(d.accessCode)+'</div></div>';
+        ['nName','nEmail','nMobile','nCode','nPayout','nNotes'].forEach(function(id){$(id).value='';});
+        return reload();
+      }).catch(function(e){$('nOut').innerHTML='<p class="bad">'+esc(e.message)+'</p>';}).then(function(){b.disabled=false;});
+  };
+  $('csvAll').onclick=function(){
+    var q=function(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+    var lines=[['Date','Partner','Type','Order ref','Invoice','Product','Customer','Currency','Paid incl. GST','Excl. GST','%','Commission','Status','Payable from','Paid on','Payout ref','Void reason'].join(',')].concat(SALES.map(function(s){
+      return [day(s.at),s.code,s.kind,s.orderRef,s.invoiceNo,s.product,(s.customerName||'')+' '+(s.customerEmail||s.customer||''),s.currency,s.paid,s.base,s.pct,s.commission,stl(s.status),day(s.holdUntil),day(s.paidAt),s.payoutRef,s.voidReason].map(q).join(',');}));
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));a.download='fullonbaan-referral-ledger.csv';document.body.appendChild(a);a.click();a.remove();
+  };
+})();
+</script>
+{% endraw %}
+</body>
+</html>

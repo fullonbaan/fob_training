@@ -1,0 +1,281 @@
+---
+permalink: /partners/index.html
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Dashboard | FullOnBaan Training</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&family=Work+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#f6bc68;--gold-dk:#ba8738;--gold-faint:rgba(246,188,104,0.08);--gold-line:rgba(246,188,104,0.22);--bg:#060f1e;--bg2:#06132a;--surface:#0a1630;--surface-hi:#0d1a30;
+      --ink:#f0e8d8;--ink-mid:rgba(212,196,178,0.78);--ink-lt:rgba(212,196,178,0.55);--border:rgba(246,188,104,0.14);--err:#f87171;--ok:#4ade80;--warn:#fbbf24;--info:#93c5fd}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 420px);background-color:var(--bg);color:var(--ink);font-family:'Work Sans',system-ui,sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    a{color:var(--gold)}
+    .nav{position:sticky;top:0;z-index:10;background:rgba(6,19,42,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+    .nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;gap:12px}
+    .brand{font-family:'Noto Serif',serif;font-size:19px;font-weight:700;color:var(--gold);text-decoration:none;white-space:nowrap}.brand span{color:var(--ink-mid);font-weight:400}
+    .navlink{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mid);text-decoration:none;background:none;border:0;cursor:pointer;font-family:inherit}
+    .navlink:hover{color:var(--gold)}
+    main{max-width:1200px;margin:0 auto;padding:40px 24px 72px}
+    .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+    h1{font-family:'Noto Serif',serif;font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1.15;margin:8px 0 10px}
+    h2{font-family:'Noto Serif',serif;font-size:20px;margin-bottom:14px}
+    .lede{color:var(--ink-mid);max-width:640px}
+    .card{background:var(--surface);border:1px solid var(--gold-line);border-radius:16px;padding:26px}
+    .auth{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start;margin-top:8px}
+    label{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid);margin:16px 0 7px}
+    input,select,textarea{width:100%;padding:12px 13px;border:1px solid var(--gold-line);background:rgba(255,255,255,0.04);font:inherit;color:var(--ink);outline:none;border-radius:10px}
+    select option{background:var(--surface);color:var(--ink)}
+    input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-faint)}
+    input.code{font-family:'DM Mono',monospace;font-size:17px;letter-spacing:.12em;text-transform:uppercase}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border:1px solid transparent;border-radius:10px;background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;text-decoration:none;white-space:nowrap}
+    .btn:disabled{opacity:.55;cursor:wait}.btn.ghost{background:transparent;color:var(--gold);border-color:var(--gold-line)}.btn.ghost:hover{background:var(--gold-faint)}
+    .btn.sm{padding:8px 12px;font-size:12px}
+    .linkbtn{background:none;border:0;color:var(--gold);font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .msg{margin-top:14px;padding:11px 13px;font-size:14px;display:none;border-left:3px solid;border-radius:6px}.msg.show{display:block}
+    .msg.err{background:rgba(248,113,113,.08);border-color:var(--err);color:#fca5a5}.msg.ok{background:rgba(74,222,128,.08);border-color:var(--ok);color:#86efac}
+    .points{list-style:none;margin-top:24px;display:grid;gap:12px}.points li{display:flex;gap:12px;color:var(--ink-mid);font-size:14px}.points b{color:var(--ink)}
+    .dot{flex:0 0 26px;height:26px;border-radius:50%;border:1px solid var(--gold-line);display:grid;place-items:center;color:var(--gold);font:600 12px 'DM Mono',monospace}
+    .grid{display:grid;gap:18px}
+    .linkbox{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+    .linkbox input{flex:1;min-width:220px;font-family:'DM Mono',monospace;font-size:14px}
+    .chip{display:inline-block;font-family:'DM Mono',monospace;font-size:18px;letter-spacing:.14em;color:var(--gold);border:1px dashed var(--gold-dk);background:var(--gold-faint);padding:6px 14px;border-radius:10px}
+    .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+    .tile{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+    .tile .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-lt)}
+    .tile .v{font-family:'Noto Serif',serif;font-size:24px;font-weight:700;margin-top:4px;color:var(--ink);font-variant-numeric:tabular-nums}
+    .tile .s{font-size:12px;color:var(--ink-lt);margin-top:2px}
+    .tile.hl{border-color:var(--gold-line);background:linear-gradient(180deg,rgba(246,188,104,.07),transparent)}.tile.hl .v{color:var(--gold)}
+    .scroll{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+    th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-lt);font-weight:700}
+    td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+    .st-review{color:var(--info);border-color:rgba(147,197,253,.4)}.st-pending{color:var(--warn);border-color:rgba(251,191,36,.4)}
+    .st-approved{color:var(--ok);border-color:rgba(74,222,128,.4)}.st-paid{color:var(--gold);border-color:var(--gold-line)}.st-void{color:var(--ink-lt);border-color:var(--border);text-decoration:line-through}
+    small,.muted{color:var(--ink-lt);font-size:12px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1;min-width:180px}
+    .two{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.two>*,.grid>*{min-width:0}
+    .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+    .filters button{background:transparent;border:1px solid var(--border);color:var(--ink-mid);padding:5px 12px;border-radius:999px;font:600 12px 'Work Sans',sans-serif;cursor:pointer}
+    .filters button.on{border-color:var(--gold);color:var(--gold);background:var(--gold-faint)}
+    #toast{position:fixed;bottom:18px;right:18px;background:var(--surface-hi);border:1px solid var(--gold-line);color:var(--ink);padding:12px 16px;border-radius:10px;max-width:340px;display:none;z-index:20}
+    [hidden]{display:none!important}
+    @media (max-width:860px){.auth,.two{grid-template-columns:1fr;gap:24px}main{padding:28px 16px 56px}.nav-in{padding:0 16px}.card{padding:20px}}
+  </style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="/">FullOnBaan <span>Partners</span></a>
+  <div><a class="navlink" href="/" style="margin-right:14px">Website</a><button class="navlink" id="logout" hidden>Sign out</button></div>
+</div></nav>
+
+<main>
+  <!-- ── Sign in ── -->
+  <section id="signin" hidden>
+    <div class="auth">
+      <div>
+        <div class="eyebrow">Sales Partner Programme</div>
+        <h1>Your referral dashboard</h1>
+        <p class="lede">Track the visitors your link brings in, the sales they make and the commission you have earned — updated the moment a referred customer pays.</p>
+        <ul class="points">
+          <li><span class="dot">1</span><span><b>Share your link</b> — anyone who opens it is remembered as your referral for 30 days.</span></li>
+          <li><span class="dot">2</span><span><b>Or give your code</b> — buyers type it in the “Referral code” box at checkout.</span></li>
+          <li><span class="dot">3</span><span><b>Earn on every sale</b> — commission on the price excluding GST, payable after the money-back period.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2 style="margin-bottom:4px">Partner sign-in</h2>
+        <p class="muted">Use the email you registered with and the access code from your welcome email.</p>
+        <form id="loginForm" autocomplete="on">
+          <label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="email" required>
+          <label for="lCode">Access code</label><input id="lCode" class="code" placeholder="FOB-XXXXX-XXXXX" autocomplete="one-time-code" required>
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px">
+            <button class="btn" id="lBtn" type="submit">Sign in &rarr;</button>
+            <button class="linkbtn" type="button" id="resendBtn" style="align-self:flex-start">Email me a new access code</button>
+          </div>
+        </form>
+        <div class="msg" id="lMsg"></div>
+        <p class="muted" style="margin-top:18px">Want to become a partner? Write to <a href="mailto:support@fullonbaan.com">support@fullonbaan.com</a> or WhatsApp +91 63605 93122.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Dashboard ── -->
+  <section id="dash" hidden class="grid" style="gap:22px">
+    <div>
+      <div class="eyebrow" id="dEyebrow">Partner</div>
+      <h1 id="dHello">Welcome</h1>
+      <p class="lede" id="dLede"></p>
+    </div>
+
+    <div class="card">
+      <div class="row" style="align-items:center;justify-content:space-between">
+        <div style="flex:0 0 auto"><small>YOUR REFERRAL CODE</small><br><span class="chip" id="dCode"></span></div>
+        <div style="flex:2">
+          <small>YOUR REFERRAL LINK</small>
+          <div class="linkbox"><input id="dLink" readonly><button class="btn sm" id="copyLink">Copy link</button></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px;align-items:end">
+        <div><label for="landing" style="margin-top:0">Link to a specific page</label>
+          <select id="landing">
+            <option value="/">Home page</option><option value="/pricing/">Pricing &amp; checkout</option><option value="/catalog/">Course catalogue</option>
+            <option value="/videos/">Video courses</option><option value="/testimonials/">Testimonials</option>
+          </select></div>
+        <div style="flex:0 0 auto;display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn ghost sm" id="shWa" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn ghost sm" id="shLi" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn ghost sm" id="shMail">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+
+    <div class="two">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:6px"><h2 style="margin:0;flex:0 0 auto">Your sales</h2><button class="btn ghost sm" id="csv" style="flex:0 0 auto">Download CSV</button></div>
+        <div class="filters" id="filters"></div>
+        <div class="scroll"><table id="sales"></table></div>
+        <p class="muted" id="holdNote" style="margin-top:10px"></p>
+      </div>
+      <div class="grid" style="align-content:start">
+        <div class="card">
+          <h2>Report an offline sale</h2>
+          <p class="muted">Closed a deal paid by UPI / bank transfer instead of the website? Report it here — FullOnBaan verifies the payment and approves your commission.</p>
+          <form id="claimForm">
+            <label for="cName">Customer name</label><input id="cName" required maxlength="60">
+            <label for="cEmail">Customer email</label><input id="cEmail" type="email" maxlength="120">
+            <label for="cProduct">Product</label><select id="cProduct"><option value="">— other / custom —</option></select>
+            <div class="row"><div><label for="cAmt">Amount paid</label><input id="cAmt" type="number" min="1" step="0.01" required></div>
+              <div style="flex:0 0 96px"><label for="cCur">Currency</label><select id="cCur"><option>INR</option><option>USD</option><option>EUR</option></select></div></div>
+            <label for="cRef">Payment reference (UTR / txn id)</label><input id="cRef" maxlength="80">
+            <label for="cNote">Note</label><textarea id="cNote" rows="2" maxlength="300"></textarea>
+            <button class="btn" style="margin-top:16px;width:100%" id="cBtn" type="submit">Submit for approval</button>
+          </form>
+          <div class="msg" id="cMsg"></div>
+        </div>
+        <div class="card">
+          <h2>Payout details</h2>
+          <p id="dPayout" style="white-space:pre-wrap;color:var(--ink-mid)"></p>
+          <p class="muted" style="margin-top:8px">To change these, write to support@fullonbaan.com.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+
+{% raw %}
+<script>
+(function(){
+  'use strict';
+  var API='/api/referral', $=function(id){return document.getElementById(id);}, D=null, FILTER='all';
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function toast(t){var n=$('toast');n.textContent=t;n.style.display='block';clearTimeout(n._t);n._t=setTimeout(function(){n.style.display='none';},3500);}
+  function msg(id,t,ok){var m=$(id);m.textContent=t||'';m.className='msg'+(t?' show '+(ok?'ok':'err'):'');}
+  function money(a,c){var sym={INR:'₹',USD:'$',EUR:'€'}[c]||'';return sym+Number(a||0).toLocaleString(c==='INR'?'en-IN':'en-US',{minimumFractionDigits:Number(a||0)%1?2:0,maximumFractionDigits:2});}
+  function day(iso){return iso?new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';}
+  function call(action,body){
+    return fetch(API+'?action='+action,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok){var e=new Error(d.error||('Error '+r.status));e.status=r.status;throw e;}return d;});});
+  }
+  function showSignin(){$('dash').hidden=true;$('signin').hidden=false;$('logout').hidden=true;}
+  function load(){
+    return call('me').then(function(d){D=d;render();$('signin').hidden=true;$('dash').hidden=false;$('logout').hidden=false;})
+      .catch(function(e){if(e.status===401)showSignin();else{showSignin();msg('lMsg',e.message);}});
+  }
+
+  $('loginForm').onsubmit=function(e){
+    e.preventDefault();var b=$('lBtn');b.disabled=true;msg('lMsg','');
+    call('login',{email:$('lEmail').value.trim(),code:$('lCode').value.trim()}).then(function(){$('lCode').value='';return load();})
+      .catch(function(x){msg('lMsg',x.message);}).then(function(){b.disabled=false;});
+  };
+  $('resendBtn').onclick=function(){
+    var em=$('lEmail').value.trim(); if(!em){msg('lMsg','Enter your email first.');$('lEmail').focus();return;}
+    call('resend',{email:em}).then(function(d){msg('lMsg',d.message,true);}).catch(function(x){msg('lMsg',x.message);});
+  };
+  $('logout').onclick=function(){call('logout',{}).then(showSignin,showSignin);};
+
+  function linkFor(path){var u=new URL(D.link);u.pathname=path;return u.toString();}
+  function updateShare(){
+    var l=linkFor($('landing').value); $('dLink').value=l;
+    var t='Learn Infor LN with FullOnBaan — eBooks & video courses from real implementation experience: '+l;
+    $('shWa').href='https://wa.me/?text='+encodeURIComponent(t);
+    $('shLi').href='https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(l);
+    $('shMail').href='mailto:?subject='+encodeURIComponent('Infor LN training from FullOnBaan')+'&body='+encodeURIComponent(t+'\n\nUse my referral code '+D.partner.code+' at checkout.');
+  }
+  $('landing').onchange=updateShare;
+  $('copyLink').onclick=function(){var v=$('dLink').value;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){toast('Link copied');},function(){$('dLink').select();document.execCommand('copy');toast('Link copied');});};
+
+  function perCur(field){
+    var by=D.totals.byCurrency, ks=Object.keys(by); if(!ks.length) return money(0,'INR');
+    ks.sort(function(a,b){return a==='INR'?-1:b==='INR'?1:0;});
+    return ks.map(function(c){return money(by[c][field]||0,c);}).join(' · ');
+  }
+  function render(){
+    var p=D.partner;
+    $('dEyebrow').textContent='Partner · '+p.commissionPct+'% commission';
+    $('dHello').textContent='Hello, '+String(p.name||'').split(/\s+/)[0];
+    $('dLede').textContent='Partner since '+day(p.since)+'. You earn '+p.commissionPct+'% of the price (excluding GST) on every sale you refer.';
+    $('dCode').textContent=p.code; updateShare();
+    $('dPayout').textContent=p.payout||'Not set yet — send your UPI ID or bank details to support@fullonbaan.com so we can pay you.';
+    var t=D.totals, c=D.clicks, conv=c.total?Math.round(t.orders/c.total*1000)/10:0;
+    $('tiles').innerHTML=[
+      ['Clicks',c.total,c.thisMonth+' this month'],
+      ['Orders',t.orders,(c.total?conv+'% of clicks':'')+(t.review?(c.total?' · ':'')+t.review+' awaiting review':'')],
+      ['Sales (excl. GST)',perCur('base'),'Total paid '+perCur('sales')],
+      ['Commission earned',perCur('commission'),'All non-void sales',1],
+      ['In hold period',perCur('pending'),D.holdDays+'-day money-back window'],
+      ['Payable now',perCur('approved'),'Next payout',1],
+      ['Paid to you',perCur('paid'),'Settled']
+    ].map(function(x){return '<div class="tile'+(x[3]?' hl':'')+'"><div class="k">'+esc(x[0])+'</div><div class="v">'+esc(x[1])+'</div><div class="s">'+esc(x[2])+'</div></div>';}).join('');
+    var counts={all:D.sales.length};D.sales.forEach(function(s){counts[s.status]=(counts[s.status]||0)+1;});
+    $('filters').innerHTML=['all','pending','approved','paid','review','void'].filter(function(k){return k==='all'||counts[k];}).map(function(k){
+      var lbl={all:'All',pending:'In hold',approved:'Payable',paid:'Paid',review:'Under review',void:'Void'}[k];
+      return '<button data-f="'+k+'" class="'+(FILTER===k?'on':'')+'">'+lbl+' ('+(counts[k]||0)+')</button>';}).join('');
+    renderSales();
+    $('holdNote').textContent='Online orders stay "In hold" for '+D.holdDays+' days (our money-back guarantee) and then become payable automatically. Refunded orders are voided.';
+    var sel=$('cProduct'); if(sel.options.length<2) D.products.forEach(function(x){var o=document.createElement('option');o.value=x.key;o.textContent=x.name;sel.appendChild(o);});
+  }
+  $('filters').onclick=function(e){var b=e.target.closest('button[data-f]');if(!b)return;FILTER=b.getAttribute('data-f');render();};
+  function stLabel(s){return {review:'Under review',pending:'In hold',approved:'Payable',paid:'Paid',void:'Void'}[s]||s;}
+  function renderSales(){
+    var rows=D.sales.filter(function(s){return FILTER==='all'||s.status===FILTER;});
+    if(!rows.length){$('sales').innerHTML='<tr><td class="muted" style="padding:18px 8px">'+(D.sales.length?'Nothing in this view.':'No sales yet — share your link to get started.')+'</td></tr>';return;}
+    $('sales').innerHTML='<tr><th>Date</th><th>Product / customer</th><th class="n">Sale (excl. GST)</th><th class="n">Commission</th><th>Status</th></tr>'+rows.map(function(s){
+      var sub=s.status==='pending'?'Payable from '+day(s.holdUntil):s.status==='paid'?'Paid '+day(s.paidAt)+(s.payoutRef?' · '+s.payoutRef:''):s.status==='void'?(s.voidReason||''):s.status==='review'?'Reported by you':'';
+      return '<tr><td style="white-space:nowrap">'+esc(day(s.at))+'</td><td>'+esc(s.product)+'<br><small>'+esc(s.customer||'')+(s.orderRef?' · '+esc(s.orderRef):'')+(s.kind!=='order'?' · offline':'')+'</small></td>'+
+        '<td class="n">'+esc(money(s.base,s.currency))+'</td><td class="n"><b>'+esc(money(s.commission,s.currency))+'</b><br><small>'+esc(s.pct)+'%</small></td>'+
+        '<td><span class="pill st-'+esc(s.status)+'">'+esc(stLabel(s.status))+'</span><br><small>'+esc(sub)+'</small></td></tr>';
+    }).join('');
+  }
+  $('csv').onclick=function(){
+    var q=function(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+    var lines=[['Date','Product','Customer','Order ref','Type','Currency','Paid (incl. GST)','Sale excl. GST','Commission %','Commission','Status','Payable from','Paid on','Payout ref'].join(',')].concat(D.sales.map(function(s){
+      return [day(s.at),s.product,s.customer,s.orderRef,s.kind,s.currency,s.paid,s.base,s.pct,s.commission,stLabel(s.status),day(s.holdUntil),day(s.paidAt),s.payoutRef].map(q).join(',');}));
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));a.download='fullonbaan-referrals-'+D.partner.code+'.csv';document.body.appendChild(a);a.click();a.remove();
+  };
+  $('claimForm').onsubmit=function(e){
+    e.preventDefault();var b=$('cBtn');b.disabled=true;msg('cMsg','');
+    call('claim',{customerName:$('cName').value.trim(),customerEmail:$('cEmail').value.trim(),productKey:$('cProduct').value,
+      product:$('cProduct').value?'':'Offline sale',amount:$('cAmt').value,currency:$('cCur').value,paymentRef:$('cRef').value.trim(),note:$('cNote').value.trim()})
+      .then(function(){msg('cMsg','Thanks — submitted. It shows as "Under review" until FullOnBaan confirms the payment.',true);$('claimForm').reset();return load();})
+      .catch(function(x){msg('cMsg',x.message);}).then(function(){b.disabled=false;});
+  };
+  load();
+})();
+</script>
+{% endraw %}
+</body>
+</html>

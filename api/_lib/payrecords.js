@@ -125,6 +125,7 @@ function recordInitiated(o) {
     if (cur && cur.rzpOrderId && cur.rzpOrderId !== o.rzpOrderId) return null;   // never overwrite another order
     return Object.assign(cur || {}, b, amounts(q), {
       orderId: o.orderRef, status: 'initiated', rzpOrderId: o.rzpOrderId,
+      refCode: o.refCode || '', refSrc: o.refSrc || '',
       productKey: o.productKey, module: q.desc, currency: o.currency, amount: q.total,
       placeOfSupply: b.billStateName ? (b.billStateName + (b.billStateCode ? ' (' + b.billStateCode + ')' : '')) : '',
       invoiceNo: '', invDate: ddmmyyyy(now), dueDate: ddmmyyyy(new Date(now.getTime() + 15 * 864e5)),
@@ -155,6 +156,7 @@ async function recordPaid(order, payment) {
     return Object.assign(base, a, {
       orderId: orderRef, status: 'confirmed', rzpOrderId: order.id, paymentId: payment ? payment.id : '',
       utr: payment ? payment.id : '', productKey, module: (q && q.desc) || base.module || productKey,
+      refCode: notes.ref || base.refCode || '',
       currency: order.currency, amount: paid,
       placeOfSupply: base.billStateName ? (base.billStateName + (base.billStateCode ? ' (' + base.billStateCode + ')' : '')) : '',
       invoiceNo: invNo, invDate: ddmmyyyy(now), dueDate: ddmmyyyy(new Date(now.getTime() + 15 * 864e5)),

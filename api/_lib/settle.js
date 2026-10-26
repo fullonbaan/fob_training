@@ -12,6 +12,7 @@ const pay = require('./payrecords');
 const mail = require('./email');
 const catalog = require('./catalog');
 const RL = require('./ratelimit');
+const referrals = require('./referrals');
 
 const ADMIN_EMAIL = () => process.env.ADMIN_ALERT_EMAIL || 'fullonbaan@gmail.com';
 const TPL_OK = () => process.env.EMAILJS_TEMPLATE_PAYMENT || 'FOB_Razorpay_Success';
@@ -69,11 +70,13 @@ async function paymentEmails(rec, productKey, siteUrl) {
   const common = { order_ref: rec.orderId, utr_number: rec.paymentId, guide: rec.module, amount: amt, cust_name: rec.name, cust_email: rec.email, cust_mobile: mobile };
   const tableRows = [['Invoice No', rec.invoiceNo], ['Order Ref', rec.orderId], ['Payment ID', rec.paymentId], ['Product', rec.module],
     ['Amount paid', amt + (rec.currency === 'INR' ? ' (Base ' + pay.fmtMoney(rec.baseAmt, 'INR') + ' + GST ' + pay.fmtMoney(rec.gstAmt, 'INR') + ')' : '')]];
+  const refRow = rec.refCode ? [['Referred by', 'Partner ' + rec.refCode]] : [];
   try {
     await mail.sendTemplateOrHtml(TPL_OK(), Object.assign({}, common, {
       to_email: ADMIN_EMAIL(), subject: 'New Training Order — ' + rec.module, status: 'PAYMENT CONFIRMED — RAZORPAY',
-      message: 'Invoice No: ' + rec.invoiceNo + '. Razorpay Payment ID: ' + rec.paymentId + '. Currency: ' + rec.currency + '.' + adminDelivery(product)
-    }), 'New training order', tableRows.concat([['Customer', rec.name + ' · ' + rec.email + ' · ' + mobile]]));
+      message: 'Invoice No: ' + rec.invoiceNo + '. Razorpay Payment ID: ' + rec.paymentId + '. Currency: ' + rec.currency + '.' + adminDelivery(product) +
+        (rec.refCode ? ' Referred by partner ' + rec.refCode + '.' : '')
+    }), 'New training order', tableRows.concat([['Customer', rec.name + ' · ' + rec.email + ' · ' + mobile]], refRow));
   } catch (e) { console.error('admin order email failed', e); }
   try {
     await mail.sendTemplateOrHtml(TPL_OK(), Object.assign({}, common, {
@@ -90,7 +93,11 @@ async function settle(order, payment, siteUrl, via) {
   let rec = null;
   try { rec = await ensureInvoice(order, payment, siteUrl); }
   catch (e) { console.error('ORDER PAID BUT REGISTER/INVOICE FAILED', order.id, e); }
-  return { fulfil: f, record: rec, invoice: pay.invoiceView(rec) };
+  // Partner commission line (once per order). Never allowed to break fulfilment.
+  let referral = null;
+  try { referral = await referrals.recordSale(order, payment, rec, siteUrl); }
+  catch (e) { console.error('REFERRAL COMMISSION NOT RECORDED', order.id, (order.notes || {}).ref, e); }
+  return { fulfil: f, record: rec, invoice: pay.invoiceView(rec), referral };
 }
 
 // Alerts you about a failed / abandoned checkout. Only for real orders our server created,

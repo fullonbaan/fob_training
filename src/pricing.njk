@@ -764,6 +764,12 @@ pageId: "pricing"
                   class="flex-1 bg-transparent py-2.5 outline-none text-sm placeholder:text-on-surface-variant text-on-surface"
                   placeholder="XXXXX XXXXX"/>
               </div>
+              <!-- Referral code (optional) — pre-filled from a partner's ?ref= link; validated by the server -->
+              <div>
+                <input type="text" id="refCode" placeholder="Referral code (optional)" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                  class="w-full p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface text-sm placeholder-on-surface-variant uppercase tracking-wider">
+                <p id="refNote" class="text-[10px] mt-1 text-on-surface-variant/70" style="display:none"></p>
+              </div>
             </div>
 
             <!-- ─── Billing Address (mandatory for GST Invoice) ─── -->
@@ -1289,6 +1295,27 @@ pageId: "pricing"
 
   window.goToStep1=function(){showStep('step1');};
 
+  /* Referral code box: pre-fill from the partner link cookie, check it with the server on change. */
+  (function(){
+    var box=document.getElementById('refCode'), note=document.getElementById('refNote'), last=null, t=null;
+    if(!box) return;
+    function show(txt,ok){ note.style.display=txt?'block':'none'; note.textContent=txt||''; note.style.color=ok?'#4ade80':(ok===false?'#fca5a5':''); }
+    function check(){
+      var c=box.value.toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,20);
+      if(box.value!==c) box.value=c;
+      if(c===last) return; last=c;
+      if(c.length<3){ show(''); return; }
+      fetch('/api/referral?action=validate&code='+encodeURIComponent(c),{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+        if(box.value!==c) return;
+        if(d.valid) show('\u2713 Referred by '+(d.by||'a FullOnBaan partner'),true);
+        else show('Referral code not recognised \u2014 you can still complete your purchase.',false);
+      }).catch(function(){ show(''); });
+    }
+    try{ var pre=window.fobRef?window.fobRef():''; if(pre&&!box.value){ box.value=pre; check(); } }catch(e){}
+    box.addEventListener('input',function(){ clearTimeout(t); t=setTimeout(check,450); });
+    box.addEventListener('blur',check);
+  })();
+
   /* ── Razorpay Launch (called from "Pay ₹X incl. GST" button) ────────── */
   window.goToStep3=function(){
     var name=document.getElementById('userName').value.trim(),
@@ -1387,7 +1414,9 @@ pageId: "pricing"
     fetch('/api/checkout?action=order',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
       body:JSON.stringify({product:selKey,currency:activeCurr,
         customer:{name:name,email:email,mobile:mobile,mobileCode:mobileCode},
-        billing:userData, notes:clientNotes})})
+        billing:userData, notes:clientNotes,
+        ref:(document.getElementById('refCode')||{}).value||'',
+        refSrc:((document.getElementById('refCode')||{}).value||'').toUpperCase()===(window.fobRef?window.fobRef():'')?'link':'code'})})
       .then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok||!d.orderId)throw new Error(d.error||('Could not start the payment (HTTP '+r.status+').'));return d;});})
       .then(function(d){
         txnRef=d.orderRef; selDesc=d.productName||selDesc; selCurr=d.currency;

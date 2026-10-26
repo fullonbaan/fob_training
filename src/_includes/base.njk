@@ -6,6 +6,30 @@
 </script>
 <head>
   <meta charset="UTF-8">
+  <script>
+  /* Partner referral tracking: ?ref=CODE on any page → first-party cookie for 30 days (last referrer wins),
+     one click logged per browser session, then the parameter is removed from the address bar.
+     The checkout's "Referral code" box reads it through window.fobRef(). */
+  (function(){try{
+    var DAYS=30, u=new URL(location.href), r=u.searchParams.get('ref')||u.searchParams.get('partner');
+    if(r!==null){
+      r=String(r).toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,20);
+      if(/^[A-Z0-9][A-Z0-9-]{2,19}$/.test(r)){
+        document.cookie='fob_ref='+r+'; Max-Age='+(DAYS*86400)+'; Path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
+        try{localStorage.setItem('fob_ref',JSON.stringify({c:r,t:Date.now()}));}catch(e){}
+        var seen=null; try{seen=sessionStorage.getItem('fob_ref_hit_'+r);sessionStorage.setItem('fob_ref_hit_'+r,'1');}catch(e){}
+        if(!seen&&window.fetch) fetch('/api/referral?action=click',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',keepalive:true,body:JSON.stringify({code:r,page:location.pathname})}).catch(function(){});
+      }
+      u.searchParams.delete('ref');u.searchParams.delete('partner');
+      try{history.replaceState(history.state,'',u.pathname+u.search+u.hash);}catch(e){}
+    }
+  }catch(e){}
+  window.fobRef=function(){
+    try{var m=document.cookie.match(/(?:^|;\s*)fob_ref=([A-Z0-9-]{3,20})/);if(m)return m[1];}catch(e){}
+    try{var o=JSON.parse(localStorage.getItem('fob_ref')||'null');if(o&&o.c&&Date.now()-o.t<30*864e5)return o.c;}catch(e){}
+    return '';
+  };})();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} | FullOnBaan</title>
   <meta name="description" content="{{ description }}">
@@ -661,6 +685,7 @@
             <a href="/feedback/" class="block hover:text-primary transition">Feedback</a>
             <a href="/videos/" class="block hover:text-primary transition">Videos</a>
             <a href="/members/" class="block hover:text-primary transition">Member Login — eBook Library</a>
+            <a href="/partners/" class="block hover:text-primary transition">Partner Login — Referral Dashboard</a>
             <a href="/contact/" class="block hover:text-primary transition">Contact Us</a>
           </div>
         </div>

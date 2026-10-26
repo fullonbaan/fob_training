@@ -7,7 +7,7 @@
     "build:11ty": "node node_modules/@11ty/eleventy/cmd.cjs",
     "build": "npm run build:counts && npm run build:css && npm run build:11ty",
     "dev": "node node_modules/@11ty/eleventy/cmd.cjs --serve",
-    "test": "npm run build && node tests/api.test.js && node tests/adapters.test.js && node tests/r2errors.test.js && node tests/counts.test.js",
+    "test": "npm run build && node tests/api.test.js && node tests/referral.test.js && node tests/adapters.test.js && node tests/r2errors.test.js && node tests/counts.test.js",
     "build:counts": "node scripts/r2-counts.js"
   },
   "devDependencies": {

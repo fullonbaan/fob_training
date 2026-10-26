@@ -11,6 +11,7 @@ const rzp = require('./_lib/razorpay');
 const settle = require('./_lib/settle');
 const pay = require('./_lib/payrecords');
 const RL = require('./_lib/ratelimit');
+const referrals = require('./_lib/referrals');
 
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').slice(0, n || 250);
 
@@ -44,10 +45,17 @@ async function createOrder(req, res) {
     price_at: String(at),
     module: clip(q.desc, 250)
   };
+  // Referral: the code in the checkout box (pre-filled from the ?ref= link cookie), else the cookie itself.
+  // Validated here, on the server — only an ACTIVE partner who is not the buyer gets the order.
+  let referral = null;
+  try { referral = await referrals.resolveForCheckout(b.ref || H.parseCookies(req).fob_ref, email); }
+  catch (e) { console.warn('referral lookup failed (order continues without it)', e.message); }
+  if (referral && !referral.self) notes.ref = referral.code;
   const extra = b.notes && typeof b.notes === 'object' ? b.notes : {};
   Object.keys(extra).forEach(k => {
     const key = clip(k, 40);
-    if (Object.keys(notes).length >= 15 || notes[key] !== undefined || /^(site|product_key|cust_|order_ref|price_at|module)$|^cust_/.test(key)) return;
+    if (Object.keys(notes).length >= 15 || notes[key] !== undefined || /^(site|product_key|cust_|order_ref|price_at|module|ref)$|^cust_|^ref_/.test(key)) return;
+    if (notes.ref && key === 'bill_country' && extra[k] === 'IN') return;    // implied default — keeps room for `ref` within Razorpay's 15 notes
     const v = extra[k]; if (v === '' || v == null || typeof v === 'object') return;
     notes[key] = clip(v, 250);
   });
@@ -58,13 +66,15 @@ async function createOrder(req, res) {
   // Register line ("initiated") written by the server — the browser never touches the register.
   try {
     await pay.recordInitiated({ orderRef: notes.order_ref, rzpOrderId: order.id, productKey, currency, at,
-      billing: Object.assign({}, billing, { name: notes.cust_name, email, mobile: notes.cust_mobile, mobileCode: cust.mobileCode }) });
+      billing: Object.assign({}, billing, { name: notes.cust_name, email, mobile: notes.cust_mobile, mobileCode: cust.mobileCode }),
+      refCode: notes.ref || '', refSrc: notes.ref ? (b.refSrc === 'link' ? 'link' : 'code') : '' });
   } catch (e) { console.error('register (initiated) failed', e.message); }
   return H.send(res, 200, {
     orderId: order.id, orderRef: notes.order_ref, amount: order.amount, currency: order.currency,
     keyId: process.env.RAZORPAY_KEY_ID, productName: q.desc,
     quote: { base: q.base, gst: q.gst, total: q.total, cgst: q.cgst, sgst: q.sgst, igst: q.igst, taxType: q.taxType, list: q.list, onSale: q.onSale },
-    delivers: { ebooks: product.ebooks.length > 0, video: !!product.video }
+    delivers: { ebooks: product.ebooks.length > 0, video: !!product.video },
+    referral: notes.ref ? { code: notes.ref, by: referral.firstName } : null
   });
 }
 

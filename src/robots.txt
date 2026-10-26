@@ -3,6 +3,8 @@ Allow: /
 Disallow: /admin
 Disallow: /members
 Disallow: /members-admin
+Disallow: /partners
+Disallow: /referrals-admin
 Disallow: /api/
 
 Sitemap: https://training.fullonbaan.com/sitemap.xml
