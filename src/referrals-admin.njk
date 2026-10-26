@@ -6,6 +6,7 @@ eleventyExcludeFromCollections: true
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t='light';try{var s=localStorage.getItem('fob_theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.classList.add(t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Referral Partners Admin | FullOnBaan Training</title>
   <meta name="robots" content="noindex, nofollow">
@@ -41,11 +42,30 @@ eleventyExcludeFromCollections: true
     .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.kpi{border:1px solid var(--border);padding:10px 12px}.kpi b{display:block;font:700 20px Georgia,serif}.kpi span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-lt)}
     #toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:#fff;padding:12px 16px;max-width:380px;display:none;z-index:9}
     main>*,#app>*{min-width:0}
+    /* ── Dark theme (switch in the header; shared preference "fob_theme") ── */
+    html.dark{--gold:#f6bc68;--ink:#f0e8d8;--ink-mid:rgba(212,196,178,.82);--ink-lt:rgba(212,196,178,.58);--bg:#060f1e;--surface:#0a1630;--border:rgba(246,188,104,.16);--rust:#f87171;--green:#4ade80;--amber:#fbbf24;--blue:#93c5fd;color-scheme:dark}
+    html.dark header{background:#06132a;border-bottom:1px solid var(--border)}
+    html.dark a{color:#f6bc68}
+    html.dark input,html.dark select,html.dark textarea{background:rgba(255,255,255,.04);color:var(--ink);border-color:var(--border)}
+    html.dark select option{background:#0d1a30;color:var(--ink)}
+    html.dark button{background:#f6bc68;border-color:#f6bc68;color:#06132a}
+    html.dark button.ghost,html.dark .btnlike{background:transparent;color:var(--ink);border-color:rgba(246,188,104,.35)}
+    html.dark button.warn{background:rgba(248,113,113,.14);border-color:rgba(248,113,113,.5);color:#fca5a5}
+    html.dark button.good{background:rgba(74,222,128,.14);border-color:rgba(74,222,128,.5);color:#86efac}
+    html.dark .filters button{background:transparent;color:var(--ink-mid);border-color:var(--border)}
+    html.dark .filters button.on{color:#f6bc68;border-color:#f6bc68}
+    html.dark tr.click:hover,html.dark tr.sel{background:rgba(246,188,104,.06)}
+    html.dark .code,html.dark .note{background:rgba(246,188,104,.06)}
+    html.dark .code{color:#fca5a5}
+    html.dark #toast{background:#0d1a30;color:var(--ink);border:1px solid var(--border)}
+    .theme-btn{width:32px;height:32px;flex:0 0 32px;border-radius:999px;border:1px solid rgba(246,188,104,.35);background:transparent;color:#f6bc68;cursor:pointer;display:inline-grid;place-items:center;padding:0;vertical-align:middle}.theme-btn:hover{background:rgba(246,188,104,.12)}.theme-btn svg{width:17px;height:17px}.theme-btn .i-moon{display:none}html.light .theme-btn .i-sun{display:none}html.light .theme-btn .i-moon{display:block}
+    button.theme-btn,html.dark button.theme-btn{background:transparent;color:#f6bc68;border-color:rgba(246,188,104,.35);padding:0;margin-left:10px}
+    button.theme-btn:hover,html.dark button.theme-btn:hover{background:rgba(246,188,104,.12)}
     [hidden]{display:none!important}
   </style>
 </head>
 <body>
-<header><b>FullOnBaan Training · Referral Partners</b><span><a href="/admin">Payments admin</a><a href="/members-admin">Members admin</a><a href="/partners" target="_blank">Partner dashboard ↗</a><button class="ghost sm" id="lockBtn" hidden>Lock</button></span></header>
+<header><b>FullOnBaan Training · Referral Partners</b><span><a href="/admin">Payments admin</a><a href="/members-admin">Members admin</a><a href="/partners" target="_blank">Partner dashboard ↗</a><button class="ghost sm" id="lockBtn" hidden>Lock</button><button type="button" class="theme-btn" data-theme-toggle title="Switch theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg></button></span></header>
 <main>
   <section class="card" id="gate">
     <h2>Admin token</h2>
@@ -239,5 +259,16 @@ eleventyExcludeFromCollections: true
 })();
 </script>
 {% endraw %}
+<script>
+/* Light / dark switch — same preference key as the main site ("fob_theme"), so the choice follows you across pages. */
+(function(){
+  function sync(){var l=document.documentElement.classList.contains('light'),t=l?'Switch to dark mode':'Switch to light mode';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-theme-toggle]'),function(b){b.title=t;b.setAttribute('aria-label',t);});}
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-theme-toggle]');if(!b)return;
+    var h=document.documentElement,l=!h.classList.contains('light');h.classList.toggle('light',l);h.classList.toggle('dark',!l);
+    try{localStorage.setItem('fob_theme',l?'light':'dark');}catch(_){}sync();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+})();
+</script>
 </body>
 </html>

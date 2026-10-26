@@ -6,6 +6,7 @@ eleventyExcludeFromCollections: true
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t='dark';try{var s=localStorage.getItem('fob_theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.classList.add(t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Partner Dashboard | FullOnBaan Training</title>
   <meta name="robots" content="noindex, nofollow">
@@ -69,6 +70,17 @@ eleventyExcludeFromCollections: true
     .filters button{background:transparent;border:1px solid var(--border);color:var(--ink-mid);padding:5px 12px;border-radius:999px;font:600 12px 'Work Sans',sans-serif;cursor:pointer}
     .filters button.on{border-color:var(--gold);color:var(--gold);background:var(--gold-faint)}
     #toast{position:fixed;bottom:18px;right:18px;background:var(--surface-hi);border:1px solid var(--gold-line);color:var(--ink);padding:12px 16px;border-radius:10px;max-width:340px;display:none;z-index:20}
+    /* ── Light theme (switch in the top bar; same "fob_theme" preference as the main site and Members Library) ── */
+    html.light{--gold:#a8782a;--gold-dk:#8a6220;--gold-faint:rgba(168,120,42,0.08);--gold-line:rgba(168,120,42,0.30);--bg:#f5f1ea;--bg2:#fbf8f2;--surface:#ffffff;--surface-hi:#f3eee5;
+      --ink:#1b2333;--ink-mid:rgba(27,35,51,0.76);--ink-lt:rgba(27,35,51,0.55);--border:rgba(27,35,51,0.12);--err:#b91c1c;--ok:#15803d;--warn:#b45309;--info:#1d4ed8;color-scheme:light}
+    html.light .nav{background:rgba(251,248,242,.92)}
+    html.light input,html.light select,html.light textarea{background:#fff}
+    html.light .card,html.light .tile{box-shadow:0 1px 2px rgba(27,35,51,.05)}
+    html.light .msg.err{background:#fdf0ef;color:#b91c1c}html.light .msg.ok{background:#effaf3;color:#15803d}
+    html.light .st-review{border-color:rgba(29,78,216,.35)}html.light .st-pending{border-color:rgba(180,83,9,.35)}html.light .st-approved{border-color:rgba(21,128,61,.35)}
+    html.light .btn{color:#fff;background:linear-gradient(135deg,#b8862f,#8a6220)}html.light .btn.ghost{background:transparent;color:var(--gold)}
+    .theme-btn{width:34px;height:34px;flex:0 0 34px;border-radius:999px;border:1px solid var(--gold-line);background:transparent;color:var(--gold);cursor:pointer;display:inline-grid;place-items:center;padding:0;vertical-align:middle}.theme-btn:hover{background:var(--gold-faint)}.theme-btn svg{width:17px;height:17px}.theme-btn .i-moon{display:none}html.light .theme-btn .i-sun{display:none}html.light .theme-btn .i-moon{display:block}
+    .nav-in>div{display:flex;align-items:center;gap:14px}
     [hidden]{display:none!important}
     @media (max-width:860px){.auth,.two{grid-template-columns:1fr;gap:24px}main{padding:28px 16px 56px}.nav-in{padding:0 16px}.card{padding:20px}}
   </style>
@@ -76,7 +88,7 @@ eleventyExcludeFromCollections: true
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="/">FullOnBaan <span>Partners</span></a>
-  <div><a class="navlink" href="/" style="margin-right:14px">Website</a><button class="navlink" id="logout" hidden>Sign out</button></div>
+  <div><a class="navlink" href="/">Website</a><button class="navlink" id="logout" hidden>Sign out</button><button type="button" class="theme-btn" data-theme-toggle title="Switch theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg></button></div>
 </div></nav>
 
 <main>
@@ -277,5 +289,16 @@ eleventyExcludeFromCollections: true
 })();
 </script>
 {% endraw %}
+<script>
+/* Light / dark switch — same preference key as the main site ("fob_theme"), so the choice follows you across pages. */
+(function(){
+  function sync(){var l=document.documentElement.classList.contains('light'),t=l?'Switch to dark mode':'Switch to light mode';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-theme-toggle]'),function(b){b.title=t;b.setAttribute('aria-label',t);});}
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-theme-toggle]');if(!b)return;
+    var h=document.documentElement,l=!h.classList.contains('light');h.classList.toggle('light',l);h.classList.toggle('dark',!l);
+    try{localStorage.setItem('fob_theme',l?'light':'dark');}catch(_){}sync();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+})();
+</script>
 </body>
 </html>
