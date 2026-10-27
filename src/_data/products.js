@@ -34,7 +34,8 @@ const EBOOK_FOLDERS = {
   pln:   { name: 'Infor LN Planning',                  track: 'Functional', product: 'pln_ebook' },
   mst:   { name: 'Infor LN Multisite',                 track: 'Functional', product: 'mst_ebook' },
   cloud: { name: 'Cloud Migration & Upgrade Strategy', track: 'Strategy',   product: 'cloud_migration' },
-  ai:    { name: 'AI Agents & GenAI in Infor LN',      track: 'Strategy',   product: 'ai_genai' }
+  ai:    { name: 'AI Agents & GenAI in Infor LN',      track: 'Strategy',   product: 'ai_genai' },
+  ln2026:{ name: 'Infor LN 2026 Consultant Bundle',    track: 'Strategy',   product: 'ln2026_bundle' }
 };
 const ALL_EBOOKS = Object.keys(EBOOK_FOLDERS);
 
@@ -56,6 +57,9 @@ const P = {
   dom_ebook:          { name: 'Infor DOM — ' + eb('dom_ebook'),       price: 1999, kind: 'ebook', ebooks: ['dom'] },
   cloud_migration:    { name: 'Cloud Migration & Upgrade Strategy — ' + eb('cloud_migration') + ' + Excel', price: 2499, kind: 'ebook', ebooks: ['cloud'] },
   ai_genai:           { name: 'AI Agents & GenAI in Infor LN — ' + eb('ai_genai') + ' + Excel',             price: 2499, kind: 'ebook', ebooks: ['ai'] },
+
+  // Bundled eBooks — several new titles sold together, delivered from ONE Members Library folder (ebooks/ln2026/).
+  ln2026_bundle:      { name: 'Infor LN 2026 Consultant Bundle — ' + eb('ln2026_bundle'), price: 2999, kind: 'bundle', ebooks: ['ln2026'] },
 
   dev_video:          { name: 'Infor LN Development — Video Course',    price: 4999, kind: 'video', ebooks: [], video: true },
   adm_video:          { name: 'Infor LN Administration — Video Course', price: 4999, kind: 'video', ebooks: [], video: true },
@@ -85,7 +89,7 @@ const P = {
 const CURRENCY_RATES = { INR: { symbol: '₹', rate: 1 }, USD: { symbol: '$', rate: 85 }, EUR: { symbol: '€', rate: 92 } };
 const FIXED_PRICES = {
   4999: { USD: 80, EUR: 80 }, 5999: { USD: 100, EUR: 100 }, 15999: { USD: 400, EUR: 400 }, 34999: { USD: 800, EUR: 800 },
-  499: { USD: 10, EUR: 9 }, 999: { USD: 20, EUR: 20 }, 1999: { USD: 40, EUR: 40 }, 2499: { USD: 40, EUR: 40 },
+  499: { USD: 10, EUR: 9 }, 999: { USD: 20, EUR: 20 }, 1999: { USD: 40, EUR: 40 }, 2499: { USD: 40, EUR: 40 }, 2999: { USD: 50, EUR: 50 },
   3488: { USD: 45, EUR: 40 }, 3999: { USD: 59, EUR: 55 }, 4000: { USD: 60, EUR: 55 }, 4499: { USD: 65, EUR: 60 },
   4488: { USD: 39, EUR: 36 }, 6999: { USD: 99, EUR: 95 }, 7999: { USD: 109, EUR: 99 }, 8999: { USD: 119, EUR: 109 },
   11487: { USD: 159, EUR: 149 }, 12999: { USD: 179, EUR: 169 }, 12793: { USD: 165, EUR: 149 }, 12994: { USD: 160, EUR: 149 },

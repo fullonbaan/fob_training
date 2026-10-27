@@ -19,7 +19,8 @@ const ebooks = [
   { key: 'ln_api_ebook',     name: 'Infor LN API',                      count: 27 },
   { key: 'dom_ebook',        name: 'Infor DOM',                         count: 51 },
   { key: 'cloud_migration',  name: 'Cloud Migration & Upgrade Strategy', count: 7, extra: '+ Excel tool' },
-  { key: 'ai_genai',         name: 'AI Agents & GenAI in Infor LN',     count: 7, extra: '+ Excel tool' }
+  { key: 'ai_genai',         name: 'AI Agents & GenAI in Infor LN',     count: 7, extra: '+ Excel tool' },
+  { key: 'ln2026_bundle',    name: 'Infor LN 2026 Consultant Bundle',   count: 4 }
 ];
 
 // What the Full Video Library (₹34,999) contains

@@ -353,7 +353,7 @@ eleventyExcludeFromCollections: true
   function fmtSize(b){ return b > 1048576 ? (b/1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b/1024)) + ' KB'; }
   function fileLink(g, id, mode){ return API + '?action=file&mode=' + mode + '&g=' + encodeURIComponent(g) + '&f=' + encodeURIComponent(id); }
   var KIND = { pdf:'PDF', xlsx:'Excel', xlsm:'Excel', xls:'Excel', csv:'CSV', docx:'Word', doc:'Word', pptx:'PowerPoint', ppt:'PowerPoint', zip:'ZIP', txt:'Text' };
-  var ORDER = ['dev','adm','ext','bod','ion','os','idm','lnapi','dom','fin','mfg','log','whs','pln','mst','cloud','ai'];
+  var ORDER = ['dev','adm','ext','bod','ion','os','idm','lnapi','dom','fin','mfg','log','whs','pln','mst','cloud','ai','ln2026'];
   function sortKeys(keys){ return keys.sort(function(a,b){ var x=ORDER.indexOf(a), y=ORDER.indexOf(b); return (x<0?99:x)-(y<0?99:y); }); }
 
   function ebookCard(g, f){

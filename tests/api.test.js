@@ -73,7 +73,7 @@ function clientPricer(atMs) {
   console.log('Test store:', T);
 
   console.log('\n[1] Pricing — server charge == what the page shows (every product × currency × sale state)');
-  await test('server price equals the browser price for all 35 products, 3 currencies, before / during / after the sale', async () => {
+  await test('server price equals the browser price for all 36 products, 3 currencies, before / during / after the sale', async () => {
     const times = { before: sale.startsMs - 3600e3, during: sale.startsMs + 3600e3, after: sale.endsMs + 3600e3 };
     let n = 0;
     for (const [label, t] of Object.entries(times)) {
@@ -85,7 +85,7 @@ function clientPricer(atMs) {
         n++;
       }
     }
-    assert.strictEqual(n, 3 * 35 * 3);
+    assert.strictEqual(n, 3 * 36 * 3);
   });
   await test('spot values: dev eBook ₹1,999 + GST = ₹2,358.82; Full eBook Library on sale ₹7,999 + GST; USD $199', () => {
     const during = sale.startsMs + 1000;
@@ -105,9 +105,10 @@ function clientPricer(atMs) {
       if (P[k].kind === 'combo') { assert.strictEqual(P[k].ebooks.length, 1, k); assert.ok(P[k].video, k); assert.strictEqual(P[k].ebooks[0], products.EBOOK_FOLDERS[P[k].ebooks[0]] && P[k].ebooks[0]); }
       if (P[k].kind === 'ebook') assert.strictEqual(products.EBOOK_FOLDERS[P[k].ebooks[0]].product, k, k);
     });
-    assert.strictEqual(P.full_ebook_library.ebooks.length, 17);
+    assert.strictEqual(P.full_ebook_library.ebooks.length, 18);
+    assert.deepStrictEqual(P.ln2026_bundle.ebooks, ['ln2026']); assert.strictEqual(P.ln2026_bundle.price, 2999);
     assert.deepStrictEqual(P.full_video_library.ebooks, []);
-    assert.strictEqual(Object.keys(P).length, 35);
+    assert.strictEqual(Object.keys(P).length, 36);
   });
 
   console.log('\n[2] eBook purchase — new customer');
@@ -214,13 +215,53 @@ function clientPricer(atMs) {
     assert.ok(b.verify.data.ok && !b.verify.data.access && b.verify.data.video);
     assert.strictEqual(member('videolib@example.com'), null);
   });
-  await test('Full eBook Library (on sale) in USD → all 17 kits unlocked, charged $199, no GST', async () => {
+  await test('Full eBook Library (on sale) in USD → all 18 kits unlocked, charged $199, no GST', async () => {
     const b = await buy('full_ebook_library', 'bundle@example.com', { currency: 'USD', billing: { billCountry: 'US', billStateName: 'CA', billLine1: 'x', billCity: 'SF', billPincode: '94000' } });
     assert.strictEqual(b.order.amount, catalog.priceMinor('full_ebook_library', 'USD'));
     assert.strictEqual(b.verify.status, 200, JSON.stringify(b.verify.data));
-    assert.strictEqual(Object.keys(member('bundle@example.com').entitlements).length, 17);
+    assert.strictEqual(Object.keys(member('bundle@example.com').entitlements).length, 18);
     const inv = b.verify.data.invoice; assert.strictEqual(inv.taxType, 'NONE'); assert.strictEqual(inv.gstAmt, 0); assert.strictEqual(inv.currency, 'USD');
     if (catalog.saleLive()) assert.ok(inv.module.includes('% off'), 'sale recorded on invoice');
+  });
+
+  await test('Infor LN 2026 Consultant Bundle: ₹2,999 + GST, $50, €50 — pays, unlocks ONLY ebooks/ln2026/, invoices, signs in, opens a file', async () => {
+    assert.strictEqual(catalog.quote('ln2026_bundle', 'INR').base, 2999);
+    assert.strictEqual(catalog.quote('ln2026_bundle', 'INR').amountMinor, 353882);
+    assert.strictEqual(catalog.quote('ln2026_bundle', 'USD').total, 50);
+    assert.strictEqual(catalog.quote('ln2026_bundle', 'EUR').total, 50);
+    const pdf = fs.readFileSync(path.join(process.env.FOB_LOCAL_STORE, 'ebooks/dev/02 - DAL Scripts.pdf'));
+    const putB = (n) => { const p = path.join(process.env.FOB_LOCAL_STORE, 'ebooks/ln2026', n); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, pdf); };
+    ['01 - Infor Agentic AI for LN Consultants.pdf', '02 - Infor 2026.10 Release Decoded.pdf', '03 - From Customisation to Extension.pdf', '04 - Infor Process Mining for LN.pdf'].forEach(putB);
+    // INR, Karnataka
+    const b = await buy('ln2026_bundle', 'bundle2026@example.com', { billing: billingKA, name: 'Bundle Buyer' });
+    assert.strictEqual(b.order.amount, 353882);
+    assert.strictEqual(b.verify.status, 200, JSON.stringify(b.verify.data));
+    const d = b.verify.data;
+    assert.ok(d.ok && d.access && !d.video && d.code, JSON.stringify(d));
+    assert.deepStrictEqual(d.unlocked, ['Infor LN 2026 Consultant Bundle']);
+    assert.deepStrictEqual(Object.keys(member('bundle2026@example.com').entitlements), ['ln2026']);
+    assert.strictEqual(d.invoice.taxType, 'CGST_SGST'); assert.strictEqual(d.invoice.totalAmt, 3538.82);
+    assert.ok(d.invoice.module.startsWith('Infor LN 2026 Consultant Bundle'), d.invoice.module);
+    // sign in → library shows the 4 bundle eBooks and nothing else
+    const r = await req('POST', '/api/member?action=login', { email: 'bundle2026@example.com', code: d.code });
+    assert.strictEqual(r.status, 200, JSON.stringify(r.data));
+    const ck = r.cookie.split(';')[0];
+    const me = await req('GET', '/api/member?action=me', undefined, { Cookie: ck });
+    assert.deepStrictEqual(me.data.library.owned, ['ln2026']);
+    assert.deepStrictEqual(Object.keys(me.data.files), ['ln2026']);
+    assert.strictEqual(me.data.files.ln2026.length, 4);
+    assert.strictEqual(me.data.files.ln2026[0].title, 'Infor Agentic AI for LN Consultants');
+    const v = await req('GET', '/api/member?action=file&mode=view&g=ln2026&f=' + encodeURIComponent(me.data.files.ln2026[0].id), undefined, { Cookie: ck });
+    assert.strictEqual(v.status, 302); assert.ok(!v.headers.get('location').startsWith('/members/?e='), v.headers.get('location'));
+    const no = await req('GET', '/api/member?action=file&mode=view&g=dev&f=' + encodeURIComponent('dev/01 - Sessions & 4GL.pdf'), undefined, { Cookie: ck });
+    assert.strictEqual(no.headers.get('location'), '/members/?e=forbidden', 'bundle buyer cannot open other kits');
+    // USD + EUR charge exactly 50, no GST
+    for (const cur of ['USD', 'EUR']) {
+      const x = await buy('ln2026_bundle', 'bundle2026-' + cur.toLowerCase() + '@example.com', { currency: cur, billing: { billCountry: 'US', billStateName: 'CA', billLine1: 'x', billCity: 'SF', billPincode: '94000' } });
+      assert.strictEqual(x.order.amount, 5000, cur);
+      assert.strictEqual(x.verify.status, 200, JSON.stringify(x.verify.data));
+      assert.strictEqual(x.verify.data.invoice.taxType, 'NONE'); assert.strictEqual(x.verify.data.invoice.currency, cur);
+    }
   });
 
   console.log('\n[5] Security');
@@ -274,7 +315,7 @@ function clientPricer(atMs) {
     mock.state.orders[id] = { id, amount: catalog.priceMinor('full_ebook_library', 'INR', at), currency: 'INR', receipt: 'FOBTSALE', status: 'created', created_at: Math.floor(at / 1000), notes: { site: 'training', product_key: 'full_ebook_library', cust_email: 'late@example.com', cust_name: 'Late', order_ref: 'FOBTSALE1', price_at: String(at) } };
     const p = mock.pay(id);
     const v = await req('POST', '/api/checkout?action=verify', p);
-    assert.strictEqual(v.status, 200, JSON.stringify(v.data)); assert.strictEqual(Object.keys(member('late@example.com').entitlements).length, 17);
+    assert.strictEqual(v.status, 200, JSON.stringify(v.data)); assert.strictEqual(Object.keys(member('late@example.com').entitlements).length, 18);
   });
   await test('Razorpay down → order endpoint returns a friendly 500, no register line', async () => {
     const before = records().length; process.env.MOCK_RZP_DOWN = '1';
@@ -302,7 +343,7 @@ function clientPricer(atMs) {
     assert.deepStrictEqual(me.data.library.owned.sort(), ['dev', 'fin']);
     assert.deepStrictEqual(Object.keys(me.data.files).sort(), ['dev', 'fin'], 'files only for owned kits');
     assert.deepStrictEqual(me.data.files.dev.map(f => f.title), ['Sessions & 4GL', 'DAL Scripts'], 'ordered, prefix hidden, draft hidden');
-    assert.strictEqual(Object.keys(me.data.catalog).length, 17); assert.strictEqual(me.data.catalog.os.count, 1);
+    assert.strictEqual(Object.keys(me.data.catalog).length, 18); assert.strictEqual(me.data.catalog.os.count, 1);
   });
   let stampedPath;
   await test('Read online → 302 to a short-lived link of a personal watermarked copy', async () => {
@@ -425,13 +466,13 @@ function clientPricer(atMs) {
     assert.strictEqual((await req('GET', '/api/member-admin?action=list')).status, 401);
     assert.strictEqual((await req('GET', '/api/member-admin?action=list', undefined, { Authorization: 'Bearer nope' })).status, 401);
   });
-  await test('files: 17 kits with folders; init-folders creates ebooks/<code>/ markers (idempotent, hidden from buyers)', async () => {
+  await test('files: 18 kits with folders; init-folders creates ebooks/<code>/ markers (idempotent, hidden from buyers)', async () => {
     const f = await req('GET', '/api/member-admin?action=files', undefined, ADMIN);
-    assert.strictEqual(f.status, 200); assert.strictEqual(f.data.guides.length, 17);
+    assert.strictEqual(f.status, 200); assert.strictEqual(f.data.guides.length, 18);
     assert.strictEqual(f.data.guides.find(g => g.key === 'dev').ebooks.length, 2);
-    assert.strictEqual(f.data.products.length, 35);
+    assert.strictEqual(f.data.products.length, 36);
     const i1 = await req('POST', '/api/member-admin?action=init-folders', {}, ADMIN);
-    assert.strictEqual(i1.data.created.length, 17);
+    assert.strictEqual(i1.data.created.length, 18);
     assert.ok(fs.existsSync(path.join(process.env.FOB_LOCAL_STORE, 'ebooks/idm/.keep')));
     const i2 = await req('POST', '/api/member-admin?action=init-folders', {}, ADMIN); assert.strictEqual(i2.data.created.length, 0);
     const f2 = await req('GET', '/api/member-admin?action=files', undefined, ADMIN);

@@ -325,10 +325,11 @@ pageId: "pricing"
       .bundle-card--video { background: linear-gradient(160deg, rgba(129,140,248,0.08) 0%, #0d1a30 30%, #091326 100%); border: 1px solid rgba(129,140,248,0.2); }
       html.light .bundle-card--ebook { background: linear-gradient(160deg, rgba(128,86,4,0.08) 0%, #ffffff 35%, #faf6ee 100%); border-color: rgba(128,86,4,0.25); }
       html.light .bundle-card--video { background: linear-gradient(160deg, rgba(99,102,241,0.08) 0%, #ffffff 35%, #f4f4ff 100%); border-color: rgba(99,102,241,0.28); }
-      html.light .bundle-card--ebook h3, html.light .bundle-card--ebook .font-headline[data-inr="15999"] { background: linear-gradient(135deg, #805604, #a67206) !important; -webkit-background-clip: text !important; background-clip: text !important; }
+      html.light .bundle-card--ebook h3, html.light .bundle-card--ebook .ln26-price, html.light .bundle-card--ebook .font-headline[data-inr="15999"] { background: linear-gradient(135deg, #805604, #a67206) !important; -webkit-background-clip: text !important; background-clip: text !important; }
       html.light .bundle-card--video h3, html.light .bundle-card--video .font-headline[data-inr="34999"] { background: linear-gradient(135deg, #4338ca, #6366f1) !important; -webkit-background-clip: text !important; background-clip: text !important; }
       html.light .bundle-card .font-label.rounded-full { color: #4e4539 !important; }
       html.light .bundle-card details { color: #4e4539 !important; }
+      html.light .bundle-card ul { color: #4e4539 !important; }
       html.light .bundle-card details li span[style] { color: rgba(78,69,57,0.65) !important; }
       html.light .bundle-card--ebook details summary { color: #805604 !important; }
       html.light .bundle-card--video details summary { color: #4338ca !important; }
@@ -355,6 +356,9 @@ pageId: "pricing"
       <button class="filter-tab" onclick="filterPricing('special')">
         <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">auto_awesome</span>Special Edition</span>
       </button>
+      <button class="filter-tab" onclick="filterPricing('bundled')">
+        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">library_add</span>Bundled eBooks <span class="price-pill" style="padding:1px 6px;font-size:8px;background:rgba(246,188,104,0.12);color:#f6bc68;border:1px solid rgba(246,188,104,0.2);">NEW</span></span>
+      </button>
       <button class="filter-tab" onclick="filterPricing('bundle')">
         <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">inventory_2</span>Bundles</span>
       </button>
@@ -375,11 +379,11 @@ pageId: "pricing"
         { name: "Infor LN Warehousing", icon: "warehouse", key: "whs_ebook", price: "1999", preview: "/preview/preview_Warehousing.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
         { name: "Infor BOD", icon: "swap_horiz", key: "bod_ebook", price: "1999", preview: "/preview/preview_BOD.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
         { name: "Infor ION", icon: "hub", key: "ion_ebook", price: "1999", preview: "/preview/preview_ION.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
-        { name: "Infor LN Multisite", icon: "language", key: "mst_ebook", price: "1999", badge: "NEW", preview: "/preview/preview_Multisite.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
+        { name: "Infor LN Multisite", icon: "language", key: "mst_ebook", price: "1999", preview: "/preview/preview_Multisite.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
         { name: "Infor OS", icon: "cloud_circle", key: "infor_os", price: "1999", badge: "ON DEMAND", preview: "/preview/preview_Infor_OS.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
-        { name: "Infor IDM", icon: "folder_managed", key: "idm_ebook", price: "1999", badge: "NEW", preview: "/preview/preview_IDM.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
-        { name: "Infor LN API", icon: "api", key: "ln_api_ebook", price: "2499", badge: "NEW", preview: "/preview/preview_LN_API.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
-        { name: "Infor DOM", icon: "print", key: "dom_ebook", price: "1999", badge: "NEW", preview: "/preview/preview_DOM.pdf", ebookSuffix: " · Technical", img: "/images/covers/card-texture-branded.webp" }
+        { name: "Infor IDM", icon: "folder_managed", key: "idm_ebook", price: "1999", preview: "/preview/preview_IDM.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
+        { name: "Infor LN API", icon: "api", key: "ln_api_ebook", price: "2499", preview: "/preview/preview_LN_API.pdf", ebookSuffix: "", img: "/images/covers/card-texture-branded.webp" },
+        { name: "Infor DOM", icon: "print", key: "dom_ebook", price: "1999", preview: "/preview/preview_DOM.pdf", ebookSuffix: " · Technical", img: "/images/covers/card-texture-branded.webp" }
       ] %}
       {% for mod in allEbooks %}
       <div class="price-card" data-category="ebook" onclick="selectModule('{{ mod.key }}', event)">
@@ -523,6 +527,38 @@ pageId: "pricing"
 
     <!-- Mega Bundle Cards -->
     <div id="bundleSection" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <!-- Bundled eBooks: Infor LN 2026 Consultant Bundle -->
+      <div id="ln2026Bundle" class="bundle-card bundle-card--ebook md:col-span-2" data-category="bundle" data-bundled="1" onclick="selectModule('ln2026_bundle', event)">
+        <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
+          <span class="material-symbols-outlined" style="font-size:inherit;color:#f6bc68;">inventory_2</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="price-pill" style="background:rgba(246,188,104,0.1);color:#f6bc68;border:1px solid rgba(246,188,104,0.15);">NEW</span>
+          <span class="price-pill" style="background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.15);">BUNDLED eBOOKS</span>
+        </div>
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <h3 class="font-headline font-bold text-2xl mt-2 mb-2" style="background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Infor LN 2026 Consultant Bundle</h3>
+            <p class="text-sm text-on-surface-variant" style="line-height:1.6;">{{ library.byKey.ln2026_bundle.count }} brand-new eBooks (Oct 2026) — Agentic AI, the 2026.10 release, CloudSuite extensions and Process Mining</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="ln26-price font-headline font-bold" style="font-size:32px;background:linear-gradient(135deg,#f6bc68,#ffd89e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-inr="2999">₹2,999</span>
+            <a href="#payBtn" onclick="event.stopPropagation(); event.preventDefault(); openPurchase('ln2026_bundle');" class="font-label text-[10px] font-bold uppercase tracking-widest px-5 py-2 rounded-full transition-all" style="background:linear-gradient(135deg,#f6bc68,#ba8738);color:#06132a;text-decoration:none;white-space:nowrap;">Buy Now</a>
+          </div>
+        </div>
+        <div class="price-divider mt-5"></div>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 pt-3 text-xs" style="list-style:none;padding:0;margin:12px 0 0;color:rgba(212,196,178,0.85);">
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>Infor Agentic AI for LN Consultants</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>Infor 2026.10 Release Decoded</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>From Customisation to Extension — Multi-Tenant CloudSuite</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>Infor Process Mining &amp; Process Intelligence for LN</li>
+        </ul>
+        <div class="flex flex-wrap gap-2 pt-4">
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(246,188,104,0.06);border:1px solid rgba(246,188,104,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">menu_book</span>{{ library.byKey.ln2026_bundle.count }} eBooks · 1 Bundle</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs text-green-400">verified_user</span>7-Day Guarantee</span>
+          <span class="font-label text-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5" style="background:rgba(246,188,104,0.06);border:1px solid rgba(246,188,104,0.1);color:rgba(212,196,178,0.8);"><span class="material-symbols-outlined text-xs" style="color:#f6bc68;">bolt</span>Instant Members Library access</span>
+        </div>
+      </div>
       <!-- Full eBook Library -->
       <div class="bundle-card bundle-card--ebook" data-category="bundle" onclick="selectModule('full_ebook_library', event)">
         <div class="absolute top-0 right-0 opacity-[0.03]" style="font-size:160px;line-height:1;">
@@ -693,6 +729,7 @@ pageId: "pricing"
                 <option value="ext_combo">Infor Extensibility — Combo (₹5,999)</option>
               </optgroup>
               <optgroup label="Bundles">
+                <option value="ln2026_bundle">Infor LN 2026 Consultant Bundle — {{ library.byKey.ln2026_bundle.count }} eBook{% if library.byKey.ln2026_bundle.count != 1 %}s{% endif %} (₹2,999)</option>
                 <option value="full_ebook_library">{{ library.ebookLibraryName }} (₹15,999)</option>
                 <option value="full_video_library">{{ library.videoLibraryName }} (₹34,999)</option>
               </optgroup>
@@ -1141,8 +1178,19 @@ pageId: "pricing"
     var cards = grid.querySelectorAll('.price-card');
     var bundleSection = document.getElementById('bundleSection');
 
+    var bundleCards = bundleSection.querySelectorAll('.bundle-card');
+    bundleCards.forEach(function(c) { c.style.display = ''; });
+
     if (category === 'all') {
       cards.forEach(function(c) { c.style.display = ''; });
+      bundleSection.style.display = '';
+      return;
+    }
+
+    // Bundled eBooks: only the multi-eBook bundles (e.g. Infor LN 2026 Consultant Bundle)
+    if (category === 'bundled') {
+      cards.forEach(function(c) { c.style.display = 'none'; });
+      bundleCards.forEach(function(c) { c.style.display = c.hasAttribute('data-bundled') ? '' : 'none'; });
       bundleSection.style.display = '';
       return;
     }

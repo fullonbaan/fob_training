@@ -20,6 +20,7 @@ module.exports = {
     "Infor DOM",
     "Cloud Migration & Upgrade Strategy",
     "AI Agents & GenAI in Infor LN",
+    "Infor LN 2026 Consultant Bundle",
     "Full eBook Library",
     "Full Video Library",
     "Free Starter Guides",
