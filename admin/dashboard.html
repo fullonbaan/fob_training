@@ -58,6 +58,7 @@
         </div>
         <button onclick="admRefresh()" style="padding:7px 14px;background:var(--g-15);border:1px solid var(--g-30);color:var(--gold);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;">↻ Refresh</button>
         <button onclick="admMigrateInvoiceNos()" style="padding:7px 14px;background:var(--warnA-12);border:1px solid var(--warnA-40);color:var(--warn);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;" title="Renumber confirmed invoices to FOB####### sequence">🔢 Renumber Invoices</button>
+        <button onclick="admSetNextInvoiceNo()" style="padding:7px 14px;background:var(--g-15);border:1px solid var(--g-30);color:var(--gold);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;" title="See or change the number the next paid order will get">#️⃣ Next Invoice No</button>
         <button onclick="admFbToggle()" id="admFbBtn" class="tb-btn">💬 Feedback</button>
         <button type="button" class="theme-btn" data-theme-toggle title="Switch theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg></button>
         <button onclick="admLogout()" class="tb-btn tb-muted">⎋ Sign out</button>
@@ -605,6 +606,7 @@
     acts+='<button onclick="admCp(\''+aE(r.orderId)+'\',\'Ref\')" style="padding:5px 10px;background:var(--g-10);border:1px solid var(--g-20);color:var(--gold);border-radius:6px;cursor:pointer;font-size:11px;">📋 Ref</button>';
     /* Edit Billing — available on every record so admins can backfill legacy entries */
     acts+='<button onclick="admEditOpen(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:var(--okA-12);border:1px solid var(--okA-30);color:var(--ok);border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">✏️ Edit Billing</button>';
+    if(s||r.invoiceNo){acts+='<button onclick="admEditInvoiceNo(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:var(--g-10);border:1px solid var(--g-30);color:var(--gold);border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">#️⃣ Invoice No</button>';}
     acts+='<button onclick="admDeleteRecord(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:var(--errA-12);border:1px solid var(--errA-40);color:var(--err);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">🗑️ Delete</button>';
     if(s&&r.invoiceNo){acts+='<button onclick="admDlInvoice(\''+aE(r.orderId)+'\')" style="padding:5px 10px;background:var(--g-20);border:1px solid var(--g-40);color:var(--gold);border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;">📄 GST Invoice</button>';}
     return '<div style="background:var(--surface);border:1px solid var(--g-10);border-radius:12px;padding:16px;margin-bottom:12px;">' +
@@ -694,6 +696,61 @@
     } catch(e){
       console.error('Migration failed:', e);
       alert('Migration failed: '+(e.message||'unknown error'));
+    }
+  }
+
+  /* ── Admin: change ONE record's invoice number ─────────────────────── */
+  async function admEditInvoiceNo(orderId){
+    var rec = admRecs.find(function(x){return x.orderId===orderId;});
+    if(!rec){admToast('Record not found.');return;}
+    var cur = rec.invoiceNo || '';
+    var v = prompt('Invoice number for '+(rec.name||'—')+' · '+(rec.module||'—')+'\n\nCurrent: '+(cur||'(none)')+
+      (rec.legacyInvoiceNo?'\nOriginal: '+rec.legacyInvoiceNo:'')+
+      '\n\nEnter the new number (e.g. FOB0000035, or just 35):', cur);
+    if(v===null) return;
+    v = String(v).trim().toUpperCase();
+    if(/^\d+$/.test(v)) v = 'FOB' + v.padStart(7,'0');
+    if(!v || v===cur){ admToast('No change.'); return; }
+    var dup = admRecs.find(function(x){return x.orderId!==orderId && String(x.invoiceNo||'').toUpperCase()===v;});
+    if(dup){ alert(v+' is already used by '+(dup.name||dup.orderId)+'. Change that record first.'); return; }
+    try {
+      var w = await fetch(ADM_API,{method:'POST',headers:admHdr({'Content-Type':'application/json'}),credentials:'same-origin',
+        body:JSON.stringify({action:'setInvoiceNo',orderId:orderId,invoiceNo:v})});
+      if(admAuthLost(w)) return;
+      var d = {}; try{ d = await w.json(); }catch(e){}
+      if(!w.ok) throw new Error(d.error || ('API '+w.status));
+      rec.invoiceNo = v; if(cur && !rec.legacyInvoiceNo) rec.legacyInvoiceNo = cur;
+      admStats(); admRender();
+      admToast('#️⃣ Invoice '+(cur||'—')+' → '+v);
+    } catch(e){
+      console.error('Invoice no change failed:', e);
+      alert('Could not change the invoice number: '+(e.message||'unknown error'));
+    }
+  }
+
+  /* ── Admin: see / change the next auto-generated invoice number ────── */
+  async function admSetNextInvoiceNo(){
+    try {
+      var r = await fetch('/api/invoice-counter?peek=1',{headers:admHdr(),credentials:'same-origin',cache:'no-store'});
+      if(admAuthLost(r)) return;
+      var d = await r.json();
+      if(!r.ok) throw new Error(d.error || ('API '+r.status));
+      var v = prompt('Next paid order will get: '+d.nextInvoiceNo+
+        '\nHighest invoice number in the register: '+(d.highestInvoiceNo||'(none)')+
+        '\n\nEnter the NEXT invoice number to use (e.g. 50 or FOB0000050):', String(d.counter+1));
+      if(v===null) return;
+      v = String(v).trim().toUpperCase().replace(/^FOB/,'');
+      var n = parseInt(v,10);
+      if(!/^\d+$/.test(v) || !(n>=1)){ alert('Please enter a positive number.'); return; }
+      if(n <= d.highest && !confirm('FOB'+String(n).padStart(7,'0')+' is not above the highest existing invoice ('+d.highestInvoiceNo+').\nThis can create DUPLICATE invoice numbers. Continue anyway?')) return;
+      var w = await fetch('/api/invoice-counter',{method:'POST',headers:admHdr({'Content-Type':'application/json'}),credentials:'same-origin',body:JSON.stringify({counter:n-1})});
+      if(admAuthLost(w)) return;
+      var j = {}; try{ j = await w.json(); }catch(e){}
+      if(!w.ok) throw new Error(j.error || ('API '+w.status));
+      admToast('✅ Next invoice: FOB'+String(n).padStart(7,'0'));
+    } catch(e){
+      console.error('Set next invoice failed:', e);
+      alert('Could not update the next invoice number: '+(e.message||'unknown error'));
     }
   }
 

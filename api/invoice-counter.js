@@ -1,5 +1,6 @@
 // api/invoice-counter.js — sequential GST invoice numbers (FOB#######) — ADMIN ONLY.
 //   GET            → increments the counter and returns the next number (manual /admin entries)
+//   GET ?peek=1    → read-only: { counter, nextInvoiceNo, highest } — nothing is incremented
 //   POST {counter} → sets the counter (the /admin "Renumber" migration)
 // Paid Razorpay orders get their number on the SERVER (api/_lib/payrecords.js), so the public never
 // needs this endpoint (it used to be open, letting anyone burn invoice numbers).
@@ -13,6 +14,22 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (!auth.isAdmin(req)) return res.status(401).json({ error: 'Admin sign-in required.' });
+
+  if (req.method === 'GET' && req.query && String(req.query.peek) === '1') {
+    try {
+      const g = await pay.ghGet(pay.FILE_COUNTER);
+      const counter = Number(g.data && g.data.counter) || 0;
+      const { records } = await pay.readRecords();
+      const highest = records.reduce((m, r) => {
+        const x = String(r.invoiceNo || '').startsWith(pay.INV_PREFIX) ? parseInt(r.invoiceNo.slice(pay.INV_PREFIX.length), 10) : NaN;
+        return Number.isFinite(x) && x > m ? x : m;
+      }, 0);
+      return res.status(200).json({ counter, nextInvoiceNo: fmt(counter + 1), highest, highestInvoiceNo: highest ? fmt(highest) : '' });
+    } catch (e) {
+      console.error('invoice-counter peek error:', e);
+      return res.status(502).json({ error: e.message });
+    }
+  }
 
   if (req.method === 'GET') {
     try {

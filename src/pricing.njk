@@ -356,9 +356,6 @@ pageId: "pricing"
       <button class="filter-tab" onclick="filterPricing('special')">
         <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">auto_awesome</span>Special Edition</span>
       </button>
-      <button class="filter-tab" onclick="filterPricing('bundled')">
-        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">library_add</span>Bundled eBooks <span class="price-pill" style="padding:1px 6px;font-size:8px;background:rgba(246,188,104,0.12);color:#f6bc68;border:1px solid rgba(246,188,104,0.2);">NEW</span></span>
-      </button>
       <button class="filter-tab" onclick="filterPricing('bundle')">
         <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">inventory_2</span>Bundles</span>
       </button>
@@ -1187,13 +1184,6 @@ pageId: "pricing"
       return;
     }
 
-    // Bundled eBooks: only the multi-eBook bundles (e.g. Infor LN 2026 Consultant Bundle)
-    if (category === 'bundled') {
-      cards.forEach(function(c) { c.style.display = 'none'; });
-      bundleCards.forEach(function(c) { c.style.display = c.hasAttribute('data-bundled') ? '' : 'none'; });
-      bundleSection.style.display = '';
-      return;
-    }
 
     // Show/hide cards based on data-category
     cards.forEach(function(c) {
